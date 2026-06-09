@@ -1,36 +1,32 @@
-//@ pragma Env QSG_RENDER_LOOP=threaded
-//@ pragma Env QT_MEDIA_BACKEND=ffmpeg
-//@ pragma Env QT_FFMPEG_DECODING_HW_DEVICE_TYPES=vaapi
-//@ pragma Env QT_FFMPEG_ENCODING_HW_DEVICE_TYPES=vaapi
-//@ pragma Env QT_WAYLAND_DISABLE_WINDOWDECORATION=1
-//@ pragma Env QT_QUICK_CONTROLS_STYLE=Material
-//@ pragma UseQApplication
-//@ pragma AppId com.danklinux.dms
+//@ pragma Env QS_CRASHREPORT_URL=https://github.com/caelestia-dots/shell/issues/new?template=crash.yml
+//@ pragma DefaultEnv QS_NO_RELOAD_POPUP=1
+//@ pragma DefaultEnv QS_DROP_EXPENSIVE_FONTS=1
+//@ pragma DefaultEnv QSG_RENDER_LOOP=threaded
+//@ pragma DefaultEnv QT_QUICK_FLICKABLE_WHEEL_DECELERATION=10000
 
-import QtQuick
+import "modules"
+import "modules/drawers"
+import "modules/background"
+import "modules/areapicker"
+import "modules/lock"
 import Quickshell
 
 ShellRoot {
-    id: entrypoint
+    settings.watchFiles: true
 
-    readonly property bool runGreeter: Quickshell.env("DMS_RUN_GREETER") === "1" || Quickshell.env("DMS_RUN_GREETER") === "true"
-    readonly property bool disableHotReload: Quickshell.env("DMS_DISABLE_HOT_RELOAD") === "1" || Quickshell.env("DMS_DISABLE_HOT_RELOAD") === "true"
+    GSFLoader {}
 
-    Component.onCompleted: {
-        Quickshell.watchFiles = !disableHotReload;
+    Background {}
+    Drawers {}
+    AreaPicker {}
+    Lock {
+        id: lock
     }
 
-    Loader {
-        id: dmsShellLoader
-        asynchronous: false
-        sourceComponent: DMSShell {}
-        active: !entrypoint.runGreeter
-    }
-
-    Loader {
-        id: dmsGreeterLoader
-        asynchronous: false
-        sourceComponent: DMSGreeter {}
-        active: entrypoint.runGreeter
+    ConfigToasts {}
+    Shortcuts {}
+    BatteryMonitor {}
+    IdleMonitors {
+        lock: lock
     }
 }
