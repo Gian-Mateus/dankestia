@@ -149,13 +149,13 @@ func TestMangoWCGetKeybindAtLine(t *testing.T) {
 		},
 		{
 			name: "bindl_flag",
-			line: "bindl=SUPER+ALT,l,spawn,dms ipc call lock lock",
+			line: "bindl=SUPER+ALT,l,spawn,dankestia ipc call lock lock",
 			expected: &MangoWCKeyBinding{
 				Mods:    []string{"SUPER", "ALT"},
 				Key:     "l",
 				Command: "spawn",
-				Params:  "dms ipc call lock lock",
-				Comment: "dms ipc call lock lock",
+				Params:  "dankestia ipc call lock lock",
+				Comment: "dankestia ipc call lock lock",
 			},
 		},
 		{
@@ -171,26 +171,26 @@ func TestMangoWCGetKeybindAtLine(t *testing.T) {
 		},
 		{
 			name:             "preceding_comment",
-			line:             "bind=SUPER+SHIFT,S,spawn,dms screenshot",
+			line:             "bind=SUPER+SHIFT,S,spawn,dankestia screenshot",
 			precedingComment: "Screenshot: Interactive",
 			expected: &MangoWCKeyBinding{
 				Mods:    []string{"SUPER", "SHIFT"},
 				Key:     "S",
 				Command: "spawn",
-				Params:  "dms screenshot",
+				Params:  "dankestia screenshot",
 				Comment: "Screenshot: Interactive",
 			},
 		},
 		{
 			name:             "section_header_not_description",
-			line:             "bind=none,XF86AudioRaiseVolume,spawn,dms ipc call audio increment 3",
+			line:             "bind=none,XF86AudioRaiseVolume,spawn,dankestia ipc call audio increment 3",
 			precedingComment: "=== Audio Controls ===",
 			expected: &MangoWCKeyBinding{
 				Mods:    []string{},
 				Key:     "XF86AudioRaiseVolume",
 				Command: "spawn",
-				Params:  "dms ipc call audio increment 3",
-				Comment: "dms ipc call audio increment 3",
+				Params:  "dankestia ipc call audio increment 3",
+				Comment: "dankestia ipc call audio increment 3",
 			},
 		},
 		{
@@ -472,8 +472,8 @@ func TestMangoWCRealWorldConfig(t *testing.T) {
 
 	content := `# Application Launchers
 bind=Alt,t,spawn,kitty
-bind=Alt,space,spawn,dms ipc call spotlight toggle
-bind=Alt,v,spawn,dms ipc call clipboard toggle
+bind=Alt,space,spawn,dankestia ipc call spotlight toggle
+bind=Alt,v,spawn,dankestia ipc call clipboard toggle
 
 # exit
 bind=ALT+SHIFT,e,quit

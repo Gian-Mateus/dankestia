@@ -1,16 +1,16 @@
-# DMS Backend & CLI
+# DANKESTIA Backend & CLI
 
-Go-based backend for DankMaterialShell providing system integration, IPC, and installation tools.
+Go-based backend for Dankestia providing system integration, IPC, and installation tools.
 
 **See [root README](../README.md) for project overview and installation.**
 
 ## Components
 
-**dms CLI**
+**dankestia CLI**
 Command-line interface and daemon for shell management and system control.
 
 **dankinstall**
-Distribution-aware installer for deploying DMS and compositor configurations on Arch, Fedora, Debian, Ubuntu, openSUSE, and Gentoo. Supports both an interactive TUI and a headless (unattended) mode via CLI flags.
+Distribution-aware installer for deploying DANKESTIA and compositor configurations on Arch, Fedora, Debian, Ubuntu, openSUSE, and Gentoo. Supports both an interactive TUI and a headless (unattended) mode via CLI flags.
 
 ## System Integration
 
@@ -71,25 +71,25 @@ Custom IPC via unix socket (JSON API) for shell communication.
 
 ## CLI Commands
 
-- `dms run [-d]` - Start shell (optionally as daemon)
-- `dms restart` / `dms kill` - Manage running processes
-- `dms ipc <command>` - Send IPC commands (toggle launcher, notifications, etc.)
-- `dms plugins [install|browse|search]` - Plugin management
-- `dms brightness [list|set]` - Control display/monitor brightness
-- `dms color pick` - Native color picker (see below)
-- `dms update` - Update DMS and dependencies (disabled in distro packages)
-- `dms greeter install` - Install greetd greeter (disabled in distro packages)
+- `dankestia run [-d]` - Start shell (optionally as daemon)
+- `dankestia restart` / `dankestia kill` - Manage running processes
+- `dankestia ipc <command>` - Send IPC commands (toggle launcher, notifications, etc.)
+- `dankestia plugins [install|browse|search]` - Plugin management
+- `dankestia brightness [list|set]` - Control display/monitor brightness
+- `dankestia color pick` - Native color picker (see below)
+- `dankestia update` - Update DANKESTIA and dependencies (disabled in distro packages)
+- `dankestia greeter install` - Install greetd greeter (disabled in distro packages)
 
 ### Color Picker
 
 Native Wayland color picker with magnifier, no external dependencies. Supports HiDPI and fractional scaling.
 
 ```bash
-dms color pick              # Pick color, output hex
-dms color pick --rgb        # Output as RGB (255 128 64)
-dms color pick --hsv        # Output as HSV (24 75% 100%)
-dms color pick --json       # Output all formats as JSON
-dms color pick -a           # Auto-copy to clipboard
+dankestia color pick              # Pick color, output hex
+dankestia color pick --rgb        # Output as RGB (255 128 64)
+dankestia color pick --hsv        # Output as HSV (24 75% 100%)
+dankestia color pick --json       # Output all formats as JSON
+dankestia color pick -a           # Auto-copy to clipboard
 ```
 
 The on-screen preview displays the selected format. JSON output includes hex, RGB, HSL, HSV, and CMYK values.
@@ -101,7 +101,7 @@ Requires Go 1.25+
 **Development build:**
 
 ```bash
-make              # Build dms CLI
+make              # Build dankestia CLI
 make dankinstall  # Build installer
 make test         # Run tests
 ```
@@ -112,12 +112,12 @@ make test         # Run tests
 make dist         # Build without update/greeter features
 ```
 
-Produces `bin/dms-linux-amd64` and `bin/dms-linux-arm64`
+Produces `bin/dankestia-linux-amd64` and `bin/dankestia-linux-arm64`
 
 **Installation:**
 
 ```bash
-sudo make install  # Install to /usr/local/bin/dms
+sudo make install  # Install to /usr/local/bin/dankestia
 ```
 
 ## Development
@@ -140,7 +140,7 @@ go-wayland-scanner -i internal/proto/xml/wlr-gamma-control-unstable-v1.xml \
 
 **Module Structure:**
 
-- `cmd/` - Binary entrypoints (dms, dankinstall)
+- `cmd/` - Binary entrypoints (dankestia, dankinstall)
 - `internal/distros/` - Distribution-specific installation logic
 - `internal/proto/` - Wayland protocol bindings
 - `pkg/` - Shared packages
@@ -159,14 +159,14 @@ Headless mode requires cached sudo credentials. Run `sudo -v` first:
 
 ```bash
 sudo -v && curl -fsSL https://install.danklinux.com | sh -s -- -c niri -t ghostty -y
-sudo -v && curl -fsSL https://install.danklinux.com | sh -s -- -c hyprland -t kitty --include-deps dms-greeter -y
+sudo -v && curl -fsSL https://install.danklinux.com | sh -s -- -c hyprland -t kitty --include-deps dankestia-greeter -y
 ```
 
 | Flag | Short | Description |
 |------|-------|-------------|
 | `--compositor <niri|hyprland>` | `-c` | Compositor/WM to install (required for headless) |
 | `--term <ghostty|kitty|alacritty>` | `-t` | Terminal emulator (required for headless) |
-| `--include-deps <name,...>` | | Enable optional dependencies (e.g. `dms-greeter`) |
+| `--include-deps <name,...>` | | Enable optional dependencies (e.g. `dankestia-greeter`) |
 | `--exclude-deps <name,...>` | | Skip specific dependencies |
 | `--replace-configs <name,...>` | | Replace specific configuration files (mutually exclusive with `--replace-configs-all`) |
 | `--replace-configs-all` | | Replace all configuration files (mutually exclusive with `--replace-configs`) |
@@ -174,7 +174,7 @@ sudo -v && curl -fsSL https://install.danklinux.com | sh -s -- -c hyprland -t ki
 
 Headless mode requires `--yes` to proceed; without it, the installer exits with an error.
 Configuration files are not replaced by default unless `--replace-configs` or `--replace-configs-all` is specified.
-`dms-greeter` is disabled by default; use `--include-deps dms-greeter` to enable it.
+`dankestia-greeter` is disabled by default; use `--include-deps dankestia-greeter` to enable it.
 
 When no flags are provided, `dankinstall` launches the interactive TUI.
 
@@ -200,7 +200,7 @@ Uses `pacman` for system packages, builds AUR packages via `makepkg`, no AUR hel
 
 **Fedora**
 
-Uses COPR repositories (`avengemedia/danklinux`, `avengemedia/dms`).
+Uses COPR repositories (`avengemedia/danklinux`, `avengemedia/dankestia`).
 
 **Ubuntu**
 Requires PPA support. Most packages built from source (slow first install).

@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
-# Unified OBS status checker for dms packages
+# Unified OBS status checker for dankestia packages
 # Checks all platforms (Debian, OpenSUSE) and architectures (x86_64, aarch64)
 # Only pulls logs if build failed
 # Usage: ./distro/scripts/obs-status.sh [package-name]
 #
 # Examples:
 #   ./distro/scripts/obs-status.sh              # Check all packages
-#   ./distro/scripts/obs-status.sh dms          # Check specific package
+#   ./distro/scripts/obs-status.sh dankestia          # Check specific package
 
 OBS_BASE_PROJECT="home:AvengeMedia"
 OBS_BASE="$HOME/.cache/osc-checkouts"
 
-ALL_PACKAGES=(dms dms-git dms-greeter)
+ALL_PACKAGES=(dankestia dankestia-git dankestia-greeter)
 
 REPOS=("Debian_13" "openSUSE_Tumbleweed" "16.0")
 ARCHES=("x86_64" "aarch64")
@@ -35,13 +35,13 @@ cd "$OBS_BASE" || {
 
 for pkg in "${PACKAGES[@]}"; do
     case "$pkg" in
-    dms)
-        PROJECT="$OBS_BASE_PROJECT:dms"
+    dankestia)
+        PROJECT="$OBS_BASE_PROJECT:dankestia"
         ;;
-    dms-git)
-        PROJECT="$OBS_BASE_PROJECT:dms-git"
+    dankestia-git)
+        PROJECT="$OBS_BASE_PROJECT:dankestia-git"
         ;;
-    dms-greeter)
+    dankestia-greeter)
         PROJECT="$OBS_BASE_PROJECT:danklinux"
         ;;
     *)

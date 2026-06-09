@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/distros"
+	"github.com/AvengeMedia/Dankestia/core/internal/distros"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
@@ -71,7 +71,7 @@ func (m Model) viewWelcome() string {
 			case "nixos":
 				errorMsg = "See the NixOS documentation for installation instructions: https://danklinux.com/docs/dankmaterialshell/nixos."
 			default:
-				errorMsg = fmt.Sprintf("%s is not supported.\nFeel free to request on https://github.com/AvengeMedia/DankMaterialShell", m.osInfo.PrettyName)
+				errorMsg = fmt.Sprintf("%s is not supported.\nFeel free to request on https://github.com/AvengeMedia/Dankestia", m.osInfo.PrettyName)
 			}
 
 			errorMsgStyled := lipgloss.NewStyle().
@@ -110,7 +110,7 @@ func (m Model) viewWelcome() string {
 			b.WriteString(featTitle + "\n\n")
 
 			features := []string{
-				"[shell]   dms (DankMaterialShell)",
+				"[shell]   dankestia (Dankestia)",
 				"[wm]      niri or Hyprland",
 				"[term]    Ghostty, kitty, or Alacritty",
 				"[style]   All the themes, automatically.",

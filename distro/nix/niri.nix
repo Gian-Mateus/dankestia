@@ -6,13 +6,13 @@
   cfg = config.programs.dank-material-shell;
 in {
   imports = [
-    ./dms-rename.nix
+    ./dankestia-rename.nix
   ];
 
   options.programs.dank-material-shell = {
     niri = {
-      enableKeybinds = lib.mkEnableOption "DankMaterialShell niri keybinds";
-      enableSpawn = lib.mkEnableOption "DankMaterialShell niri spawn-at-startup";
+      enableKeybinds = lib.mkEnableOption "Dankestia niri keybinds";
+      enableSpawn = lib.mkEnableOption "Dankestia niri spawn-at-startup";
       includes = {
         enable =
           (lib.mkEnableOption "includes for niri-flake")
@@ -22,7 +22,7 @@ in {
         override = lib.mkOption {
           type = lib.types.bool;
           description = ''
-            Whether DMS settings will be prioritized over settings defined in niri-flake or not
+            Whether DANKESTIA settings will be prioritized over settings defined in niri-flake or not
           '';
           default = true;
           example = false;
@@ -38,7 +38,7 @@ in {
         filesToInclude = lib.mkOption {
           type = lib.types.listOf lib.types.str;
           description = ''
-            A list of dms-generated files to include
+            A list of dankestia-generated files to include
           '';
           default = [
             "alttab"
@@ -72,10 +72,10 @@ in {
       let
         cfg' = cfg.niri.includes;
 
-        withOriginalConfig = dmsFiles:
+        withOriginalConfig = dankestiaFiles:
           if cfg'.override
-          then [cfg'.originalFileName] ++ dmsFiles
-          else dmsFiles ++ [cfg'.originalFileName];
+          then [cfg'.originalFileName] ++ dankestiaFiles
+          else dankestiaFiles ++ [cfg'.originalFileName];
 
         fixes = map (fix: "\n${fix}") (
           lib.optional (cfg'.enable && config.programs.niri.settings.layout.border.enable)
@@ -88,10 +88,10 @@ in {
         );
       in {
         niri-config.target = lib.mkForce "niri/${cfg'.originalFileName}.kdl";
-        niri-config-dms = {
+        niri-config-dankestia = {
           target = "niri/config.kdl";
           text = lib.pipe cfg'.filesToInclude [
-            (map (filename: "dms/${filename}"))
+            (map (filename: "dankestia/${filename}"))
             withOriginalConfig
             (map (filename: "include \"${filename}.kdl\""))
             (files: files ++ fixes)
@@ -104,70 +104,70 @@ in {
     programs.niri.settings = lib.mkMerge [
       (lib.mkIf cfg.niri.enableKeybinds {
         binds = with config.lib.niri.actions; let
-          dms-ipc = spawn "dms" "ipc";
+          dankestia-ipc = spawn "dankestia" "ipc";
         in
           {
             "Mod+Space" = {
-              action = dms-ipc "spotlight" "toggle";
+              action = dankestia-ipc "spotlight" "toggle";
               hotkey-overlay.title = "Toggle Application Launcher";
             };
             "Mod+N" = {
-              action = dms-ipc "notifications" "toggle";
+              action = dankestia-ipc "notifications" "toggle";
               hotkey-overlay.title = "Toggle Notification Center";
             };
             "Mod+Comma" = {
-              action = dms-ipc "settings" "toggle";
+              action = dankestia-ipc "settings" "toggle";
               hotkey-overlay.title = "Toggle Settings";
             };
             "Mod+P" = {
-              action = dms-ipc "notepad" "toggle";
+              action = dankestia-ipc "notepad" "toggle";
               hotkey-overlay.title = "Toggle Notepad";
             };
             "Super+Alt+L" = {
-              action = dms-ipc "lock" "lock";
+              action = dankestia-ipc "lock" "lock";
               hotkey-overlay.title = "Toggle Lock Screen";
             };
             "Mod+X" = {
-              action = dms-ipc "powermenu" "toggle";
+              action = dankestia-ipc "powermenu" "toggle";
               hotkey-overlay.title = "Toggle Power Menu";
             };
             "XF86AudioRaiseVolume" = {
               allow-when-locked = true;
-              action = dms-ipc "audio" "increment" "3";
+              action = dankestia-ipc "audio" "increment" "3";
             };
             "XF86AudioLowerVolume" = {
               allow-when-locked = true;
-              action = dms-ipc "audio" "decrement" "3";
+              action = dankestia-ipc "audio" "decrement" "3";
             };
             "XF86AudioMute" = {
               allow-when-locked = true;
-              action = dms-ipc "audio" "mute";
+              action = dankestia-ipc "audio" "mute";
             };
             "XF86AudioMicMute" = {
               allow-when-locked = true;
-              action = dms-ipc "audio" "micmute";
+              action = dankestia-ipc "audio" "micmute";
             };
             "XF86MonBrightnessUp" = {
               allow-when-locked = true;
-              action = dms-ipc "brightness" "increment" "5" "";
+              action = dankestia-ipc "brightness" "increment" "5" "";
             };
             "XF86MonBrightnessDown" = {
               allow-when-locked = true;
-              action = dms-ipc "brightness" "decrement" "5" "";
+              action = dankestia-ipc "brightness" "decrement" "5" "";
             };
             "Mod+Alt+N" = {
               allow-when-locked = true;
-              action = dms-ipc "night" "toggle";
+              action = dankestia-ipc "night" "toggle";
               hotkey-overlay.title = "Toggle Night Mode";
             };
             "Mod+V" = {
-              action = dms-ipc "clipboard" "toggle";
+              action = dankestia-ipc "clipboard" "toggle";
               hotkey-overlay.title = "Toggle Clipboard Manager";
             };
           }
           // lib.attrsets.optionalAttrs cfg.enableSystemMonitoring {
             "Mod+M" = {
-              action = dms-ipc "processlist" "toggle";
+              action = dankestia-ipc "processlist" "toggle";
               hotkey-overlay.title = "Toggle Process List";
             };
           };
@@ -177,7 +177,7 @@ in {
         spawn-at-startup = [
           {
             command = [
-              "dms"
+              "dankestia"
               "run"
             ];
           }

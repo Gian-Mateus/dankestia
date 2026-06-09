@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/utils"
+	"github.com/AvengeMedia/Dankestia/core/internal/utils"
 )
 
 const (

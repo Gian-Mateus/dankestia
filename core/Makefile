@@ -1,6 +1,6 @@
-BINARY_NAME=dms
+BINARY_NAME=dankestia
 BINARY_NAME_INSTALL=dankinstall
-SOURCE_DIR=cmd/dms
+SOURCE_DIR=cmd/dankestia
 SOURCE_DIR_INSTALL=cmd/dankinstall
 BUILD_DIR=bin
 PREFIX ?= /usr/local
@@ -27,7 +27,7 @@ ARCH ?= all
 # Default target
 all: build
 
-# Build the main binary (dms)
+# Build the main binary (dankestia)
 build:
 	@echo "Building $(BINARY_NAME)..."
 	@mkdir -p $(BUILD_DIR)
@@ -140,16 +140,16 @@ print-version:
 
 help:
 	@echo "Available targets:"
-	@echo "  all                 - Build the main binary (dms) (default)"
-	@echo "  build               - Build the main binary (dms)"
+	@echo "  all                 - Build the main binary (dankestia) (default)"
+	@echo "  build               - Build the main binary (dankestia)"
 	@echo "  dankinstall         - Build dankinstall binary"
-	@echo "  dist                - Build dms for linux amd64/arm64 (no update/greeter)"
+	@echo "  dist                - Build dankestia for linux amd64/arm64 (no update/greeter)"
 	@echo "                        Use ARCH=amd64 or ARCH=arm64 to build only one"
 	@echo "  build-all           - Build both binaries"
-	@echo "  install             - Install dms to $(INSTALL_DIR)"
-	@echo "  install-all         - Install both dms and dankinstall to $(INSTALL_DIR)"
+	@echo "  install             - Install dankestia to $(INSTALL_DIR)"
+	@echo "  install-all         - Install both dankestia and dankinstall to $(INSTALL_DIR)"
 	@echo "  install-dankinstall - Install only dankinstall to $(INSTALL_DIR)"
-	@echo "  uninstall           - Remove dms from $(INSTALL_DIR)"
+	@echo "  uninstall           - Remove dankestia from $(INSTALL_DIR)"
 	@echo "  uninstall-all       - Remove both binaries from $(INSTALL_DIR)"
 	@echo "  uninstall-dankinstall - Remove only dankinstall from $(INSTALL_DIR)"
 	@echo "  clean               - Clean build artifacts"

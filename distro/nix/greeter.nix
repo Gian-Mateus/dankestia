@@ -2,7 +2,7 @@
   lib,
   config,
   pkgs,
-  dmsPkgs,
+  dankestiaPkgs,
   options,
   ...
 }:
@@ -19,8 +19,8 @@ let
     in
     if configured != null then configured else builtins.getAttr cfg.compositor.name pkgs;
 
-  cacheDir = "/var/lib/dms-greeter";
-  greeterScript = pkgs.writeShellScriptBin "dms-greeter" ''
+  cacheDir = "/var/lib/dankestia-greeter";
+  greeterScript = pkgs.writeShellScriptBin "dankestia-greeter" ''
     export PATH=$PATH:${
       lib.makeBinPath [
         cfg.quickshell.package
@@ -32,17 +32,17 @@ let
       lib.escapeShellArgs (
         [
           "sh"
-          "${cfg.package}/share/quickshell/dms/Modules/Greetd/assets/dms-greeter"
+          "${cfg.package}/share/quickshell/dankestia/Modules/Greetd/assets/dankestia-greeter"
           "--cache-dir"
           cacheDir
           "--command"
           cfg.compositor.name
           "-p"
-          "${cfg.package}/share/quickshell/dms"
+          "${cfg.package}/share/quickshell/dankestia"
         ]
         ++ lib.optionals (cfg.compositor.customConfig != "") [
           "-C"
-          "${pkgs.writeText "dmsgreeter-compositor-config" cfg.compositor.customConfig}"
+          "${pkgs.writeText "dankestiagreeter-compositor-config" cfg.compositor.customConfig}"
         ]
       )
     } ${lib.optionalString cfg.logs.save "> ${cfg.logs.path} 2>&1"}
@@ -63,21 +63,21 @@ in
         "compositor"
         "extraConfig"
       ] msg)
-      ./dms-rename.nix
+      ./dankestia-rename.nix
     ];
 
   options.programs.dank-material-shell.greeter = {
-    enable = lib.mkEnableOption "DankMaterialShell greeter";
+    enable = lib.mkEnableOption "Dankestia greeter";
     package = lib.mkOption {
       type = types.package;
-      default = if cfgDms.enable or false then cfgDms.package else dmsPkgs.dms-shell;
+      default = if cfgDms.enable or false then cfgDms.package else dankestiaPkgs.dankestia-shell;
       defaultText = lib.literalExpression ''
         if config.programs.dank-material-shell.enable
         then config.programs.dank-material-shell.package
         else built from source;
       '';
       description = ''
-        The DankMaterialShell package to use for the greeter.
+        The Dankestia package to use for the greeter.
 
         Defaults to the package from `programs.dank-material-shell` if it is enabled,
         otherwise defaults to building from source.
@@ -105,7 +105,7 @@ in
       default = [ ];
       description = "Config files to copy into data directory";
       example = [
-        "/home/user/.config/DankMaterialShell/settings.json"
+        "/home/user/.config/Dankestia/settings.json"
       ];
     };
     configHome = lib.mkOption {
@@ -114,7 +114,7 @@ in
       example = "/home/user";
       description = ''
         User home directory to copy configurations for greeter
-        If DMS config files are in non-standard locations then use the configFiles option instead
+        If DANKESTIA config files are in non-standard locations then use the configFiles option instead
       '';
     };
     quickshell = {
@@ -138,12 +138,12 @@ in
         '';
       };
     };
-    logs.save = lib.mkEnableOption "saving logs from DMS greeter to file";
+    logs.save = lib.mkEnableOption "saving logs from DANKESTIA greeter to file";
     logs.path = lib.mkOption {
       type = types.path;
-      default = "/tmp/dms-greeter.log";
+      default = "/tmp/dankestia-greeter.log";
       description = ''
-        File path to save DMS greeter logs to
+        File path to save DANKESTIA greeter logs to
       '';
     };
   };
@@ -152,13 +152,13 @@ in
       {
         assertion = (config.users.users.${user} or { }) != { };
         message = ''
-          dmsgreeter: user set for greetd default_session ${user} does not exist. Please create it before referencing it.
+          dankestiagreeter: user set for greetd default_session ${user} does not exist. Please create it before referencing it.
         '';
       }
     ];
-    # DMS currently relies on /etc/pam.d/login for lock screen password auth on NixOS.
+    # DANKESTIA currently relies on /etc/pam.d/login for lock screen password auth on NixOS.
     # Declare security.pam.services.dankshell only if you want to override that runtime fallback.
-    # U2F and fingerprint are handled separately by DMS — do not add pam_u2f or pam_fprintd here.
+    # U2F and fingerprint are handled separately by DANKESTIA — do not add pam_u2f or pam_fprintd here.
     # security.pam.services.dankshell = {
     #   # Example: add faillock
     #   faillock.enable = true;
@@ -172,7 +172,7 @@ in
       inter
       material-symbols
     ];
-    systemd.tmpfiles.settings."10-dmsgreeter" = {
+    systemd.tmpfiles.settings."10-dankestiagreeter" = {
       ${cacheDir}.d = {
         inherit user;
         group =
@@ -228,13 +228,13 @@ in
           fi
       fi
 
-      mv dms-colors.json colors.json || :
+      mv dankestia-colors.json colors.json || :
       chown ${user}: * || :
     '';
     programs.dank-material-shell.greeter.configFiles = lib.mkIf (cfg.configHome != null) [
-      "${cfg.configHome}/.config/DankMaterialShell/settings.json"
-      "${cfg.configHome}/.local/state/DankMaterialShell/session.json"
-      "${cfg.configHome}/.cache/DankMaterialShell/dms-colors.json"
+      "${cfg.configHome}/.config/Dankestia/settings.json"
+      "${cfg.configHome}/.local/state/Dankestia/session.json"
+      "${cfg.configHome}/.cache/Dankestia/dankestia-colors.json"
     ];
   };
 }

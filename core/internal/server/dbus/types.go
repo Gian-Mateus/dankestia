@@ -1,7 +1,7 @@
 package dbus
 
 import (
-	"github.com/AvengeMedia/DankMaterialShell/core/pkg/syncmap"
+	"github.com/AvengeMedia/Dankestia/core/pkg/syncmap"
 	"github.com/godbus/dbus/v5"
 )
 

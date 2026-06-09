@@ -1,9 +1,9 @@
 # IPC Commands Reference
 
-DankMaterialShell provides comprehensive IPC (Inter-Process Communication) functionality that allows external control of the shell through command-line commands. All IPC commands follow the format:
+Dankestia provides comprehensive IPC (Inter-Process Communication) functionality that allows external control of the shell through command-line commands. All IPC commands follow the format:
 
 ```bash
-dms ipc call <target> <function> [parameters...]
+dankestia ipc call <target> <function> [parameters...]
 ```
 
 ## Target: `audio`
@@ -44,9 +44,9 @@ Audio system control and information.
 
 ### Examples
 ```bash
-dms ipc call audio setvolume 50
-dms ipc call audio increment 10
-dms ipc call audio mute
+dankestia ipc call audio setvolume 50
+dankestia ipc call audio increment 10
+dankestia ipc call audio mute
 ```
 
 ## Target: `brightness`
@@ -86,9 +86,9 @@ Display brightness control for internal and external displays.
 
 ### Examples
 ```bash
-dms ipc call brightness set 80
-dms ipc call brightness increment 10 ""
-dms ipc call brightness decrement 5 "intel_backlight"
+dankestia ipc call brightness set 80
+dankestia ipc call brightness increment 10 ""
+dankestia ipc call brightness decrement 5 "intel_backlight"
 ```
 
 ## Target: `night`
@@ -141,11 +141,11 @@ Night mode (gamma/color temperature) control.
 
 ### Examples
 ```bash
-dms ipc call night toggle
-dms ipc call night temperature 4000
-dms ipc call night automation time
-dms ipc call night schedule 20:00 06:00
-dms ipc call night location 40.7128 -74.0060
+dankestia ipc call night toggle
+dankestia ipc call night temperature 4000
+dankestia ipc call night automation time
+dankestia ipc call night schedule 20:00 06:00
+dankestia ipc call night location 40.7128 -74.0060
 ```
 
 ## Target: `mpris`
@@ -184,8 +184,8 @@ Media player control via MPRIS interface.
 
 ### Examples
 ```bash
-dms ipc call mpris playPause
-dms ipc call mpris next
+dankestia ipc call mpris playPause
+dankestia ipc call mpris next
 ```
 
 ## Target: `lock`
@@ -208,8 +208,8 @@ Screen lock control and status.
 
 ### Examples
 ```bash
-dms ipc call lock lock
-dms ipc call lock isLocked
+dankestia ipc call lock lock
+dankestia ipc call lock isLocked
 ```
 
 ## Target: `sessions`
@@ -219,7 +219,7 @@ Logind session enumeration and seat-local session switching. Wraps `loginctl lis
 ### Functions
 
 **`list`**
-- Print every session DMS knows about as tab-separated columns: `sessionId\tusername\tseat\ttty\ttype\tcurrent-marker`
+- Print every session DANKESTIA knows about as tab-separated columns: `sessionId\tusername\tseat\ttty\ttype\tcurrent-marker`
 - Returns: Multi-line string. The current session is marked with `*current*`.
 
 **`refresh`**
@@ -244,19 +244,19 @@ Logind session enumeration and seat-local session switching. Wraps `loginctl lis
 ### Examples
 ```bash
 # Inspect what's switchable
-dms ipc call sessions list
+dankestia ipc call sessions list
 
 # Open the picker (useful for a keybind)
-dms ipc call sessions open
+dankestia ipc call sessions open
 
 # Jump straight to another logged-in user without the picker
-dms ipc call sessions switchTo testuser2
+dankestia ipc call sessions switchTo testuser2
 
 # Or by session ID, when the user has multiple sessions
-dms ipc call sessions activate 4
+dankestia ipc call sessions activate 4
 ```
 
-The dedicated `dms switch-user [target]` CLI command wraps the same behavior with a friendlier error path (it prints the switchable list when no target matches).
+The dedicated `dankestia switch-user [target]` CLI command wraps the same behavior with a friendlier error path (it prints the switchable list when no target matches).
 
 ## Target: `inhibit`
 
@@ -278,13 +278,13 @@ Idle inhibitor control to prevent automatic sleep/lock.
 
 ### Examples
 ```bash
-dms ipc call inhibit toggle
-dms ipc call inhibit enable
+dankestia ipc call inhibit toggle
+dankestia ipc call inhibit enable
 ```
 
 ## Target: `powerprofile`
 
-Power profile control via `power-profiles-daemon`. Changes stay in sync with DMS UI and trigger the power profile OSD when enabled.
+Power profile control via `power-profiles-daemon`. Changes stay in sync with DANKESTIA UI and trigger the power profile OSD when enabled.
 
 Requires `power-profiles-daemon` to be installed and running. Works on all compositors.
 
@@ -321,12 +321,12 @@ Requires `power-profiles-daemon` to be installed and running. Works on all compo
 
 ### Examples
 ```bash
-dms ipc call powerprofile status
-dms ipc call powerprofile list
-dms ipc call powerprofile cycle
-dms ipc call powerprofile set balanced
-dms ipc call powerprofile set performance
-dms ipc call powerprofile toggle
+dankestia ipc call powerprofile status
+dankestia ipc call powerprofile list
+dankestia ipc call powerprofile cycle
+dankestia ipc call powerprofile set balanced
+dankestia ipc call powerprofile set performance
+dankestia ipc call powerprofile toggle
 ```
 
 ## Target: `wallpaper`
@@ -384,36 +384,36 @@ Wallpaper management and retrieval with support for per-monitor configurations.
 
 **Global wallpaper mode:**
 ```bash
-dms ipc call wallpaper get
-dms ipc call wallpaper set /path/to/image.jpg
-dms ipc call wallpaper next
-dms ipc call wallpaper clear
+dankestia ipc call wallpaper get
+dankestia ipc call wallpaper set /path/to/image.jpg
+dankestia ipc call wallpaper next
+dankestia ipc call wallpaper clear
 ```
 
 **Per-monitor wallpaper mode:**
 ```bash
 # Set different wallpapers for each monitor
-dms ipc call wallpaper setFor DP-2 /path/to/image1.jpg
-dms ipc call wallpaper setFor eDP-1 /path/to/image2.jpg
+dankestia ipc call wallpaper setFor DP-2 /path/to/image1.jpg
+dankestia ipc call wallpaper setFor eDP-1 /path/to/image2.jpg
 
 # Get wallpaper for specific monitor
-dms ipc call wallpaper getFor DP-2
+dankestia ipc call wallpaper getFor DP-2
 
 # Cycle wallpapers for specific monitor
-dms ipc call wallpaper nextFor eDP-1
-dms ipc call wallpaper prevFor DP-2
+dankestia ipc call wallpaper nextFor eDP-1
+dankestia ipc call wallpaper prevFor DP-2
 
 # Clear all wallpapers and return to global mode
-dms ipc call wallpaper clear
+dankestia ipc call wallpaper clear
 ```
 
 **Error handling:**
 When per-monitor mode is enabled, legacy functions will return helpful error messages:
 ```bash
-dms ipc call wallpaper get
+dankestia ipc call wallpaper get
 # Returns: "ERROR: Per-monitor mode enabled. Use getFor(screenName) instead."
 
-dms ipc call wallpaper set /path/to/image.jpg
+dankestia ipc call wallpaper set /path/to/image.jpg
 # Returns: "ERROR: Per-monitor mode enabled. Use setFor(screenName, path) instead."
 ```
 
@@ -438,9 +438,9 @@ User profile image management.
 
 ### Examples
 ```bash
-dms ipc call profile getImage
-dms ipc call profile setImage /path/to/avatar.png
-dms ipc call profile clearImage
+dankestia ipc call profile getImage
+dankestia ipc call profile setImage /path/to/avatar.png
+dankestia ipc call profile clearImage
 ```
 
 ## Target: `theme`
@@ -467,8 +467,8 @@ Theme mode control (light/dark mode switching).
 
 ### Examples
 ```bash
-dms ipc call theme toggle
-dms ipc call theme dark
+dankestia ipc call theme toggle
+dankestia ipc call theme dark
 ```
 
 ## Target: `bar`
@@ -499,10 +499,10 @@ Top bar visibility control.
 
 ### Examples
 ```bash
-dms ipc call bar toggle
-dms ipc call bar toggleReveal index 0
-dms ipc call bar hide
-dms ipc call bar status
+dankestia ipc call bar toggle
+dankestia ipc call bar toggleReveal index 0
+dankestia ipc call bar hide
+dankestia ipc call bar status
 ```
 
 ## Target: `systemupdater`
@@ -526,10 +526,10 @@ System updater widget control and background update checks.
 
 ### Examples
 ```bash
-dms ipc call systemupdater toggle
-dms ipc call systemupdater open
-dms ipc call systemupdater close
-dms ipc call systemupdater updatestatus
+dankestia ipc call systemupdater toggle
+dankestia ipc call systemupdater open
+dankestia ipc call systemupdater close
+dankestia ipc call systemupdater updatestatus
 ```
 
 ## Target: `defaultApp`
@@ -576,8 +576,8 @@ Launch applications configured in Settings > Default Apps.
 
 ### Examples
 ```bash
-dms ipc call defaultApp browser
-dms ipc call defaultApp fileManager
+dankestia ipc call defaultApp browser
+dankestia ipc call defaultApp fileManager
 ```
 
 ## Modal Controls
@@ -660,9 +660,9 @@ Control Center popout containing network, bluetooth, audio, power, and other qui
 
 **Examples**
 ```bash
-dms ipc call control-center toggle
-dms ipc call control-center open
-dms ipc call control-center close
+dankestia ipc call control-center toggle
+dankestia ipc call control-center open
+dankestia ipc call control-center close
 ```
 
 ### Target: `notepad`
@@ -759,66 +759,66 @@ Displays a live overview of all workspaces across all monitors with window previ
 ### Modal Examples
 ```bash
 # Open application launcher
-dms ipc call spotlight toggle
+dankestia ipc call spotlight toggle
 
 # Open spotlight with pre-filled search
-dms ipc call spotlight openQuery browser
-dms ipc call spotlight toggleQuery "!"
+dankestia ipc call spotlight openQuery browser
+dankestia ipc call spotlight toggleQuery "!"
 
 # Show clipboard history
-dms ipc call clipboard open
+dankestia ipc call clipboard open
 
 # Toggle notification center
-dms ipc call notifications toggle
+dankestia ipc call notifications toggle
 
 # Show settings
-dms ipc call settings open
+dankestia ipc call settings open
 
 # Show system monitor
-dms ipc call processlist toggle
+dankestia ipc call processlist toggle
 
 # Show power menu
-dms ipc call powermenu toggle
+dankestia ipc call powermenu toggle
 
 # Cycle or set power profile (requires power-profiles-daemon)
-dms ipc call powerprofile cycle
-dms ipc call powerprofile toggle
+dankestia ipc call powerprofile cycle
+dankestia ipc call powerprofile toggle
 
 # Open notepad
-dms ipc call notepad toggle
+dankestia ipc call notepad toggle
 
 # Open the active notepad expanded
-dms ipc call notepad expand
+dankestia ipc call notepad expand
 
 # Collapse the active notepad width
-dms ipc call notepad collapse
+dankestia ipc call notepad collapse
 
 # Toggle the active notepad width
-dms ipc call notepad toggleExpand
+dankestia ipc call notepad toggleExpand
 
 # Show dashboard with specific tabs
-dms ipc call dash open overview
-dms ipc call dash toggle media
-dms ipc call dash open weather
+dankestia ipc call dash open overview
+dankestia ipc call dash toggle media
+dankestia ipc call dash open weather
 
 # Open wallpaper browser
-dms ipc call dankdash wallpaper
+dankestia ipc call dankdash wallpaper
 
 # Open file browsers
-dms ipc call file browse wallpaper
-dms ipc call file browse profile
+dankestia ipc call file browse wallpaper
+dankestia ipc call file browse profile
 
 # Open color picker
-dms ipc call color-picker toggle
+dankestia ipc call color-picker toggle
 
 # Show Hyprland keybinds cheatsheet (Hyprland only)
-dms ipc call hypr toggleBinds
-dms ipc call hypr openBinds
+dankestia ipc call hypr toggleBinds
+dankestia ipc call hypr openBinds
 
 # Show Hyprland workspace overview (Hyprland only)
-dms ipc call hypr toggleOverview
-dms ipc call hypr openOverview
-dms ipc call hypr closeOverview
+dankestia ipc call hypr toggleOverview
+dankestia ipc call hypr openOverview
+dankestia ipc call hypr closeOverview
 ```
 
 ## Common Usage Patterns
@@ -830,29 +830,29 @@ These IPC commands are designed to be used with window manager keybindings.
 **Example niri configuration:**
 ```kdl
 binds {
-    Mod+Space { spawn "qs" "-c" "dms" "ipc" "call" "spotlight" "toggle"; }
-    Mod+V { spawn "qs" "-c" "dms" "ipc" "call" "clipboard" "toggle"; }
-    Mod+P { spawn "qs" "-c" "dms" "ipc" "call" "notepad" "toggle"; }
-    Mod+Shift+P { spawn "qs" "-c" "dms" "ipc" "call" "notepad" "expand"; }
-    Mod+Ctrl+P { spawn "qs" "-c" "dms" "ipc" "call" "notepad" "toggleExpand"; }
-    Mod+X { spawn "qs" "-c" "dms" "ipc" "call" "powermenu" "toggle"; }
-    XF86AudioRaiseVolume { spawn "qs" "-c" "dms" "ipc" "call" "audio" "increment" "3"; }
-    XF86MonBrightnessUp { spawn "qs" "-c" "dms" "ipc" "call" "brightness" "increment" "5" ""; }
+    Mod+Space { spawn "qs" "-c" "dankestia" "ipc" "call" "spotlight" "toggle"; }
+    Mod+V { spawn "qs" "-c" "dankestia" "ipc" "call" "clipboard" "toggle"; }
+    Mod+P { spawn "qs" "-c" "dankestia" "ipc" "call" "notepad" "toggle"; }
+    Mod+Shift+P { spawn "qs" "-c" "dankestia" "ipc" "call" "notepad" "expand"; }
+    Mod+Ctrl+P { spawn "qs" "-c" "dankestia" "ipc" "call" "notepad" "toggleExpand"; }
+    Mod+X { spawn "qs" "-c" "dankestia" "ipc" "call" "powermenu" "toggle"; }
+    XF86AudioRaiseVolume { spawn "qs" "-c" "dankestia" "ipc" "call" "audio" "increment" "3"; }
+    XF86MonBrightnessUp { spawn "qs" "-c" "dankestia" "ipc" "call" "brightness" "increment" "5" ""; }
 }
 ```
 
 **Example Hyprland configuration:**
 ```conf
-bind = SUPER, Space, exec, qs -c dms ipc call spotlight toggle
-bind = SUPER, V, exec, qs -c dms ipc call clipboard toggle
-bind = SUPER, P, exec, qs -c dms ipc call notepad toggle
-bind = SUPER SHIFT, P, exec, qs -c dms ipc call notepad expand
-bind = SUPER CTRL, P, exec, qs -c dms ipc call notepad toggleExpand
-bind = SUPER, X, exec, qs -c dms ipc call powermenu toggle
-bind = SUPER, slash, exec, qs -c dms ipc call hypr toggleBinds
-bind = SUPER, Tab, exec, qs -c dms ipc call hypr toggleOverview
-bind = , XF86AudioRaiseVolume, exec, qs -c dms ipc call audio increment 3
-bind = , XF86MonBrightnessUp, exec, qs -c dms ipc call brightness increment 5 ""
+bind = SUPER, Space, exec, qs -c dankestia ipc call spotlight toggle
+bind = SUPER, V, exec, qs -c dankestia ipc call clipboard toggle
+bind = SUPER, P, exec, qs -c dankestia ipc call notepad toggle
+bind = SUPER SHIFT, P, exec, qs -c dankestia ipc call notepad expand
+bind = SUPER CTRL, P, exec, qs -c dankestia ipc call notepad toggleExpand
+bind = SUPER, X, exec, qs -c dankestia ipc call powermenu toggle
+bind = SUPER, slash, exec, qs -c dankestia ipc call hypr toggleBinds
+bind = SUPER, Tab, exec, qs -c dankestia ipc call hypr toggleOverview
+bind = , XF86AudioRaiseVolume, exec, qs -c dankestia ipc call audio increment 3
+bind = , XF86MonBrightnessUp, exec, qs -c dankestia ipc call brightness increment 5 ""
 ```
 
 ### Scripting and Automation
@@ -864,9 +864,9 @@ IPC commands can be used in scripts for automation:
 # Toggle night mode based on time of day
 hour=$(date +%H)
 if [ $hour -ge 20 ] || [ $hour -le 6 ]; then
-    dms ipc call night enable
+    dankestia ipc call night enable
 else
-    dms ipc call night disable
+    dankestia ipc call night disable
 fi
 ```
 
@@ -876,9 +876,9 @@ Many commands provide status information useful for scripts:
 
 ```bash
 # Check if screen is locked before performing action
-if dms ipc call lock isLocked | grep -q "false"; then
+if dankestia ipc call lock isLocked | grep -q "false"; then
     # Perform action only if unlocked
-    dms ipc call notifications open
+    dankestia ipc call notifications open
 fi
 ```
 

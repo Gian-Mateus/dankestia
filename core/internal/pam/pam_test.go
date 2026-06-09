@@ -61,7 +61,7 @@ func (e *pamTestEnv) writePamFile(t *testing.T, name string, content string) {
 
 func (e *pamTestEnv) writeSettings(t *testing.T, content string) {
 	t.Helper()
-	writeTestFile(t, filepath.Join(e.homeDir, ".config", "DankMaterialShell", "settings.json"), content)
+	writeTestFile(t, filepath.Join(e.homeDir, ".config", "Dankestia", "settings.json"), content)
 }
 
 func (e *pamTestEnv) deps(isNixOS bool) syncDeps {
@@ -448,7 +448,7 @@ func TestSyncLockscreenU2FPamConfigWithDeps(t *testing.T) {
 		}
 	})
 
-	t.Run("disabled removes DMS-managed file", func(t *testing.T) {
+	t.Run("disabled removes DANKESTIA-managed file", func(t *testing.T) {
 		t.Parallel()
 
 		env := newPamTestEnv(t)
@@ -464,7 +464,7 @@ func TestSyncLockscreenU2FPamConfigWithDeps(t *testing.T) {
 		if _, err := os.Stat(env.dankshellU2fPath); !os.IsNotExist(err) {
 			t.Fatalf("expected managed dankshell-u2f to be removed, stat err = %v", err)
 		}
-		if len(logs) == 0 || !strings.Contains(logs[len(logs)-1], "Removed DMS-managed /etc/pam.d/dankshell-u2f") {
+		if len(logs) == 0 || !strings.Contains(logs[len(logs)-1], "Removed DANKESTIA-managed /etc/pam.d/dankshell-u2f") {
 			t.Fatalf("expected removal log, got %v", logs)
 		}
 	})
@@ -568,10 +568,10 @@ func TestRemoveManagedGreeterPamBlockWithDeps(t *testing.T) {
 
 	got := readFileString(t, env.greetdPath)
 	if strings.Contains(got, GreeterPamManagedBlockStart) || strings.Contains(got, legacyGreeterPamFprintComment) {
-		t.Fatalf("managed or legacy DMS auth lines remained in greetd PAM:\n%s", got)
+		t.Fatalf("managed or legacy DANKESTIA auth lines remained in greetd PAM:\n%s", got)
 	}
 	if !strings.Contains(got, "auth include system-auth") {
-		t.Fatalf("expected non-DMS greetd auth lines to remain:\n%s", got)
+		t.Fatalf("expected non-DANKESTIA greetd auth lines to remain:\n%s", got)
 	}
 }
 

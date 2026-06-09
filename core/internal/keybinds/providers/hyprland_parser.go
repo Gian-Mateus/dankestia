@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/luaconfig"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/utils"
+	"github.com/AvengeMedia/Dankestia/core/internal/luaconfig"
+	"github.com/AvengeMedia/Dankestia/core/internal/utils"
 )
 
 const (
@@ -40,20 +40,20 @@ type HyprlandParser struct {
 	readingLine        int
 	configDir          string
 	currentSource      string
-	dmsBindsExists     bool
-	dmsBindsIncluded   bool
+	dankestiaBindsExists     bool
+	dankestiaBindsIncluded   bool
 	includeCount       int
-	dmsIncludePos      int
-	bindsAfterDMS      int
-	dmsBindKeys        map[string]bool
+	dankestiaIncludePos      int
+	bindsAfterDANKESTIA      int
+	dankestiaBindKeys        map[string]bool
 	configBindKeys     map[string]bool
 	conflictingConfigs map[string]*HyprlandKeyBinding
 	bindMap            map[string]*HyprlandKeyBinding
 	bindOrder          []string
 	processedFiles     map[string]bool
-	dmsProcessed       bool
+	dankestiaProcessed       bool
 	removedKeys        map[string]bool // bare hl.unbind targets (negative overrides)
-	defaultDMSKeys     map[string]bool // keys present in dms/binds.{lua,conf}
+	defaultDANKESTIAKeys     map[string]bool // keys present in dankestia/binds.{lua,conf}
 	configFormat       string
 	readOnly           bool
 }
@@ -63,15 +63,15 @@ func NewHyprlandParser(configDir string) *HyprlandParser {
 		contentLines:       []string{},
 		readingLine:        0,
 		configDir:          configDir,
-		dmsIncludePos:      -1,
-		dmsBindKeys:        make(map[string]bool),
+		dankestiaIncludePos:      -1,
+		dankestiaBindKeys:        make(map[string]bool),
 		configBindKeys:     make(map[string]bool),
 		conflictingConfigs: make(map[string]*HyprlandKeyBinding),
 		bindMap:            make(map[string]*HyprlandKeyBinding),
 		bindOrder:          []string{},
 		processedFiles:     make(map[string]bool),
 		removedKeys:        make(map[string]bool),
-		defaultDMSKeys:     make(map[string]bool),
+		defaultDANKESTIAKeys:     make(map[string]bool),
 	}
 }
 
@@ -297,18 +297,18 @@ func ParseHyprlandKeys(path string) (*HyprlandSection, error) {
 
 type HyprlandParseResult struct {
 	Section            *HyprlandSection
-	DMSBindsIncluded   bool
-	DMSStatus          *HyprlandDMSStatus
+	DANKESTIABindsIncluded   bool
+	DANKESTIAStatus          *HyprlandDANKESTIAStatus
 	ConflictingConfigs map[string]*HyprlandKeyBinding
-	DefaultDMSKeys     map[string]bool // keys with a DMS default in binds.{lua,conf}
+	DefaultDANKESTIAKeys     map[string]bool // keys with a DANKESTIA default in binds.{lua,conf}
 }
 
-type HyprlandDMSStatus struct {
+type HyprlandDANKESTIAStatus struct {
 	Exists          bool
 	Included        bool
 	IncludePosition int
 	TotalIncludes   int
-	BindsAfterDMS   int
+	BindsAfterDANKESTIA   int
 	Effective       bool
 	OverriddenBy    int
 	StatusMessage   string
@@ -316,31 +316,31 @@ type HyprlandDMSStatus struct {
 	ReadOnly        bool
 }
 
-func (p *HyprlandParser) buildDMSStatus() *HyprlandDMSStatus {
-	status := &HyprlandDMSStatus{
-		Exists:          p.dmsBindsExists,
-		Included:        p.dmsBindsIncluded,
-		IncludePosition: p.dmsIncludePos,
+func (p *HyprlandParser) buildDANKESTIAStatus() *HyprlandDANKESTIAStatus {
+	status := &HyprlandDANKESTIAStatus{
+		Exists:          p.dankestiaBindsExists,
+		Included:        p.dankestiaBindsIncluded,
+		IncludePosition: p.dankestiaIncludePos,
 		TotalIncludes:   p.includeCount,
-		BindsAfterDMS:   p.bindsAfterDMS,
+		BindsAfterDANKESTIA:   p.bindsAfterDANKESTIA,
 		ConfigFormat:    p.configFormat,
 		ReadOnly:        p.readOnly,
 	}
 
 	switch {
-	case !p.dmsBindsExists:
+	case !p.dankestiaBindsExists:
 		status.Effective = false
-		status.StatusMessage = "dms/binds.lua (or legacy binds.conf) does not exist"
-	case !p.dmsBindsIncluded:
+		status.StatusMessage = "dankestia/binds.lua (or legacy binds.conf) does not exist"
+	case !p.dankestiaBindsIncluded:
 		status.Effective = false
-		status.StatusMessage = "dms binds are not loaded from Hyprland config (require / source)"
-	case p.bindsAfterDMS > 0:
+		status.StatusMessage = "dankestia binds are not loaded from Hyprland config (require / source)"
+	case p.bindsAfterDANKESTIA > 0:
 		status.Effective = true
-		status.OverriddenBy = p.bindsAfterDMS
-		status.StatusMessage = "Some DMS binds may be overridden by config binds"
+		status.OverriddenBy = p.bindsAfterDANKESTIA
+		status.StatusMessage = "Some DANKESTIA binds may be overridden by config binds"
 	default:
 		status.Effective = true
-		status.StatusMessage = "DMS binds are active"
+		status.StatusMessage = "DANKESTIA binds are active"
 	}
 
 	return status
@@ -360,15 +360,15 @@ func (p *HyprlandParser) normalizeKey(key string) string {
 func (p *HyprlandParser) addBind(kb *HyprlandKeyBinding) bool {
 	key := p.formatBindKey(kb)
 	normalizedKey := p.normalizeKey(key)
-	isDMSBind := isDMSBindsSourcePath(kb.Source)
+	isDANKESTIABind := isDANKESTIABindsSourcePath(kb.Source)
 
-	if isDMSBindsPrimarySourcePath(kb.Source) {
-		p.defaultDMSKeys[normalizedKey] = true
+	if isDANKESTIABindsPrimarySourcePath(kb.Source) {
+		p.defaultDANKESTIAKeys[normalizedKey] = true
 	}
-	if isDMSBind {
-		p.dmsBindKeys[normalizedKey] = true
-	} else if p.dmsBindKeys[normalizedKey] {
-		p.bindsAfterDMS++
+	if isDANKESTIABind {
+		p.dankestiaBindKeys[normalizedKey] = true
+	} else if p.dankestiaBindKeys[normalizedKey] {
+		p.bindsAfterDANKESTIA++
 		p.conflictingConfigs[normalizedKey] = kb
 		p.configBindKeys[normalizedKey] = true
 		return false
@@ -383,21 +383,21 @@ func (p *HyprlandParser) addBind(kb *HyprlandKeyBinding) bool {
 	return true
 }
 
-func (p *HyprlandParser) ParseWithDMS() (*HyprlandSection, error) {
+func (p *HyprlandParser) ParseWithDANKESTIA() (*HyprlandSection, error) {
 	expandedDir, err := utils.ExpandPath(p.configDir)
 	if err != nil {
 		return nil, err
 	}
 
-	dmsBindsLua := filepath.Join(expandedDir, "dms", "binds.lua")
-	dmsBindsConf := filepath.Join(expandedDir, "dms", "binds.conf")
-	dmsBindsPath := ""
-	if _, err := os.Stat(dmsBindsLua); err == nil {
-		p.dmsBindsExists = true
-		dmsBindsPath = dmsBindsLua
-	} else if _, err := os.Stat(dmsBindsConf); err == nil {
-		p.dmsBindsExists = true
-		dmsBindsPath = dmsBindsConf
+	dankestiaBindsLua := filepath.Join(expandedDir, "dankestia", "binds.lua")
+	dankestiaBindsConf := filepath.Join(expandedDir, "dankestia", "binds.conf")
+	dankestiaBindsPath := ""
+	if _, err := os.Stat(dankestiaBindsLua); err == nil {
+		p.dankestiaBindsExists = true
+		dankestiaBindsPath = dankestiaBindsLua
+	} else if _, err := os.Stat(dankestiaBindsConf); err == nil {
+		p.dankestiaBindsExists = true
+		dankestiaBindsPath = dankestiaBindsConf
 	}
 
 	mainConfig, err := hyprlandMainConfigPath(p.configDir)
@@ -416,57 +416,57 @@ func (p *HyprlandParser) ParseWithDMS() (*HyprlandSection, error) {
 		return nil, err
 	}
 
-	if p.dmsBindsExists && !p.dmsProcessed {
-		p.parseDMSBindsDirectly(dmsBindsPath, section)
+	if p.dankestiaBindsExists && !p.dankestiaProcessed {
+		p.parseDANKESTIABindsDirectly(dankestiaBindsPath, section)
 	}
-	p.removeShadowedDMSBinds(section)
-	p.removeUnboundDMSBinds(section)
+	p.removeShadowedDANKESTIABinds(section)
+	p.removeUnboundDANKESTIABinds(section)
 
 	return section, nil
 }
 
-func (p *HyprlandParser) removeUnboundDMSBinds(section *HyprlandSection) {
+func (p *HyprlandParser) removeUnboundDANKESTIABinds(section *HyprlandSection) {
 	if len(p.removedKeys) == 0 {
 		return
 	}
 	filtered := section.Keybinds[:0]
 	for i := range section.Keybinds {
 		kb := section.Keybinds[i]
-		if isDMSBindsSourcePath(kb.Source) && p.removedKeys[p.normalizeKey(p.formatBindKey(&kb))] {
+		if isDANKESTIABindsSourcePath(kb.Source) && p.removedKeys[p.normalizeKey(p.formatBindKey(&kb))] {
 			continue
 		}
 		filtered = append(filtered, kb)
 	}
 	section.Keybinds = filtered
 	for i := range section.Children {
-		p.removeUnboundDMSBinds(&section.Children[i])
+		p.removeUnboundDANKESTIABinds(&section.Children[i])
 	}
 }
 
-func (p *HyprlandParser) removeShadowedDMSBinds(section *HyprlandSection) {
+func (p *HyprlandParser) removeShadowedDANKESTIABinds(section *HyprlandSection) {
 	counts := make(map[string]int)
-	p.countDMSBinds(section, counts)
-	p.filterShadowedDMSBinds(section, counts)
+	p.countDANKESTIABinds(section, counts)
+	p.filterShadowedDANKESTIABinds(section, counts)
 }
 
-func (p *HyprlandParser) countDMSBinds(section *HyprlandSection, counts map[string]int) {
+func (p *HyprlandParser) countDANKESTIABinds(section *HyprlandSection, counts map[string]int) {
 	for i := range section.Keybinds {
 		kb := &section.Keybinds[i]
-		if isDMSBindsSourcePath(kb.Source) {
+		if isDANKESTIABindsSourcePath(kb.Source) {
 			counts[p.normalizeKey(p.formatBindKey(kb))]++
 		}
 	}
 	for i := range section.Children {
-		p.countDMSBinds(&section.Children[i], counts)
+		p.countDANKESTIABinds(&section.Children[i], counts)
 	}
 }
 
-func (p *HyprlandParser) filterShadowedDMSBinds(section *HyprlandSection, counts map[string]int) {
+func (p *HyprlandParser) filterShadowedDANKESTIABinds(section *HyprlandSection, counts map[string]int) {
 	filtered := section.Keybinds[:0]
 	for i := range section.Keybinds {
 		kb := section.Keybinds[i]
 		key := p.normalizeKey(p.formatBindKey(&kb))
-		if isDMSBindsSourcePath(kb.Source) && counts[key] > 1 {
+		if isDANKESTIABindsSourcePath(kb.Source) && counts[key] > 1 {
 			counts[key]--
 			continue
 		}
@@ -474,7 +474,7 @@ func (p *HyprlandParser) filterShadowedDMSBinds(section *HyprlandSection, counts
 	}
 	section.Keybinds = filtered
 	for i := range section.Children {
-		p.filterShadowedDMSBinds(&section.Children[i], counts)
+		p.filterShadowedDANKESTIABinds(&section.Children[i], counts)
 	}
 }
 
@@ -537,13 +537,13 @@ func (p *HyprlandParser) handleSource(line string, section *HyprlandSection, bas
 	}
 
 	sourcePath := strings.TrimSpace(parts[1])
-	isDMSSource := isDMSBindsPrimarySourcePath(sourcePath)
+	isDANKESTIASource := isDANKESTIABindsPrimarySourcePath(sourcePath)
 
 	p.includeCount++
-	if isDMSSource {
-		p.dmsBindsIncluded = true
-		p.dmsIncludePos = p.includeCount
-		p.dmsProcessed = true
+	if isDANKESTIASource {
+		p.dankestiaBindsIncluded = true
+		p.dankestiaIncludePos = p.includeCount
+		p.dankestiaProcessed = true
 	}
 
 	fullPath := sourcePath
@@ -564,25 +564,25 @@ func (p *HyprlandParser) handleSource(line string, section *HyprlandSection, bas
 	section.Children = append(section.Children, *includedSection)
 }
 
-func (p *HyprlandParser) parseDMSBindsDirectly(dmsBindsPath string, section *HyprlandSection) {
-	if strings.EqualFold(filepath.Ext(dmsBindsPath), ".lua") {
-		sub, err := p.parseLuaLinesFromPath(dmsBindsPath)
+func (p *HyprlandParser) parseDANKESTIABindsDirectly(dankestiaBindsPath string, section *HyprlandSection) {
+	if strings.EqualFold(filepath.Ext(dankestiaBindsPath), ".lua") {
+		sub, err := p.parseLuaLinesFromPath(dankestiaBindsPath)
 		if err != nil {
 			return
 		}
 		section.Keybinds = append(section.Keybinds, sub.Keybinds...)
 		section.Children = append(section.Children, sub.Children...)
-		p.dmsProcessed = true
+		p.dankestiaProcessed = true
 		return
 	}
 
-	data, err := os.ReadFile(dmsBindsPath)
+	data, err := os.ReadFile(dankestiaBindsPath)
 	if err != nil {
 		return
 	}
 
 	prevSource := p.currentSource
-	p.currentSource = dmsBindsPath
+	p.currentSource = dankestiaBindsPath
 
 	lines := strings.Split(string(data), "\n")
 	for _, line := range lines {
@@ -595,14 +595,14 @@ func (p *HyprlandParser) parseDMSBindsDirectly(dmsBindsPath string, section *Hyp
 		if kb == nil {
 			continue
 		}
-		kb.Source = dmsBindsPath
+		kb.Source = dankestiaBindsPath
 		if p.addBind(kb) {
 			section.Keybinds = append(section.Keybinds, *kb)
 		}
 	}
 
 	p.currentSource = prevSource
-	p.dmsProcessed = true
+	p.dankestiaProcessed = true
 }
 
 func (p *HyprlandParser) parseLuaLinesFromPath(absPath string) (*HyprlandSection, error) {
@@ -646,12 +646,12 @@ func (p *HyprlandParser) parseLuaLines(content string, baseDir, absPath, section
 				if rel == "" {
 					continue
 				}
-				isDMS := isDMSBindsPrimarySourcePath(rel)
+				isDANKESTIA := isDANKESTIABindsPrimarySourcePath(rel)
 				p.includeCount++
-				if isDMS {
-					p.dmsBindsIncluded = true
-					p.dmsIncludePos = p.includeCount
-					p.dmsProcessed = true
+				if isDANKESTIA {
+					p.dankestiaBindsIncluded = true
+					p.dankestiaIncludePos = p.includeCount
+					p.dankestiaProcessed = true
 				}
 				fullPath := luaconfig.ModuleToPath(rootDir, mod)
 				expanded, err := utils.ExpandPath(fullPath)
@@ -831,19 +831,19 @@ func extractBindFlags(bindType string) string {
 	return bindType[4:] // Everything after "bind"
 }
 
-func ParseHyprlandKeysWithDMS(path string) (*HyprlandParseResult, error) {
+func ParseHyprlandKeysWithDANKESTIA(path string) (*HyprlandParseResult, error) {
 	parser := NewHyprlandParser(path)
-	section, err := parser.ParseWithDMS()
+	section, err := parser.ParseWithDANKESTIA()
 	if err != nil {
 		return nil, err
 	}
 
 	return &HyprlandParseResult{
 		Section:            section,
-		DMSBindsIncluded:   parser.dmsBindsIncluded,
-		DMSStatus:          parser.buildDMSStatus(),
+		DANKESTIABindsIncluded:   parser.dankestiaBindsIncluded,
+		DANKESTIAStatus:          parser.buildDANKESTIAStatus(),
 		ConflictingConfigs: parser.conflictingConfigs,
-		DefaultDMSKeys:     parser.defaultDMSKeys,
+		DefaultDANKESTIAKeys:     parser.defaultDANKESTIAKeys,
 	}, nil
 }
 
@@ -1529,29 +1529,29 @@ func luaLineTrailingComment(line string) string {
 	return ""
 }
 
-func isDMSBindsSourcePath(p string) bool {
+func isDANKESTIABindsSourcePath(p string) bool {
 	p = filepath.ToSlash(strings.TrimSpace(p))
-	if isDMSBindsPrimarySourcePath(p) {
+	if isDANKESTIABindsPrimarySourcePath(p) {
 		return true
 	}
-	return isDMSBindsUserOverridePath(p)
+	return isDANKESTIABindsUserOverridePath(p)
 }
 
-func isDMSBindsUserOverridePath(p string) bool {
+func isDANKESTIABindsUserOverridePath(p string) bool {
 	p = filepath.ToSlash(strings.TrimSpace(p))
-	return p == "dms/binds-user.lua" || p == "./dms/binds-user.lua" ||
-		strings.HasSuffix(p, "/dms/binds-user.lua")
+	return p == "dankestia/binds-user.lua" || p == "./dankestia/binds-user.lua" ||
+		strings.HasSuffix(p, "/dankestia/binds-user.lua")
 }
 
-func isDMSBindsPrimarySourcePath(p string) bool {
+func isDANKESTIABindsPrimarySourcePath(p string) bool {
 	p = filepath.ToSlash(strings.TrimSpace(p))
-	if strings.Contains(p, "/dms/binds.lua") || strings.HasSuffix(p, "dms/binds.lua") || p == "dms/binds.lua" || p == "./dms/binds.lua" {
+	if strings.Contains(p, "/dankestia/binds.lua") || strings.HasSuffix(p, "dankestia/binds.lua") || p == "dankestia/binds.lua" || p == "./dankestia/binds.lua" {
 		return true
 	}
-	if strings.Contains(p, "/dms/binds.conf") || strings.HasSuffix(p, "dms/binds.conf") {
+	if strings.Contains(p, "/dankestia/binds.conf") || strings.HasSuffix(p, "dankestia/binds.conf") {
 		return true
 	}
-	return p == "dms/binds.conf" || p == "./dms/binds.conf"
+	return p == "dankestia/binds.conf" || p == "./dankestia/binds.conf"
 }
 
 // hyprlandMainConfigPath returns hyprland.lua if present, else hyprland.conf if present.

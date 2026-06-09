@@ -7,8 +7,8 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/deps"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/privesc"
+	"github.com/AvengeMedia/Dankestia/core/internal/deps"
+	"github.com/AvengeMedia/Dankestia/core/internal/privesc"
 )
 
 var GentooGlobalUseFlags = []string{
@@ -88,7 +88,7 @@ func (g *GentooDistribution) DetectDependencies(ctx context.Context, wm deps.Win
 func (g *GentooDistribution) DetectDependenciesWithTerminal(ctx context.Context, wm deps.WindowManager, terminal deps.Terminal) ([]deps.Dependency, error) {
 	var dependencies []deps.Dependency
 
-	dependencies = append(dependencies, g.detectDMS())
+	dependencies = append(dependencies, g.detectDANKESTIA())
 
 	dependencies = append(dependencies, g.detectSpecificTerminal(terminal))
 
@@ -121,9 +121,9 @@ func (g *GentooDistribution) detectXDGPortal() deps.Dependency {
 	return g.detectPackage("xdg-desktop-portal-gtk", "Desktop integration portal for GTK", g.packageInstalled("sys-apps/xdg-desktop-portal-gtk"))
 }
 
-func (g *GentooDistribution) detectDMS() deps.Dependency {
+func (g *GentooDistribution) detectDANKESTIA() deps.Dependency {
 	dep := deps.Dependency{
-		Name:        "dms (DankMaterialShell)",
+		Name:        "dankestia (Dankestia)",
 		Status:      deps.StatusMissing,
 		Description: "Desktop Management System configuration",
 		Required:    true,
@@ -169,7 +169,7 @@ func (g *GentooDistribution) GetPackageMappingWithVariants(wm deps.WindowManager
 
 		"quickshell":              g.getQuickshellMapping(variants["quickshell"]),
 		"matugen":                 {Name: "x11-misc/matugen", Repository: RepoTypeGURU, AcceptKeywords: archKeyword},
-		"dms (DankMaterialShell)": g.getDmsMapping(),
+		"dankestia (Dankestia)": g.getDmsMapping(),
 		"dgop":                    {Name: "gui-apps/dgop", Repository: RepoTypeGURU, AcceptKeywords: archKeyword},
 	}
 
@@ -435,8 +435,8 @@ func (g *GentooDistribution) InstallPackages(ctx context.Context, dependencies [
 		g.log(fmt.Sprintf("Warning: failed to write window manager config: %v", err))
 	}
 
-	if err := g.EnableDMSService(ctx, wm); err != nil {
-		g.log(fmt.Sprintf("Warning: failed to enable dms service: %v", err))
+	if err := g.EnableDANKESTIAService(ctx, wm); err != nil {
+		g.log(fmt.Sprintf("Warning: failed to enable dankestia service: %v", err))
 	}
 
 	progressChan <- InstallProgressMsg{

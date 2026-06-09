@@ -28,19 +28,19 @@ packages:
       outpkg: mocks_brightness
     interfaces:
       DBusConn:
-  github.com/AvengeMedia/DankMaterialShell/core/internal/geolocation:
+  github.com/AvengeMedia/Dankestia/core/internal/geolocation:
     config:
       dir: "internal/mocks/geolocation"
       outpkg: mocks_geolocation
     interfaces:
       Client:
-  github.com/AvengeMedia/DankMaterialShell/core/internal/server/network:
+  github.com/AvengeMedia/Dankestia/core/internal/server/network:
     config:
       dir: "internal/mocks/network"
       outpkg: mocks_network
     interfaces:
       Backend:
-  github.com/AvengeMedia/DankMaterialShell/core/internal/server/cups:
+  github.com/AvengeMedia/Dankestia/core/internal/server/cups:
     config:
       dir: "internal/mocks/cups"
       outpkg: mocks_cups
@@ -50,31 +50,31 @@ packages:
         config:
           dir: "internal/mocks/cups_pkhelper"
           outpkg: mocks_cups_pkhelper
-  github.com/AvengeMedia/DankMaterialShell/core/internal/server/evdev:
+  github.com/AvengeMedia/Dankestia/core/internal/server/evdev:
     config:
       dir: "internal/mocks/evdev"
       outpkg: mocks_evdev
     interfaces:
       EvdevDevice:
-  github.com/AvengeMedia/DankMaterialShell/core/internal/version:
+  github.com/AvengeMedia/Dankestia/core/internal/version:
     config:
       dir: "internal/mocks/version"
       outpkg: mocks_version
     interfaces:
       VersionFetcher:
-  github.com/AvengeMedia/DankMaterialShell/core/internal/server/wlcontext:
+  github.com/AvengeMedia/Dankestia/core/internal/server/wlcontext:
     config:
       dir: "internal/mocks/wlcontext"
       outpkg: mocks_wlcontext
     interfaces:
       WaylandContext:
-  github.com/AvengeMedia/DankMaterialShell/core/pkg/go-wayland/wayland/client:
+  github.com/AvengeMedia/Dankestia/core/pkg/go-wayland/wayland/client:
     config:
       dir: "internal/mocks/wlclient"
       outpkg: mocks_wlclient
     interfaces:
       WaylandDisplay:
-  github.com/AvengeMedia/DankMaterialShell/core/internal/utils:
+  github.com/AvengeMedia/Dankestia/core/internal/utils:
     config:
       dir: "internal/mocks/utils"
       outpkg: mocks_utils

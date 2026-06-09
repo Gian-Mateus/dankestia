@@ -3,8 +3,8 @@ package network
 import (
 	"testing"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/errdefs"
-	mock_gonetworkmanager "github.com/AvengeMedia/DankMaterialShell/core/internal/mocks/github.com/Wifx/gonetworkmanager/v2"
+	"github.com/AvengeMedia/Dankestia/core/internal/errdefs"
+	mock_gonetworkmanager "github.com/AvengeMedia/Dankestia/core/internal/mocks/github.com/Wifx/gonetworkmanager/v2"
 	"github.com/Wifx/gonetworkmanager/v2"
 	"github.com/stretchr/testify/assert"
 )

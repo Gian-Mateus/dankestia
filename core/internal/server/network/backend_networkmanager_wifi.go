@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/log"
+	"github.com/AvengeMedia/Dankestia/core/internal/log"
 	"github.com/Wifx/gonetworkmanager/v2"
 )
 

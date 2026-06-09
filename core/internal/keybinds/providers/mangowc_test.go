@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/config"
+	"github.com/AvengeMedia/Dankestia/core/internal/config"
 )
 
 func TestMangoWCProviderName(t *testing.T) {
@@ -324,18 +324,18 @@ bind=Ctrl,1,view,1,0
 
 func TestMangoWCSetBindPreservesStockCommentsAndGestures(t *testing.T) {
 	tmpDir := t.TempDir()
-	dmsDir := filepath.Join(tmpDir, "dms")
-	if err := os.MkdirAll(dmsDir, 0o755); err != nil {
-		t.Fatalf("failed to create dms dir: %v", err)
+	dankestiaDir := filepath.Join(tmpDir, "dankestia")
+	if err := os.MkdirAll(dankestiaDir, 0o755); err != nil {
+		t.Fatalf("failed to create dankestia dir: %v", err)
 	}
-	bindsPath := filepath.Join(dmsDir, "binds.conf")
+	bindsPath := filepath.Join(dankestiaDir, "binds.conf")
 	stock := strings.ReplaceAll(config.MangoBindsConfig, "{{TERMINAL_COMMAND}}", "ghostty")
 	if err := os.WriteFile(bindsPath, []byte(stock), 0o644); err != nil {
 		t.Fatalf("failed to write stock binds: %v", err)
 	}
 
 	provider := NewMangoWCProvider(tmpDir)
-	if err := provider.SetBind("SUPER+SHIFT+S", "spawn dms screenshot", "Screenshot: Interactive", nil); err != nil {
+	if err := provider.SetBind("SUPER+SHIFT+S", "spawn dankestia screenshot", "Screenshot: Interactive", nil); err != nil {
 		t.Fatalf("SetBind failed: %v", err)
 	}
 
@@ -350,7 +350,7 @@ func TestMangoWCSetBindPreservesStockCommentsAndGestures(t *testing.T) {
 		"# === Touchpad Gestures ===",
 		"gesturebind=none,right,3,viewtoleft_have_client",
 		"gesturebind=none,left,3,viewtoright_have_client",
-		"# Screenshot: Interactive\nbind=SUPER+SHIFT,S,spawn,dms screenshot",
+		"# Screenshot: Interactive\nbind=SUPER+SHIFT,S,spawn,dankestia screenshot",
 	} {
 		if !strings.Contains(content, want) {
 			t.Fatalf("expected saved binds to contain %q\ncontent:\n%s", want, content)
@@ -363,15 +363,15 @@ func TestMangoWCSetBindPreservesStockCommentsAndGestures(t *testing.T) {
 
 func TestMangoWCSetBindRestoresScaffoldForStrippedFile(t *testing.T) {
 	tmpDir := t.TempDir()
-	dmsDir := filepath.Join(tmpDir, "dms")
-	if err := os.MkdirAll(dmsDir, 0o755); err != nil {
-		t.Fatalf("failed to create dms dir: %v", err)
+	dankestiaDir := filepath.Join(tmpDir, "dankestia")
+	if err := os.MkdirAll(dankestiaDir, 0o755); err != nil {
+		t.Fatalf("failed to create dankestia dir: %v", err)
 	}
-	bindsPath := filepath.Join(dmsDir, "binds.conf")
+	bindsPath := filepath.Join(dankestiaDir, "binds.conf")
 	stripped := `bind=SUPER,t,spawn,ghostty
 bind=SUPER,Return,spawn,ghostty
-bind=SUPER,space,spawn,dms ipc call spotlight toggle
-bind=SUPER,v,spawn,dms ipc call clipboard toggle
+bind=SUPER,space,spawn,dankestia ipc call spotlight toggle
+bind=SUPER,v,spawn,dankestia ipc call clipboard toggle
 bind=SUPER,q,killclient
 bind=SUPER,Left,focusdir,left
 bind=SUPER,Right,focusdir,right
@@ -386,7 +386,7 @@ bind=SUPER,3,view,3
 	}
 
 	provider := NewMangoWCProvider(tmpDir)
-	if err := provider.SetBind("SUPER+SHIFT+S", "spawn dms screenshot", "Screenshot: Interactive", nil); err != nil {
+	if err := provider.SetBind("SUPER+SHIFT+S", "spawn dankestia screenshot", "Screenshot: Interactive", nil); err != nil {
 		t.Fatalf("SetBind failed: %v", err)
 	}
 
@@ -397,7 +397,7 @@ bind=SUPER,3,view,3
 	content := string(contentBytes)
 
 	for _, want := range []string{
-		"# DMS default keybinds (MangoWM)",
+		"# DANKESTIA default keybinds (MangoWM)",
 		"# === Touchpad Gestures ===",
 		"gesturebind=none,right,3,viewtoleft_have_client",
 		"bind=SUPER,H,focusdir,left",
@@ -405,7 +405,7 @@ bind=SUPER,3,view,3
 		"bind=SUPER,K,focusdir,up",
 		"bind=SUPER,L,focusdir,right",
 		"# === Custom Keybinds ===",
-		"# Screenshot: Interactive\nbind=SUPER+SHIFT,S,spawn,dms screenshot",
+		"# Screenshot: Interactive\nbind=SUPER+SHIFT,S,spawn,dankestia screenshot",
 		"bind=SUPER,t,spawn,ghostty",
 	} {
 		if !strings.Contains(content, want) {
@@ -419,11 +419,11 @@ bind=SUPER,3,view,3
 
 func TestMangoWCRemoveBindPreservesNonBindLines(t *testing.T) {
 	tmpDir := t.TempDir()
-	dmsDir := filepath.Join(tmpDir, "dms")
-	if err := os.MkdirAll(dmsDir, 0o755); err != nil {
-		t.Fatalf("failed to create dms dir: %v", err)
+	dankestiaDir := filepath.Join(tmpDir, "dankestia")
+	if err := os.MkdirAll(dankestiaDir, 0o755); err != nil {
+		t.Fatalf("failed to create dankestia dir: %v", err)
 	}
-	bindsPath := filepath.Join(dmsDir, "binds.conf")
+	bindsPath := filepath.Join(dankestiaDir, "binds.conf")
 	stock := strings.ReplaceAll(config.MangoBindsConfig, "{{TERMINAL_COMMAND}}", "ghostty")
 	if err := os.WriteFile(bindsPath, []byte(stock), 0o644); err != nil {
 		t.Fatalf("failed to write stock binds: %v", err)

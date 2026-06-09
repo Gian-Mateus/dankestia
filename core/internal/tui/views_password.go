@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/privesc"
+	"github.com/AvengeMedia/Dankestia/core/internal/privesc"
 	tea "github.com/charmbracelet/bubbletea"
 )
 

@@ -3,7 +3,7 @@ package network
 import (
 	"fmt"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/log"
+	"github.com/AvengeMedia/Dankestia/core/internal/log"
 	"github.com/godbus/dbus/v5"
 )
 

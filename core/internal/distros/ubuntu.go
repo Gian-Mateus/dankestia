@@ -6,8 +6,8 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/deps"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/privesc"
+	"github.com/AvengeMedia/Dankestia/core/internal/deps"
+	"github.com/AvengeMedia/Dankestia/core/internal/privesc"
 )
 
 func init() {
@@ -54,8 +54,8 @@ func (u *UbuntuDistribution) DetectDependencies(ctx context.Context, wm deps.Win
 func (u *UbuntuDistribution) DetectDependenciesWithTerminal(ctx context.Context, wm deps.WindowManager, terminal deps.Terminal) ([]deps.Dependency, error) {
 	var dependencies []deps.Dependency
 
-	// DMS at the top (shell is prominent)
-	dependencies = append(dependencies, u.detectDMS())
+	// DANKESTIA at the top (shell is prominent)
+	dependencies = append(dependencies, u.detectDANKESTIA())
 
 	// Terminal with choice support
 	dependencies = append(dependencies, u.detectSpecificTerminal(terminal))
@@ -64,7 +64,7 @@ func (u *UbuntuDistribution) DetectDependenciesWithTerminal(ctx context.Context,
 	dependencies = append(dependencies, u.detectGit())
 	dependencies = append(dependencies, u.detectWindowManager(wm))
 	dependencies = append(dependencies, u.detectQuickshell())
-	dependencies = append(dependencies, u.detectDMSGreeter())
+	dependencies = append(dependencies, u.detectDANKESTIAGreeter())
 	dependencies = append(dependencies, u.detectXDGPortal())
 	dependencies = append(dependencies, u.detectAccountsService())
 
@@ -96,8 +96,8 @@ func (u *UbuntuDistribution) detectAccountsService() deps.Dependency {
 	return u.detectPackage("accountsservice", "D-Bus interface for user account query and manipulation", u.packageInstalled("accountsservice"))
 }
 
-func (u *UbuntuDistribution) detectDMSGreeter() deps.Dependency {
-	return u.detectOptionalPackage("dms-greeter", "DankMaterialShell greetd greeter", u.packageInstalled("dms-greeter"))
+func (u *UbuntuDistribution) detectDANKESTIAGreeter() deps.Dependency {
+	return u.detectOptionalPackage("dankestia-greeter", "Dankestia greetd greeter", u.packageInstalled("dankestia-greeter"))
 }
 
 func (u *UbuntuDistribution) packageInstalled(pkg string) bool {
@@ -117,10 +117,10 @@ func (u *UbuntuDistribution) GetPackageMappingWithVariants(wm deps.WindowManager
 		"xdg-desktop-portal-gtk": {Name: "xdg-desktop-portal-gtk", Repository: RepoTypeSystem},
 		"accountsservice":        {Name: "accountsservice", Repository: RepoTypeSystem},
 
-		// DMS packages from PPAs
-		"dms (DankMaterialShell)": u.getDmsMapping(variants["dms (DankMaterialShell)"]),
+		// DANKESTIA packages from PPAs
+		"dankestia (Dankestia)": u.getDmsMapping(variants["dankestia (Dankestia)"]),
 		"quickshell":              u.getQuickshellMapping(variants["quickshell"]),
-		"dms-greeter":             {Name: "dms-greeter", Repository: RepoTypePPA, RepoURL: "ppa:avengemedia/danklinux"},
+		"dankestia-greeter":             {Name: "dankestia-greeter", Repository: RepoTypePPA, RepoURL: "ppa:avengemedia/danklinux"},
 		"matugen":                 {Name: "matugen", Repository: RepoTypePPA, RepoURL: "ppa:avengemedia/danklinux"},
 		"dgop":                    {Name: "dgop", Repository: RepoTypePPA, RepoURL: "ppa:avengemedia/danklinux"},
 		"ghostty":                 {Name: "ghostty", Repository: RepoTypePPA, RepoURL: "ppa:avengemedia/danklinux"},
@@ -143,9 +143,9 @@ func (u *UbuntuDistribution) GetPackageMappingWithVariants(wm deps.WindowManager
 
 func (u *UbuntuDistribution) getDmsMapping(variant deps.PackageVariant) PackageMapping {
 	if variant == deps.VariantGit {
-		return PackageMapping{Name: "dms-git", Repository: RepoTypePPA, RepoURL: "ppa:avengemedia/dms-git"}
+		return PackageMapping{Name: "dankestia-git", Repository: RepoTypePPA, RepoURL: "ppa:avengemedia/dankestia-git"}
 	}
-	return PackageMapping{Name: "dms", Repository: RepoTypePPA, RepoURL: "ppa:avengemedia/dms"}
+	return PackageMapping{Name: "dankestia", Repository: RepoTypePPA, RepoURL: "ppa:avengemedia/dankestia"}
 }
 
 func (u *UbuntuDistribution) getQuickshellMapping(variant deps.PackageVariant) PackageMapping {
@@ -332,8 +332,8 @@ func (u *UbuntuDistribution) InstallPackages(ctx context.Context, dependencies [
 		u.log(fmt.Sprintf("Warning: failed to write window manager config: %v", err))
 	}
 
-	if err := u.EnableDMSService(ctx, wm); err != nil {
-		u.log(fmt.Sprintf("Warning: failed to enable dms service: %v", err))
+	if err := u.EnableDANKESTIAService(ctx, wm); err != nil {
+		u.log(fmt.Sprintf("Warning: failed to enable dankestia service: %v", err))
 	}
 
 	// Phase 7: Complete

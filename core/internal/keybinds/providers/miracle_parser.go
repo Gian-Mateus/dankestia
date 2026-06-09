@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/utils"
+	"github.com/AvengeMedia/Dankestia/core/internal/utils"
 	"gopkg.in/yaml.v3"
 )
 

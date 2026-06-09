@@ -11,7 +11,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/utils"
+	"github.com/AvengeMedia/Dankestia/core/internal/utils"
 )
 
 var mimeappsWriteMu sync.Mutex

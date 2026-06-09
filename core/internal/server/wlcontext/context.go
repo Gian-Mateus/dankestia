@@ -7,9 +7,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/errdefs"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/log"
-	wlclient "github.com/AvengeMedia/DankMaterialShell/core/pkg/go-wayland/wayland/client"
+	"github.com/AvengeMedia/Dankestia/core/internal/errdefs"
+	"github.com/AvengeMedia/Dankestia/core/internal/log"
+	wlclient "github.com/AvengeMedia/Dankestia/core/pkg/go-wayland/wayland/client"
 )
 
 type WaylandContext interface {

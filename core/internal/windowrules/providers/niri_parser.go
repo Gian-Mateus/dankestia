@@ -11,7 +11,7 @@ import (
 	"github.com/sblinch/kdl-go"
 	"github.com/sblinch/kdl-go/document"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/windowrules"
+	"github.com/AvengeMedia/Dankestia/core/internal/windowrules"
 )
 
 type NiriMatch struct {
@@ -78,12 +78,12 @@ type NiriRulesParser struct {
 	processedFiles   map[string]bool
 	rules            []NiriWindowRule
 	currentSource    string
-	dmsRulesIncluded bool
-	dmsRulesExists   bool
+	dankestiaRulesIncluded bool
+	dankestiaRulesExists   bool
 	includeCount     int
-	dmsIncludePos    int
-	rulesAfterDMS    int
-	dmsProcessed     bool
+	dankestiaIncludePos    int
+	rulesAfterDANKESTIA    int
+	dankestiaProcessed     bool
 }
 
 func NewNiriRulesParser(configDir string) *NiriRulesParser {
@@ -91,14 +91,14 @@ func NewNiriRulesParser(configDir string) *NiriRulesParser {
 		configDir:      configDir,
 		processedFiles: make(map[string]bool),
 		rules:          []NiriWindowRule{},
-		dmsIncludePos:  -1,
+		dankestiaIncludePos:  -1,
 	}
 }
 
 func (p *NiriRulesParser) Parse() ([]NiriWindowRule, error) {
-	dmsRulesPath := filepath.Join(p.configDir, "dms", "windowrules.kdl")
-	if _, err := os.Stat(dmsRulesPath); err == nil {
-		p.dmsRulesExists = true
+	dankestiaRulesPath := filepath.Join(p.configDir, "dankestia", "windowrules.kdl")
+	if _, err := os.Stat(dankestiaRulesPath); err == nil {
+		p.dankestiaRulesExists = true
 	}
 
 	configPath := filepath.Join(p.configDir, "config.kdl")
@@ -106,15 +106,15 @@ func (p *NiriRulesParser) Parse() ([]NiriWindowRule, error) {
 		return nil, err
 	}
 
-	if p.dmsRulesExists && !p.dmsProcessed {
-		p.parseDMSRulesDirectly(dmsRulesPath)
+	if p.dankestiaRulesExists && !p.dankestiaProcessed {
+		p.parseDANKESTIARulesDirectly(dankestiaRulesPath)
 	}
 
 	return p.rules, nil
 }
 
-func (p *NiriRulesParser) parseDMSRulesDirectly(dmsRulesPath string) {
-	data, err := os.ReadFile(dmsRulesPath)
+func (p *NiriRulesParser) parseDANKESTIARulesDirectly(dankestiaRulesPath string) {
+	data, err := os.ReadFile(dankestiaRulesPath)
 	if err != nil {
 		return
 	}
@@ -125,10 +125,10 @@ func (p *NiriRulesParser) parseDMSRulesDirectly(dmsRulesPath string) {
 	}
 
 	prevSource := p.currentSource
-	p.currentSource = dmsRulesPath
-	p.processNodes(doc.Nodes, filepath.Dir(dmsRulesPath))
+	p.currentSource = dankestiaRulesPath
+	p.processNodes(doc.Nodes, filepath.Dir(dankestiaRulesPath))
 	p.currentSource = prevSource
-	p.dmsProcessed = true
+	p.dankestiaProcessed = true
 }
 
 func (p *NiriRulesParser) parseFile(filePath string) error {
@@ -180,13 +180,13 @@ func (p *NiriRulesParser) handleInclude(node *document.Node, baseDir string) {
 	}
 
 	includePath := strings.Trim(node.Arguments[0].String(), "\"")
-	isDMSInclude := includePath == "dms/windowrules.kdl" || strings.HasSuffix(includePath, "/dms/windowrules.kdl")
+	isDANKESTIAInclude := includePath == "dankestia/windowrules.kdl" || strings.HasSuffix(includePath, "/dankestia/windowrules.kdl")
 
 	p.includeCount++
-	if isDMSInclude {
-		p.dmsRulesIncluded = true
-		p.dmsIncludePos = p.includeCount
-		p.dmsProcessed = true
+	if isDANKESTIAInclude {
+		p.dankestiaRulesIncluded = true
+		p.dankestiaIncludePos = p.includeCount
+		p.dankestiaProcessed = true
 	}
 
 	fullPath := filepath.Join(baseDir, includePath)
@@ -507,33 +507,33 @@ func (p *NiriRulesParser) parseBoolArg(node *document.Node) bool {
 	return node.Arguments[0].ValueString() != "false"
 }
 
-func (p *NiriRulesParser) HasDMSRulesIncluded() bool {
-	return p.dmsRulesIncluded
+func (p *NiriRulesParser) HasDANKESTIARulesIncluded() bool {
+	return p.dankestiaRulesIncluded
 }
 
-func (p *NiriRulesParser) buildDMSStatus() *windowrules.DMSRulesStatus {
-	status := &windowrules.DMSRulesStatus{
-		Exists:          p.dmsRulesExists,
-		Included:        p.dmsRulesIncluded,
-		IncludePosition: p.dmsIncludePos,
+func (p *NiriRulesParser) buildDANKESTIAStatus() *windowrules.DANKESTIARulesStatus {
+	status := &windowrules.DANKESTIARulesStatus{
+		Exists:          p.dankestiaRulesExists,
+		Included:        p.dankestiaRulesIncluded,
+		IncludePosition: p.dankestiaIncludePos,
 		TotalIncludes:   p.includeCount,
-		RulesAfterDMS:   p.rulesAfterDMS,
+		RulesAfterDANKESTIA:   p.rulesAfterDANKESTIA,
 	}
 
 	switch {
-	case !p.dmsRulesExists:
+	case !p.dankestiaRulesExists:
 		status.Effective = false
-		status.StatusMessage = "dms/windowrules.kdl does not exist"
-	case !p.dmsRulesIncluded:
+		status.StatusMessage = "dankestia/windowrules.kdl does not exist"
+	case !p.dankestiaRulesIncluded:
 		status.Effective = false
-		status.StatusMessage = "dms/windowrules.kdl is not included in config.kdl"
-	case p.rulesAfterDMS > 0:
+		status.StatusMessage = "dankestia/windowrules.kdl is not included in config.kdl"
+	case p.rulesAfterDANKESTIA > 0:
 		status.Effective = true
-		status.OverriddenBy = p.rulesAfterDMS
-		status.StatusMessage = "Some DMS rules may be overridden by config rules"
+		status.OverriddenBy = p.rulesAfterDANKESTIA
+		status.StatusMessage = "Some DANKESTIA rules may be overridden by config rules"
 	default:
 		status.Effective = true
-		status.StatusMessage = "DMS window rules are active"
+		status.StatusMessage = "DANKESTIA window rules are active"
 	}
 
 	return status
@@ -541,8 +541,8 @@ func (p *NiriRulesParser) buildDMSStatus() *windowrules.DMSRulesStatus {
 
 type NiriRulesParseResult struct {
 	Rules            []NiriWindowRule
-	DMSRulesIncluded bool
-	DMSStatus        *windowrules.DMSRulesStatus
+	DANKESTIARulesIncluded bool
+	DANKESTIAStatus        *windowrules.DANKESTIARulesStatus
 }
 
 func ParseNiriWindowRules(configDir string) (*NiriRulesParseResult, error) {
@@ -553,8 +553,8 @@ func ParseNiriWindowRules(configDir string) (*NiriRulesParseResult, error) {
 	}
 	return &NiriRulesParseResult{
 		Rules:            rules,
-		DMSRulesIncluded: parser.HasDMSRulesIncluded(),
-		DMSStatus:        parser.buildDMSStatus(),
+		DANKESTIARulesIncluded: parser.HasDANKESTIARulesIncluded(),
+		DANKESTIAStatus:        parser.buildDANKESTIAStatus(),
 	}, nil
 }
 
@@ -652,7 +652,7 @@ func (p *NiriWritableProvider) Name() string {
 }
 
 func (p *NiriWritableProvider) GetOverridePath() string {
-	return filepath.Join(p.configDir, "dms", "windowrules.kdl")
+	return filepath.Join(p.configDir, "dankestia", "windowrules.kdl")
 }
 
 func (p *NiriWritableProvider) GetRuleSet() (*windowrules.RuleSet, error) {
@@ -664,13 +664,13 @@ func (p *NiriWritableProvider) GetRuleSet() (*windowrules.RuleSet, error) {
 		Title:            "Niri Window Rules",
 		Provider:         "niri",
 		Rules:            ConvertNiriRulesToWindowRules(result.Rules),
-		DMSRulesIncluded: result.DMSRulesIncluded,
-		DMSStatus:        result.DMSStatus,
+		DANKESTIARulesIncluded: result.DANKESTIARulesIncluded,
+		DANKESTIAStatus:        result.DANKESTIAStatus,
 	}, nil
 }
 
 func (p *NiriWritableProvider) SetRule(rule windowrules.WindowRule) error {
-	rules, err := p.LoadDMSRules()
+	rules, err := p.LoadDANKESTIARules()
 	if err != nil {
 		rules = []windowrules.WindowRule{}
 	}
@@ -687,11 +687,11 @@ func (p *NiriWritableProvider) SetRule(rule windowrules.WindowRule) error {
 		rules = append(rules, rule)
 	}
 
-	return p.writeDMSRules(rules)
+	return p.writeDANKESTIARules(rules)
 }
 
 func (p *NiriWritableProvider) RemoveRule(id string) error {
-	rules, err := p.LoadDMSRules()
+	rules, err := p.LoadDANKESTIARules()
 	if err != nil {
 		return err
 	}
@@ -703,11 +703,11 @@ func (p *NiriWritableProvider) RemoveRule(id string) error {
 		}
 	}
 
-	return p.writeDMSRules(newRules)
+	return p.writeDANKESTIARules(newRules)
 }
 
 func (p *NiriWritableProvider) ReorderRules(ids []string) error {
-	rules, err := p.LoadDMSRules()
+	rules, err := p.LoadDANKESTIARules()
 	if err != nil {
 		return err
 	}
@@ -729,12 +729,12 @@ func (p *NiriWritableProvider) ReorderRules(ids []string) error {
 		newRules = append(newRules, r)
 	}
 
-	return p.writeDMSRules(newRules)
+	return p.writeDANKESTIARules(newRules)
 }
 
 var niriMetaCommentRegex = regexp.MustCompile(`^//\s*@id=(\S*)\s*@name=(.*)$`)
 
-func (p *NiriWritableProvider) LoadDMSRules() ([]windowrules.WindowRule, error) {
+func (p *NiriWritableProvider) LoadDANKESTIARules() ([]windowrules.WindowRule, error) {
 	rulesPath := p.GetOverridePath()
 	data, err := os.ReadFile(rulesPath)
 	if err != nil {
@@ -791,7 +791,7 @@ func (p *NiriWritableProvider) LoadDMSRules() ([]windowrules.WindowRule, error) 
 			name = metas[i].name
 		}
 		if id == "" {
-			id = fmt.Sprintf("dms_rule_%d", i)
+			id = fmt.Sprintf("dankestia_rule_%d", i)
 		}
 
 		wr := windowrules.WindowRule{
@@ -854,7 +854,7 @@ func (p *NiriWritableProvider) LoadDMSRules() ([]windowrules.WindowRule, error) 
 	return rules, nil
 }
 
-func (p *NiriWritableProvider) writeDMSRules(rules []windowrules.WindowRule) error {
+func (p *NiriWritableProvider) writeDANKESTIARules(rules []windowrules.WindowRule) error {
 	rulesPath := p.GetOverridePath()
 
 	if err := os.MkdirAll(filepath.Dir(rulesPath), 0755); err != nil {
@@ -862,7 +862,7 @@ func (p *NiriWritableProvider) writeDMSRules(rules []windowrules.WindowRule) err
 	}
 
 	var lines []string
-	lines = append(lines, "// DMS Window Rules - Managed by DankMaterialShell")
+	lines = append(lines, "// DANKESTIA Window Rules - Managed by Dankestia")
 	lines = append(lines, "// Do not edit manually - changes may be overwritten")
 	lines = append(lines, "")
 

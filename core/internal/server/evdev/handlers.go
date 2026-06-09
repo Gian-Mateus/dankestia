@@ -3,7 +3,7 @@ package evdev
 import (
 	"net"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/models"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/models"
 )
 
 func HandleRequest(conn net.Conn, req models.Request, m *Manager) {

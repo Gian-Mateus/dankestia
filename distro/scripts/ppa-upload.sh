@@ -3,16 +3,16 @@
 # Usage: ./ppa-upload.sh [package-name] [ppa-name] [ubuntu-series] [rebuild-number] [--keep-builds] [--rebuild=N]
 #
 # Examples:
-#   ./ppa-upload.sh dms                    # Upload to questing + resolute (default)
-#   ./ppa-upload.sh dms 2                 # Native: questing ppa2, resolute ppa3 (auto +1 on second series)
-#   ./ppa-upload.sh dms --rebuild=2       # Rebuild with ppa2 (flag syntax)
-#   ./ppa-upload.sh dms-git               # Single package (both series)
+#   ./ppa-upload.sh dankestia                    # Upload to questing + resolute (default)
+#   ./ppa-upload.sh dankestia 2                 # Native: questing ppa2, resolute ppa3 (auto +1 on second series)
+#   ./ppa-upload.sh dankestia --rebuild=2       # Rebuild with ppa2 (flag syntax)
+#   ./ppa-upload.sh dankestia-git               # Single package (both series)
 #   ./ppa-upload.sh all                   # All packages (each to both series)
-#   ./ppa-upload.sh dms resolute          # 26.04 LTS only (same as "dms dms resolute")
-#   ./ppa-upload.sh dms questing          # 25.10 only
-#   ./ppa-upload.sh dms dms resolute      # Explicit PPA name + one series (optional form)
-#   ./ppa-upload.sh dms dms resolute 2    # One series + rebuild number
-#   ./ppa-upload.sh distro/ubuntu/dms dms # Path-style (backward compatible)
+#   ./ppa-upload.sh dankestia resolute          # 26.04 LTS only (same as "dankestia dankestia resolute")
+#   ./ppa-upload.sh dankestia questing          # 25.10 only
+#   ./ppa-upload.sh dankestia dankestia resolute      # Explicit PPA name + one series (optional form)
+#   ./ppa-upload.sh dankestia dankestia resolute 2    # One series + rebuild number
+#   ./ppa-upload.sh distro/ubuntu/dankestia dankestia # Path-style (backward compatible)
 
 set -e
 
@@ -27,7 +27,7 @@ success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
 warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
 error() { echo -e "${RED}[ERROR]${NC} $1"; }
 
-AVAILABLE_PACKAGES=(dms dms-git dms-greeter)
+AVAILABLE_PACKAGES=(dankestia dankestia-git dankestia-greeter)
 
 KEEP_BUILDS=false
 REBUILD_RELEASE=""
@@ -70,7 +70,7 @@ if [[ ${#POSITIONAL_ARGS[@]} -gt 0 ]]; then
     fi
 fi
 
-# Shorthand: "dms resolute" / "dms questing" (package + series; PPA inferred — no need for "dms dms resolute")
+# Shorthand: "dankestia resolute" / "dankestia questing" (package + series; PPA inferred — no need for "dankestia dankestia resolute")
 if [[ ${#POSITIONAL_ARGS[@]} -eq 2 ]] && [[ "${POSITIONAL_ARGS[1]}" == "questing" || "${POSITIONAL_ARGS[1]}" == "resolute" ]]; then
     PACKAGE_INPUT="${POSITIONAL_ARGS[0]}"
     PPA_NAME_INPUT=""
@@ -99,9 +99,9 @@ fi
 get_ppa_name() {
     local pkg="$1"
     case "$pkg" in
-        dms) echo "dms" ;;
-        dms-git) echo "dms-git" ;;
-        dms-greeter) echo "danklinux" ;;
+        dankestia) echo "dankestia" ;;
+        dankestia-git) echo "dankestia-git" ;;
+        dankestia-greeter) echo "danklinux" ;;
         *) echo "" ;;
     esac
 }
@@ -336,7 +336,7 @@ echo
 
 info "Step 2: Uploading to PPA..."
 
-if [ "$PPA_NAME" = "danklinux" ] || [ "$PPA_NAME" = "dms" ] || [ "$PPA_NAME" = "dms-git" ]; then
+if [ "$PPA_NAME" = "danklinux" ] || [ "$PPA_NAME" = "dankestia" ] || [ "$PPA_NAME" = "dankestia-git" ]; then
     warn "Using lftp for upload"
 
     BUILD_DIR=$(dirname "$CHANGES_FILE")
@@ -409,10 +409,10 @@ EOF
         fi
     fi
 else
-    # This branch should not be reached for DMS packages
-    # All DMS packages (dms, dms-git, dms-greeter) use lftp
+    # This branch should not be reached for DANKESTIA packages
+    # All DANKESTIA packages (dankestia, dankestia-git, dankestia-greeter) use lftp
     error "Unknown PPA: $PPA_NAME"
-    error "DMS packages use lftp for upload. Supported PPAs: dms, dms-git, danklinux"
+    error "DANKESTIA packages use lftp for upload. Supported PPAs: dankestia, dankestia-git, danklinux"
     exit 1
 fi
 
@@ -463,31 +463,31 @@ if [ "$KEEP_BUILDS" = "false" ]; then
             REMOVED=$((REMOVED + 1))
         fi
         ;;
-    dms)
-        if [ -f "$PACKAGE_DIR/dms-distropkg-amd64.gz" ]; then
-            rm -f "$PACKAGE_DIR/dms-distropkg-amd64.gz"
+    dankestia)
+        if [ -f "$PACKAGE_DIR/dankestia-distropkg-amd64.gz" ]; then
+            rm -f "$PACKAGE_DIR/dankestia-distropkg-amd64.gz"
             REMOVED=$((REMOVED + 1))
         fi
-        if [ -f "$PACKAGE_DIR/dms-distropkg-arm64.gz" ]; then
-            rm -f "$PACKAGE_DIR/dms-distropkg-arm64.gz"
+        if [ -f "$PACKAGE_DIR/dankestia-distropkg-arm64.gz" ]; then
+            rm -f "$PACKAGE_DIR/dankestia-distropkg-arm64.gz"
             REMOVED=$((REMOVED + 1))
         fi
-        if [ -f "$PACKAGE_DIR/dms-source.tar.gz" ]; then
-            rm -f "$PACKAGE_DIR/dms-source.tar.gz"
+        if [ -f "$PACKAGE_DIR/dankestia-source.tar.gz" ]; then
+            rm -f "$PACKAGE_DIR/dankestia-source.tar.gz"
             REMOVED=$((REMOVED + 1))
         fi
         ;;
-    dms-git)
+    dankestia-git)
         # Remove git source directory binary
-        if [ -d "$PACKAGE_DIR/dms-git-repo" ]; then
-            rm -rf "$PACKAGE_DIR/dms-git-repo"
+        if [ -d "$PACKAGE_DIR/dankestia-git-repo" ]; then
+            rm -rf "$PACKAGE_DIR/dankestia-git-repo"
             REMOVED=$((REMOVED + 1))
         fi
         ;;
-    dms-greeter)
+    dankestia-greeter)
         # Remove downloaded source
-        if [ -f "$PACKAGE_DIR/dms-greeter-source.tar.gz" ]; then
-            rm -f "$PACKAGE_DIR/dms-greeter-source.tar.gz"
+        if [ -f "$PACKAGE_DIR/dankestia-greeter-source.tar.gz" ]; then
+            rm -f "$PACKAGE_DIR/dankestia-greeter-source.tar.gz"
             REMOVED=$((REMOVED + 1))
         fi
         ;;

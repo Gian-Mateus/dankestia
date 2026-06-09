@@ -1,0 +1,23 @@
+Source: dankestia-greeter
+Section: x11
+Priority: optional
+Maintainer: Avenge Media <AvengeMedia.US@gmail.com>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.2
+Homepage: https://github.com/AvengeMedia/Dankestia
+Vcs-Browser: https://github.com/AvengeMedia/Dankestia
+Vcs-Git: https://github.com/AvengeMedia/Dankestia.git
+
+Package: dankestia-greeter
+Architecture: any
+Depends: ${misc:Depends},
+  greetd,
+  quickshell-git | quickshell
+Suggests: niri | hyprland | sway
+Description: Dankestia greeter for greetd
+  Dankestia greeter for greetd login manager. A modern, Material Design 3
+  inspired greeter interface built with Quickshell for Wayland compositors.
+  .
+  Supports multiple compositors including Niri, Hyprland, and Sway with automatic
+  compositor detection and configuration. Features session selection, user
+  authentication, and dynamic theming.

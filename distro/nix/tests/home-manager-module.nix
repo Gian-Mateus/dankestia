@@ -12,7 +12,7 @@ let
     + "/nixos";
 in
 pkgs.testers.runNixOSTest {
-  name = "dms-home-manager-module";
+  name = "dankestia-home-manager-module";
 
   nodes.machine = {
     ...
@@ -64,7 +64,7 @@ pkgs.testers.runNixOSTest {
 
         plugins.TestPlugin = {
           enable = true;
-          src = pkgs.runCommand "dms-test-plugin" { } ''
+          src = pkgs.runCommand "dankestia-test-plugin" { } ''
             mkdir -p "$out"
             echo plugin > "$out/plugin.txt"
           '';
@@ -84,18 +84,18 @@ pkgs.testers.runNixOSTest {
 
     machine.wait_for_unit("multi-user.target")
 
-    machine.succeed("su -- danklinux -c 'command -v dms'")
-    machine.succeed("su -- danklinux -c 'test -f ~/.config/DankMaterialShell/settings.json'")
-    machine.succeed("su -- danklinux -c 'test -f ~/.config/DankMaterialShell/clsettings.json'")
-    machine.succeed("su -- danklinux -c 'test -f ~/.config/DankMaterialShell/plugin_settings.json'")
-    machine.succeed("su -- danklinux -c 'test -e ~/.config/DankMaterialShell/plugins/TestPlugin'")
-    machine.succeed("su -- danklinux -c 'test -f ~/.local/state/DankMaterialShell/session.json'")
+    machine.succeed("su -- danklinux -c 'command -v dankestia'")
+    machine.succeed("su -- danklinux -c 'test -f ~/.config/Dankestia/settings.json'")
+    machine.succeed("su -- danklinux -c 'test -f ~/.config/Dankestia/clsettings.json'")
+    machine.succeed("su -- danklinux -c 'test -f ~/.config/Dankestia/plugin_settings.json'")
+    machine.succeed("su -- danklinux -c 'test -e ~/.config/Dankestia/plugins/TestPlugin'")
+    machine.succeed("su -- danklinux -c 'test -f ~/.local/state/Dankestia/session.json'")
 
-    settings = json.loads(machine.succeed("su -- danklinux -c 'cat ~/.config/DankMaterialShell/settings.json'"))
-    clipboard = json.loads(machine.succeed("su -- danklinux -c 'cat ~/.config/DankMaterialShell/clsettings.json'"))
-    session = json.loads(machine.succeed("su -- danklinux -c 'cat ~/.local/state/DankMaterialShell/session.json'"))
-    plugins = json.loads(machine.succeed("su -- danklinux -c 'cat ~/.config/DankMaterialShell/plugin_settings.json'"))
-    doctor = json.loads(machine.succeed("su -- danklinux -c 'dms doctor --json'"))
+    settings = json.loads(machine.succeed("su -- danklinux -c 'cat ~/.config/Dankestia/settings.json'"))
+    clipboard = json.loads(machine.succeed("su -- danklinux -c 'cat ~/.config/Dankestia/clsettings.json'"))
+    session = json.loads(machine.succeed("su -- danklinux -c 'cat ~/.local/state/Dankestia/session.json'"))
+    plugins = json.loads(machine.succeed("su -- danklinux -c 'cat ~/.config/Dankestia/plugin_settings.json'"))
+    doctor = json.loads(machine.succeed("su -- danklinux -c 'dankestia doctor --json'"))
 
     t.assertEqual(settings["theme"], "integration-test")
     t.assertEqual(clipboard["maxItems"], 10)

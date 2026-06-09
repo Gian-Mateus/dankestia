@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Generic source package builder for DMS PPA packages
+# Generic source package builder for DANKESTIA PPA packages
 # Usage: ./create-source.sh <package-dir> [ubuntu-series]
 #
 # Example:
-#   ./create-source.sh ../dms questing    # Ubuntu 25.10 (default series in ppa-upload)
-#   ./create-source.sh ../dms resolute     # Ubuntu 26.04 LTS
-#   ./create-source.sh ../dms-git questing
-#   ./create-source.sh ../dms-git resolute
+#   ./create-source.sh ../dankestia questing    # Ubuntu 25.10 (default series in ppa-upload)
+#   ./create-source.sh ../dankestia resolute     # Ubuntu 26.04 LTS
+#   ./create-source.sh ../dankestia-git questing
+#   ./create-source.sh ../dankestia-git resolute
 
 set -e
 
@@ -25,15 +25,15 @@ if [ $# -lt 1 ]; then
     error "Usage: $0 <package-dir> [ubuntu-series]"
     echo
     echo "Arguments:"
-    echo "  package-dir     : Path to package directory (e.g., ../dms)"
+    echo "  package-dir     : Path to package directory (e.g., ../dankestia)"
     echo "  ubuntu-series   : Ubuntu series (optional, default: noble)"
     echo "                    Options: noble, jammy, oracular, mantic, questing, resolute"
     echo
     echo "Examples:"
-    echo "  $0 ../dms questing"
-    echo "  $0 ../dms resolute"
-    echo "  $0 ../dms-git questing"
-    echo "  $0 ../dms-git resolute"
+    echo "  $0 ../dankestia questing"
+    echo "  $0 ../dankestia resolute"
+    echo "  $0 ../dankestia-git questing"
+    echo "  $0 ../dankestia-git resolute"
     exit 1
 fi
 
@@ -116,9 +116,9 @@ success "GPG key found"
 get_ppa_name() {
     local pkg="$1"
     case "$pkg" in
-        dms) echo "dms" ;;
-        dms-git) echo "dms-git" ;;
-        dms-greeter) echo "danklinux" ;;
+        dankestia) echo "dankestia" ;;
+        dankestia-git) echo "dankestia-git" ;;
+        dankestia-greeter) echo "danklinux" ;;
         *) echo "" ;;
     esac
 }
@@ -219,16 +219,16 @@ if grep -q "git clone" debian/rules 2>/dev/null; then
     fi
 fi
 case "$PACKAGE_NAME" in
-dms-git)
+dankestia-git)
     IS_GIT_PACKAGE=true
-    GIT_REPO="AvengeMedia/DankMaterialShell"
-    SOURCE_DIR="dms-git-repo"
+    GIT_REPO="AvengeMedia/Dankestia"
+    SOURCE_DIR="dankestia-git-repo"
     ;;
-dms)
-    GIT_REPO="AvengeMedia/DankMaterialShell"
+dankestia)
+    GIT_REPO="AvengeMedia/Dankestia"
     ;;
-dms-greeter)
-    GIT_REPO="AvengeMedia/DankMaterialShell"
+dankestia-greeter)
+    GIT_REPO="AvengeMedia/Dankestia"
     ;;
 danksearch)
     GIT_REPO="AvengeMedia/danksearch"
@@ -319,47 +319,47 @@ EOF
     VERSION=$(dpkg-parsechangelog -S Version | sed 's/-[^-]*$//' | sed 's/ppa[0-9]*$//')
 
     case "$PACKAGE_NAME" in
-    dms)
-        info "Downloading pre-built binaries and source for dms..."
-        if [ ! -f "dms-distropkg-amd64.gz" ]; then
-            info "Downloading dms binary for amd64..."
-            if wget -O dms-distropkg-amd64.gz "https://github.com/AvengeMedia/DankMaterialShell/releases/download/v${VERSION}/dms-distropkg-amd64.gz"; then
+    dankestia)
+        info "Downloading pre-built binaries and source for dankestia..."
+        if [ ! -f "dankestia-distropkg-amd64.gz" ]; then
+            info "Downloading dankestia binary for amd64..."
+            if wget -O dankestia-distropkg-amd64.gz "https://github.com/AvengeMedia/Dankestia/releases/download/v${VERSION}/dankestia-distropkg-amd64.gz"; then
                 success "amd64 binary downloaded"
             else
-                error "Failed to download dms-distropkg-amd64.gz"
+                error "Failed to download dankestia-distropkg-amd64.gz"
                 exit 1
             fi
         fi
 
-        if [ ! -f "dms-distropkg-arm64.gz" ]; then
-            info "Downloading dms binary for arm64..."
+        if [ ! -f "dankestia-distropkg-arm64.gz" ]; then
+            info "Downloading dankestia binary for arm64..."
             # Try to download arm64 binary, but don't fail if it doesn't exist (yet)
-            if wget -O dms-distropkg-arm64.gz "https://github.com/AvengeMedia/DankMaterialShell/releases/download/v${VERSION}/dms-distropkg-arm64.gz"; then
+            if wget -O dankestia-distropkg-arm64.gz "https://github.com/AvengeMedia/Dankestia/releases/download/v${VERSION}/dankestia-distropkg-arm64.gz"; then
                 success "arm64 binary downloaded"
             else
-                warn "Failed to download dms-distropkg-arm64.gz (skipping)"
-                rm -f dms-distropkg-arm64.gz
+                warn "Failed to download dankestia-distropkg-arm64.gz (skipping)"
+                rm -f dankestia-distropkg-arm64.gz
             fi
         fi
 
-        if [ ! -f "dms-source.tar.gz" ]; then
-            info "Downloading dms source for QML files..."
-            if wget -O dms-source.tar.gz "https://github.com/AvengeMedia/DankMaterialShell/archive/refs/tags/v${VERSION}.tar.gz"; then
+        if [ ! -f "dankestia-source.tar.gz" ]; then
+            info "Downloading dankestia source for QML files..."
+            if wget -O dankestia-source.tar.gz "https://github.com/AvengeMedia/Dankestia/archive/refs/tags/v${VERSION}.tar.gz"; then
                 success "source tarball downloaded"
             else
-                error "Failed to download dms-source.tar.gz"
+                error "Failed to download dankestia-source.tar.gz"
                 exit 1
             fi
         fi
         ;;
-    dms-greeter)
-        info "Downloading source for dms-greeter..."
-        if [ ! -f "dms-greeter-source.tar.gz" ]; then
-            info "Downloading dms-greeter source..."
-            if wget -O dms-greeter-source.tar.gz "https://github.com/AvengeMedia/DankMaterialShell/archive/refs/tags/v${VERSION}.tar.gz"; then
+    dankestia-greeter)
+        info "Downloading source for dankestia-greeter..."
+        if [ ! -f "dankestia-greeter-source.tar.gz" ]; then
+            info "Downloading dankestia-greeter source..."
+            if wget -O dankestia-greeter-source.tar.gz "https://github.com/AvengeMedia/Dankestia/archive/refs/tags/v${VERSION}.tar.gz"; then
                 success "source tarball downloaded"
             else
-                error "Failed to download dms-greeter-source.tar.gz"
+                error "Failed to download dankestia-greeter-source.tar.gz"
                 exit 1
             fi
         fi
@@ -481,10 +481,10 @@ EOF
         rm -rf "$SOURCE_DIR"
         cp -r "$TEMP_CLONE" "$SOURCE_DIR"
 
-        if [ "$PACKAGE_NAME" = "dms-git" ]; then
-            info "Saving version info to .dms-version for build process..."
-            echo "VERSION=${UPSTREAM_VERSION}+git${GIT_COMMIT_COUNT}.${GIT_COMMIT_HASH}" >"$SOURCE_DIR/.dms-version"
-            echo "COMMIT=${GIT_COMMIT_HASH}" >>"$SOURCE_DIR/.dms-version"
+        if [ "$PACKAGE_NAME" = "dankestia-git" ]; then
+            info "Saving version info to .dankestia-version for build process..."
+            echo "VERSION=${UPSTREAM_VERSION}+git${GIT_COMMIT_COUNT}.${GIT_COMMIT_HASH}" >"$SOURCE_DIR/.dankestia-version"
+            echo "COMMIT=${GIT_COMMIT_HASH}" >>"$SOURCE_DIR/.dankestia-version"
             success "Version info saved: ${UPSTREAM_VERSION}+git${GIT_COMMIT_COUNT}.${GIT_COMMIT_HASH}"
 
             info "Vendoring Go dependencies for offline build..."
@@ -593,13 +593,13 @@ if yes | DEBIAN_FRONTEND=noninteractive debuild -S $DEBUILD_SOURCE_FLAG -d; then
     echo "     ls -lh ${SOURCE_NAME}_${CHANGELOG_VERSION}*"
     echo
     echo "  2. Upload to PPA (stable):"
-    echo "     dput ppa:avengemedia/dms ${SOURCE_NAME}_${CHANGELOG_VERSION}_source.changes"
+    echo "     dput ppa:avengemedia/dankestia ${SOURCE_NAME}_${CHANGELOG_VERSION}_source.changes"
     echo
     echo "  3. Or upload to PPA (nightly):"
-    echo "     dput ppa:avengemedia/dms-git ${SOURCE_NAME}_${CHANGELOG_VERSION}_source.changes"
+    echo "     dput ppa:avengemedia/dankestia-git ${SOURCE_NAME}_${CHANGELOG_VERSION}_source.changes"
     echo
     echo "  4. Or use the upload script:"
-    echo "     ./upload-ppa.sh $PACKAGE_PARENT/${SOURCE_NAME}_${CHANGELOG_VERSION}_source.changes dms"
+    echo "     ./upload-ppa.sh $PACKAGE_PARENT/${SOURCE_NAME}_${CHANGELOG_VERSION}_source.changes dankestia"
 
 else
     error "Source package build failed!"

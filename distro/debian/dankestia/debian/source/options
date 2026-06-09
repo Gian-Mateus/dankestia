@@ -1,0 +1,5 @@
+# Include files that are normally excluded by .gitignore
+# These are needed for the build process on Launchpad
+tar-ignore = !dankestia-distropkg-amd64.gz
+tar-ignore = !dankestia-distropkg-arm64.gz
+tar-ignore = !dankestia-source.tar.gz

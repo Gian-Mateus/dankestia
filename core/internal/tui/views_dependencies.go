@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/deps"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/distros"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/greeter"
+	"github.com/AvengeMedia/Dankestia/core/internal/deps"
+	"github.com/AvengeMedia/Dankestia/core/internal/distros"
+	"github.com/AvengeMedia/Dankestia/core/internal/greeter"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -44,7 +44,7 @@ func (m Model) viewDependencyReview() string {
 			var reinstallMarker string
 			var variantMarker string
 
-			isDMS := dep.Name == "dms (DankMaterialShell)"
+			isDANKESTIA := dep.Name == "dankestia (Dankestia)"
 
 			if dep.CanToggle && dep.Variant == deps.VariantGit {
 				variantMarker = "[git] "
@@ -56,7 +56,7 @@ func (m Model) viewDependencyReview() string {
 			} else if m.reinstallItems[dep.Name] {
 				reinstallMarker = "🔄 "
 				status = m.styles.Warning.Render("Will upgrade")
-			} else if isDMS {
+			} else if isDANKESTIA {
 				reinstallMarker = "⚡ "
 				switch dep.Status {
 				case deps.StatusInstalled:
@@ -82,7 +82,7 @@ func (m Model) viewDependencyReview() string {
 			}
 
 			note := ""
-			if dep.Name == "dms-greeter" {
+			if dep.Name == "dankestia-greeter" {
 				note = m.styles.Subtle.Render(" (selection replaces your current display manager)")
 			}
 
@@ -121,10 +121,10 @@ func (m Model) updateDetectingDepsState(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.state = StateError
 		} else {
 			m.dependencies = depsMsg.deps
-			// dms-greeter is opt-in skipped by default
+			// dankestia-greeter is opt-in skipped by default
 			for _, dep := range depsMsg.deps {
-				if dep.Name == "dms-greeter" {
-					m.disabledItems["dms-greeter"] = true
+				if dep.Name == "dankestia-greeter" {
+					m.disabledItems["dankestia-greeter"] = true
 					break
 				}
 			}
@@ -149,9 +149,9 @@ func (m Model) updateDependencyReviewState(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case " ":
 			if len(m.dependencies) > 0 {
 				depName := m.dependencies[m.selectedDep].Name
-				isDMS := depName == "dms (DankMaterialShell)"
+				isDANKESTIA := depName == "dankestia (Dankestia)"
 
-				if !isDMS {
+				if !isDANKESTIA {
 					isInstalled := m.dependencies[m.selectedDep].Status == deps.StatusInstalled ||
 						m.dependencies[m.selectedDep].Status == deps.StatusNeedsReinstall
 
@@ -233,7 +233,7 @@ func (m Model) installPackages() tea.Cmd {
 				if msg.Phase == distros.PhaseComplete && msg.IsComplete && msg.Error == nil {
 					greeterSelected := false
 					for _, dep := range m.dependencies {
-						if dep.Name == "dms-greeter" && !m.disabledItems["dms-greeter"] {
+						if dep.Name == "dankestia-greeter" && !m.disabledItems["dankestia-greeter"] {
 							greeterSelected = true
 							break
 						}
@@ -248,13 +248,13 @@ func (m Model) installPackages() tea.Cmd {
 						}
 						m.packageProgressChan <- packageInstallProgressMsg{
 							progress:  0.92,
-							step:      "Configuring DMS greeter...",
+							step:      "Configuring DANKESTIA greeter...",
 							logOutput: "Starting automated greeter setup...",
 						}
 						greeterLogFunc := func(line string) {
 							m.packageProgressChan <- packageInstallProgressMsg{
 								progress:  0.94,
-								step:      "Configuring DMS greeter...",
+								step:      "Configuring DANKESTIA greeter...",
 								logOutput: line,
 							}
 						}

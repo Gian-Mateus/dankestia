@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/log"
+	"github.com/AvengeMedia/Dankestia/core/internal/log"
 )
 
 func NewManager() (*Manager, error) {

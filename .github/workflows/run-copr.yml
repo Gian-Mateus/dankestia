@@ -1,16 +1,16 @@
-name: DMS Copr Stable Release
+name: DANKESTIA Copr Stable Release
 
 on:
   workflow_dispatch:
     inputs:
       package:
-        description: 'Package to build (dms, dms-greeter, or both)'
+        description: 'Package to build (dankestia, dankestia-greeter, or both)'
         required: false
-        default: 'dms'
+        default: 'dankestia'
         type: choice
         options:
-          - dms
-          - dms-greeter
+          - dankestia
+          - dankestia-greeter
           - both
       version:
         description: 'Versioning (e.g., 1.0.3, leave empty for latest release)'
@@ -30,9 +30,9 @@ jobs:
       - name: Set package list
         id: set-packages
         run: |
-          PACKAGE_INPUT="${{ github.event.inputs.package || 'dms' }}"
+          PACKAGE_INPUT="${{ github.event.inputs.package || 'dankestia' }}"
           if [ "$PACKAGE_INPUT" = "both" ]; then
-            echo 'packages=["dms","dms-greeter"]' >> $GITHUB_OUTPUT
+            echo 'packages=["dankestia","dankestia-greeter"]' >> $GITHUB_OUTPUT
           else
             echo "packages=[\"$PACKAGE_INPUT\"]" >> $GITHUB_OUTPUT
           fi
@@ -81,16 +81,16 @@ jobs:
           VERSION="${{ steps.version.outputs.version }}"
           cd ~/rpmbuild/SOURCES
 
-          echo "📦 Downloading DMS QML source for v${VERSION}..."
+          echo "📦 Downloading DANKESTIA QML source for v${VERSION}..."
 
-          # Download DMS QML source
-          wget "https://github.com/AvengeMedia/DankMaterialShell/releases/download/v${VERSION}/dms-qml.tar.gz" || {
-            echo "❌ Failed to download dms-qml.tar.gz for v${VERSION}"
+          # Download DANKESTIA QML source
+          wget "https://github.com/AvengeMedia/Dankestia/releases/download/v${VERSION}/dankestia-qml.tar.gz" || {
+            echo "❌ Failed to download dankestia-qml.tar.gz for v${VERSION}"
             exit 1
           }
 
           echo "✅ Source downloaded"
-          echo "Note: dms-cli binary will be downloaded during build based on target architecture"
+          echo "Note: dankestia-cli binary will be downloaded during build based on target architecture"
           ls -lh
 
       - name: Generate stable spec file
@@ -161,9 +161,9 @@ jobs:
         id: copr_project
         run: |
           PACKAGE="${{ matrix.package }}"
-          if [ "$PACKAGE" = "dms" ]; then
-            COPR_PROJECT="avengemedia/dms"
-          elif [ "$PACKAGE" = "dms-greeter" ]; then
+          if [ "$PACKAGE" = "dankestia" ]; then
+            COPR_PROJECT="avengemedia/dankestia"
+          elif [ "$PACKAGE" = "dankestia-greeter" ]; then
             COPR_PROJECT="avengemedia/danklinux"
           else
             echo "❌ Unknown package: $PACKAGE"

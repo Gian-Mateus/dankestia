@@ -37,16 +37,16 @@ type NiriParser struct {
 	bindMap            map[string]*NiriKeyBinding
 	bindOrder          []string
 	currentSource      string
-	dmsBindsIncluded   bool
-	dmsBindsExists     bool
+	dankestiaBindsIncluded   bool
+	dankestiaBindsExists     bool
 	includeCount       int
-	dmsIncludePos      int
-	bindsBeforeDMS     int
-	bindsAfterDMS      int
-	dmsBindKeys        map[string]bool
+	dankestiaIncludePos      int
+	bindsBeforeDANKESTIA     int
+	bindsAfterDANKESTIA      int
+	dankestiaBindKeys        map[string]bool
 	configBindKeys     map[string]bool
-	dmsProcessed       bool
-	dmsBindMap         map[string]*NiriKeyBinding
+	dankestiaProcessed       bool
+	dankestiaBindMap         map[string]*NiriKeyBinding
 	conflictingConfigs map[string]*NiriKeyBinding
 }
 
@@ -154,10 +154,10 @@ func NewNiriParser(configDir string) *NiriParser {
 		bindMap:            make(map[string]*NiriKeyBinding),
 		bindOrder:          []string{},
 		currentSource:      "",
-		dmsIncludePos:      -1,
-		dmsBindKeys:        make(map[string]bool),
+		dankestiaIncludePos:      -1,
+		dankestiaBindKeys:        make(map[string]bool),
 		configBindKeys:     make(map[string]bool),
-		dmsBindMap:         make(map[string]*NiriKeyBinding),
+		dankestiaBindMap:         make(map[string]*NiriKeyBinding),
 		conflictingConfigs: make(map[string]*NiriKeyBinding),
 	}
 }
@@ -171,9 +171,9 @@ func normalizeNiriBindKey(key string) string {
 }
 
 func (p *NiriParser) Parse() (*NiriSection, error) {
-	dmsBindsPath := filepath.Join(p.configDir, "dms", "binds.kdl")
-	if _, err := os.Stat(dmsBindsPath); err == nil {
-		p.dmsBindsExists = true
+	dankestiaBindsPath := filepath.Join(p.configDir, "dankestia", "binds.kdl")
+	if _, err := os.Stat(dankestiaBindsPath); err == nil {
+		p.dankestiaBindsExists = true
 	}
 
 	configPath := filepath.Join(p.configDir, "config.kdl")
@@ -182,16 +182,16 @@ func (p *NiriParser) Parse() (*NiriSection, error) {
 		return nil, err
 	}
 
-	if p.dmsBindsExists && !p.dmsProcessed {
-		p.parseDMSBindsDirectly(dmsBindsPath, section)
+	if p.dankestiaBindsExists && !p.dankestiaProcessed {
+		p.parseDANKESTIABindsDirectly(dankestiaBindsPath, section)
 	}
 
 	section.Keybinds = p.finalizeBinds()
 	return section, nil
 }
 
-func (p *NiriParser) parseDMSBindsDirectly(dmsBindsPath string, section *NiriSection) {
-	data, err := os.ReadFile(dmsBindsPath)
+func (p *NiriParser) parseDANKESTIABindsDirectly(dankestiaBindsPath string, section *NiriSection) {
+	data, err := os.ReadFile(dankestiaBindsPath)
 	if err != nil {
 		return
 	}
@@ -202,11 +202,11 @@ func (p *NiriParser) parseDMSBindsDirectly(dmsBindsPath string, section *NiriSec
 	}
 
 	prevSource := p.currentSource
-	p.currentSource = dmsBindsPath
-	baseDir := filepath.Dir(dmsBindsPath)
+	p.currentSource = dankestiaBindsPath
+	baseDir := filepath.Dir(dankestiaBindsPath)
 	p.processNodes(doc.Nodes, section, baseDir)
 	p.currentSource = prevSource
-	p.dmsProcessed = true
+	p.dankestiaProcessed = true
 }
 
 func (p *NiriParser) finalizeBinds() []NiriKeyBinding {
@@ -222,13 +222,13 @@ func (p *NiriParser) finalizeBinds() []NiriKeyBinding {
 func (p *NiriParser) addBind(kb *NiriKeyBinding) {
 	key := p.formatBindKey(kb)
 	normalizedKey := normalizeNiriBindKey(key)
-	isDMSBind := strings.Contains(kb.Source, "dms/binds.kdl")
+	isDANKESTIABind := strings.Contains(kb.Source, "dankestia/binds.kdl")
 
-	if isDMSBind {
-		p.dmsBindKeys[normalizedKey] = true
-		p.dmsBindMap[normalizedKey] = kb
-	} else if p.dmsBindKeys[normalizedKey] {
-		p.bindsAfterDMS++
+	if isDANKESTIABind {
+		p.dankestiaBindKeys[normalizedKey] = true
+		p.dankestiaBindMap[normalizedKey] = kb
+	} else if p.dankestiaBindKeys[normalizedKey] {
+		p.bindsAfterDANKESTIA++
 		p.conflictingConfigs[normalizedKey] = kb
 		p.configBindKeys[normalizedKey] = true
 		return
@@ -304,13 +304,13 @@ func (p *NiriParser) handleInclude(node *document.Node, section *NiriSection, ba
 	}
 
 	includePath := strings.Trim(node.Arguments[0].String(), "\"")
-	isDMSInclude := includePath == "dms/binds.kdl" || strings.HasSuffix(includePath, "/dms/binds.kdl")
+	isDANKESTIAInclude := includePath == "dankestia/binds.kdl" || strings.HasSuffix(includePath, "/dankestia/binds.kdl")
 
 	p.includeCount++
-	if isDMSInclude {
-		p.dmsBindsIncluded = true
-		p.dmsIncludePos = p.includeCount
-		p.bindsBeforeDMS = len(p.bindMap)
+	if isDANKESTIAInclude {
+		p.dankestiaBindsIncluded = true
+		p.dankestiaIncludePos = p.includeCount
+		p.bindsBeforeDANKESTIA = len(p.bindMap)
 	}
 
 	fullPath := filepath.Join(baseDir, includePath)
@@ -318,8 +318,8 @@ func (p *NiriParser) handleInclude(node *document.Node, section *NiriSection, ba
 		fullPath = includePath
 	}
 
-	if isDMSInclude {
-		p.dmsProcessed = true
+	if isDANKESTIAInclude {
+		p.dankestiaProcessed = true
 	}
 
 	includedSection, err := p.parseFile(fullPath, "")
@@ -330,8 +330,8 @@ func (p *NiriParser) handleInclude(node *document.Node, section *NiriSection, ba
 	section.Children = append(section.Children, includedSection.Children...)
 }
 
-func (p *NiriParser) HasDMSBindsIncluded() bool {
-	return p.dmsBindsIncluded
+func (p *NiriParser) HasDANKESTIABindsIncluded() bool {
+	return p.dankestiaBindsIncluded
 }
 
 func (p *NiriParser) handleRecentWindows(node *document.Node, section *NiriSection) {
@@ -447,45 +447,45 @@ func (p *NiriParser) parseKeyCombo(combo string) ([]string, string) {
 
 type NiriParseResult struct {
 	Section            *NiriSection
-	DMSBindsIncluded   bool
-	DMSStatus          *DMSBindsStatusInfo
+	DANKESTIABindsIncluded   bool
+	DANKESTIAStatus          *DANKESTIABindsStatusInfo
 	ConflictingConfigs map[string]*NiriKeyBinding
 }
 
-type DMSBindsStatusInfo struct {
+type DANKESTIABindsStatusInfo struct {
 	Exists          bool
 	Included        bool
 	IncludePosition int
 	TotalIncludes   int
-	BindsAfterDMS   int
+	BindsAfterDANKESTIA   int
 	Effective       bool
 	OverriddenBy    int
 	StatusMessage   string
 }
 
-func (p *NiriParser) buildDMSStatus() *DMSBindsStatusInfo {
-	status := &DMSBindsStatusInfo{
-		Exists:          p.dmsBindsExists,
-		Included:        p.dmsBindsIncluded,
-		IncludePosition: p.dmsIncludePos,
+func (p *NiriParser) buildDANKESTIAStatus() *DANKESTIABindsStatusInfo {
+	status := &DANKESTIABindsStatusInfo{
+		Exists:          p.dankestiaBindsExists,
+		Included:        p.dankestiaBindsIncluded,
+		IncludePosition: p.dankestiaIncludePos,
 		TotalIncludes:   p.includeCount,
-		BindsAfterDMS:   p.bindsAfterDMS,
+		BindsAfterDANKESTIA:   p.bindsAfterDANKESTIA,
 	}
 
 	switch {
-	case !p.dmsBindsExists:
+	case !p.dankestiaBindsExists:
 		status.Effective = false
-		status.StatusMessage = "dms/binds.kdl does not exist"
-	case !p.dmsBindsIncluded:
+		status.StatusMessage = "dankestia/binds.kdl does not exist"
+	case !p.dankestiaBindsIncluded:
 		status.Effective = false
-		status.StatusMessage = "dms/binds.kdl is not included in config.kdl"
-	case p.bindsAfterDMS > 0:
+		status.StatusMessage = "dankestia/binds.kdl is not included in config.kdl"
+	case p.bindsAfterDANKESTIA > 0:
 		status.Effective = true
-		status.OverriddenBy = p.bindsAfterDMS
-		status.StatusMessage = "Some DMS binds may be overridden by config binds"
+		status.OverriddenBy = p.bindsAfterDANKESTIA
+		status.StatusMessage = "Some DANKESTIA binds may be overridden by config binds"
 	default:
 		status.Effective = true
-		status.StatusMessage = "DMS binds are active"
+		status.StatusMessage = "DANKESTIA binds are active"
 	}
 
 	return status
@@ -499,8 +499,8 @@ func ParseNiriKeys(configDir string) (*NiriParseResult, error) {
 	}
 	return &NiriParseResult{
 		Section:            section,
-		DMSBindsIncluded:   parser.HasDMSBindsIncluded(),
-		DMSStatus:          parser.buildDMSStatus(),
+		DANKESTIABindsIncluded:   parser.HasDANKESTIABindsIncluded(),
+		DANKESTIAStatus:          parser.buildDANKESTIAStatus(),
 		ConflictingConfigs: parser.conflictingConfigs,
 	}, nil
 }

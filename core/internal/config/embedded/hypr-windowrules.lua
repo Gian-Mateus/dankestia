@@ -1,1 +1,1 @@
--- Window rules. Deploy writes ~/.config/hypr/dms/windowrules.lua
+-- Window rules. Deploy writes ~/.config/hypr/dankestia/windowrules.lua

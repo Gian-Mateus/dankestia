@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/log"
-	"github.com/AvengeMedia/DankMaterialShell/core/pkg/dbusutil"
-	"github.com/AvengeMedia/DankMaterialShell/core/pkg/syncmap"
+	"github.com/AvengeMedia/Dankestia/core/internal/log"
+	"github.com/AvengeMedia/Dankestia/core/pkg/dbusutil"
+	"github.com/AvengeMedia/Dankestia/core/pkg/syncmap"
 	"github.com/godbus/dbus/v5"
 )
 
@@ -115,7 +115,7 @@ func (c *GeoClueClient) setupClient() error {
 	}
 
 	clientObj := c.dbusConn.Object(dbusGeoClueService, c.clientPath)
-	if err := clientObj.SetProperty(dbusGeoClueClientDesktopId, "dms"); err != nil {
+	if err := clientObj.SetProperty(dbusGeoClueClientDesktopId, "dankestia"); err != nil {
 		return fmt.Errorf("failed to set desktop ID: %w", err)
 	}
 

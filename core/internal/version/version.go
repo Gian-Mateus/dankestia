@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/log"
+	"github.com/AvengeMedia/Dankestia/core/internal/log"
 )
 
 type VersionInfo struct {
@@ -22,15 +22,15 @@ type VersionInfo struct {
 
 // VersionFetcher is an interface for fetching version information
 type VersionFetcher interface {
-	GetCurrentVersion(dmsPath string) (string, error)
-	GetLatestVersion(dmsPath string) (string, error)
+	GetCurrentVersion(dankestiaPath string) (string, error)
+	GetLatestVersion(dankestiaPath string) (string, error)
 }
 
 // DefaultVersionFetcher is the default implementation that uses git/curl
 type DefaultVersionFetcher struct{}
 
-func (d *DefaultVersionFetcher) GetCurrentVersion(dmsPath string) (string, error) {
-	if _, err := os.Stat(filepath.Join(dmsPath, ".git")); err == nil {
+func (d *DefaultVersionFetcher) GetCurrentVersion(dankestiaPath string) (string, error) {
+	if _, err := os.Stat(filepath.Join(dankestiaPath, ".git")); err == nil {
 		originalDir, err := os.Getwd()
 		if err != nil {
 			return "", err
@@ -41,8 +41,8 @@ func (d *DefaultVersionFetcher) GetCurrentVersion(dmsPath string) (string, error
 			}
 		}()
 
-		if err := os.Chdir(dmsPath); err != nil {
-			return "", fmt.Errorf("failed to change to DMS directory: %w", err)
+		if err := os.Chdir(dankestiaPath); err != nil {
+			return "", fmt.Errorf("failed to change to DANKESTIA directory: %w", err)
 		}
 
 		tagCmd := exec.Command("git", "describe", "--exact-match", "--tags", "HEAD")
@@ -62,7 +62,7 @@ func (d *DefaultVersionFetcher) GetCurrentVersion(dmsPath string) (string, error
 		}
 	}
 
-	cmd := exec.Command("dms", "--version")
+	cmd := exec.Command("dankestia", "--version")
 	if output, err := cmd.Output(); err == nil {
 		return strings.TrimSpace(string(output)), nil
 	}
@@ -70,8 +70,8 @@ func (d *DefaultVersionFetcher) GetCurrentVersion(dmsPath string) (string, error
 	return "unknown", nil
 }
 
-func (d *DefaultVersionFetcher) GetLatestVersion(dmsPath string) (string, error) {
-	if _, err := os.Stat(filepath.Join(dmsPath, ".git")); err == nil {
+func (d *DefaultVersionFetcher) GetLatestVersion(dankestiaPath string) (string, error) {
+	if _, err := os.Stat(filepath.Join(dankestiaPath, ".git")); err == nil {
 		originalDir, err := os.Getwd()
 		if err != nil {
 			return "", err
@@ -82,8 +82,8 @@ func (d *DefaultVersionFetcher) GetLatestVersion(dmsPath string) (string, error)
 			}
 		}()
 
-		if err := os.Chdir(dmsPath); err != nil {
-			return "", fmt.Errorf("failed to change to DMS directory: %w", err)
+		if err := os.Chdir(dankestiaPath); err != nil {
+			return "", fmt.Errorf("failed to change to DANKESTIA directory: %w", err)
 		}
 
 		currentRefCmd := exec.Command("git", "symbolic-ref", "-q", "HEAD")
@@ -136,7 +136,7 @@ func (d *DefaultVersionFetcher) GetLatestVersion(dmsPath string) (string, error)
 	}
 
 	// Add timeout to prevent hanging when GitHub is down
-	cmd := exec.Command("curl", "-s", "--max-time", "5", "https://api.github.com/repos/AvengeMedia/DankMaterialShell/releases/latest")
+	cmd := exec.Command("curl", "-s", "--max-time", "5", "https://api.github.com/repos/AvengeMedia/Dankestia/releases/latest")
 	output, err := cmd.Output()
 	if err != nil {
 		return "", fmt.Errorf("failed to fetch latest release: %w", err)
@@ -163,51 +163,51 @@ func (d *DefaultVersionFetcher) GetLatestVersion(dmsPath string) (string, error)
 // defaultFetcher is used by the public functions
 var defaultFetcher VersionFetcher = &DefaultVersionFetcher{}
 
-func GetCurrentDMSVersion() (string, error) {
+func GetCurrentDANKESTIAVersion() (string, error) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return "", fmt.Errorf("failed to get home directory: %w", err)
 	}
 
-	dmsPath := filepath.Join(homeDir, ".config", "quickshell", "dms")
-	if _, err := os.Stat(dmsPath); os.IsNotExist(err) {
-		return "", fmt.Errorf("DMS not installed")
+	dankestiaPath := filepath.Join(homeDir, ".config", "quickshell", "dankestia")
+	if _, err := os.Stat(dankestiaPath); os.IsNotExist(err) {
+		return "", fmt.Errorf("DANKESTIA not installed")
 	}
 
-	return defaultFetcher.GetCurrentVersion(dmsPath)
+	return defaultFetcher.GetCurrentVersion(dankestiaPath)
 }
 
-func GetLatestDMSVersion() (string, error) {
+func GetLatestDANKESTIAVersion() (string, error) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return "", fmt.Errorf("failed to get home directory: %w", err)
 	}
 
-	dmsPath := filepath.Join(homeDir, ".config", "quickshell", "dms")
-	return defaultFetcher.GetLatestVersion(dmsPath)
+	dankestiaPath := filepath.Join(homeDir, ".config", "quickshell", "dankestia")
+	return defaultFetcher.GetLatestVersion(dankestiaPath)
 }
 
-func GetDMSVersionInfo() (*VersionInfo, error) {
-	return GetDMSVersionInfoWithFetcher(defaultFetcher)
+func GetDANKESTIAVersionInfo() (*VersionInfo, error) {
+	return GetDANKESTIAVersionInfoWithFetcher(defaultFetcher)
 }
 
-func GetDMSVersionInfoWithFetcher(fetcher VersionFetcher) (*VersionInfo, error) {
+func GetDANKESTIAVersionInfoWithFetcher(fetcher VersionFetcher) (*VersionInfo, error) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get home directory: %w", err)
 	}
 
-	dmsPath := filepath.Join(homeDir, ".config", "quickshell", "dms")
-	if _, err := os.Stat(dmsPath); os.IsNotExist(err) {
-		return nil, fmt.Errorf("DMS not installed")
+	dankestiaPath := filepath.Join(homeDir, ".config", "quickshell", "dankestia")
+	if _, err := os.Stat(dankestiaPath); os.IsNotExist(err) {
+		return nil, fmt.Errorf("DANKESTIA not installed")
 	}
 
-	current, err := fetcher.GetCurrentVersion(dmsPath)
+	current, err := fetcher.GetCurrentVersion(dankestiaPath)
 	if err != nil {
 		return nil, err
 	}
 
-	latest, err := fetcher.GetLatestVersion(dmsPath)
+	latest, err := fetcher.GetLatestVersion(dankestiaPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get latest version: %w", err)
 	}

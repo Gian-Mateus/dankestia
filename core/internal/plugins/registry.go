@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/afero"
 )
 
-const registryRepo = "https://github.com/AvengeMedia/dms-plugin-registry.git"
+const registryRepo = "https://github.com/AvengeMedia/dankestia-plugin-registry.git"
 
 type Plugin struct {
 	ID           string   `json:"id"`
@@ -26,7 +26,7 @@ type Plugin struct {
 	Compositors  []string `json:"compositors"`
 	Distro       []string `json:"distro"`
 	Screenshot   string   `json:"screenshot,omitempty"`
-	RequiresDMS  string   `json:"requires_dms,omitempty"`
+	RequiresDANKESTIA  string   `json:"requires_dankestia,omitempty"`
 	Featured     bool     `json:"featured,omitempty"`
 }
 

@@ -5,8 +5,8 @@ import (
 	"net"
 	"strings"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/plugins"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/models"
+	"github.com/AvengeMedia/Dankestia/core/internal/plugins"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/models"
 )
 
 func HandleList(conn net.Conn, req models.Request) {
@@ -45,7 +45,7 @@ func HandleList(conn net.Conn, req models.Request) {
 			Installed:    installed,
 			FirstParty:   strings.HasPrefix(p.Repo, "https://github.com/AvengeMedia"),
 			Featured:     p.Featured,
-			RequiresDMS:  p.RequiresDMS,
+			RequiresDANKESTIA:  p.RequiresDANKESTIA,
 		}
 	}
 

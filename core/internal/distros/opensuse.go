@@ -9,8 +9,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/deps"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/privesc"
+	"github.com/AvengeMedia/Dankestia/core/internal/deps"
+	"github.com/AvengeMedia/Dankestia/core/internal/privesc"
 )
 
 func init() {
@@ -65,8 +65,8 @@ func (o *OpenSUSEDistribution) DetectDependencies(ctx context.Context, wm deps.W
 func (o *OpenSUSEDistribution) DetectDependenciesWithTerminal(ctx context.Context, wm deps.WindowManager, terminal deps.Terminal) ([]deps.Dependency, error) {
 	var dependencies []deps.Dependency
 
-	// DMS at the top (shell is prominent)
-	dependencies = append(dependencies, o.detectDMS())
+	// DANKESTIA at the top (shell is prominent)
+	dependencies = append(dependencies, o.detectDANKESTIA())
 
 	// Terminal with choice support
 	dependencies = append(dependencies, o.detectSpecificTerminal(terminal))
@@ -75,7 +75,7 @@ func (o *OpenSUSEDistribution) DetectDependenciesWithTerminal(ctx context.Contex
 	dependencies = append(dependencies, o.detectGit())
 	dependencies = append(dependencies, o.detectWindowManager(wm))
 	dependencies = append(dependencies, o.detectQuickshell())
-	dependencies = append(dependencies, o.detectDMSGreeter())
+	dependencies = append(dependencies, o.detectDANKESTIAGreeter())
 	dependencies = append(dependencies, o.detectXDGPortal())
 	dependencies = append(dependencies, o.detectAccountsService())
 
@@ -105,8 +105,8 @@ func (o *OpenSUSEDistribution) packageInstalled(pkg string) bool {
 	return err == nil
 }
 
-func (o *OpenSUSEDistribution) detectDMSGreeter() deps.Dependency {
-	return o.detectOptionalPackage("dms-greeter", "DankMaterialShell greetd greeter", o.packageInstalled("dms-greeter"))
+func (o *OpenSUSEDistribution) detectDANKESTIAGreeter() deps.Dependency {
+	return o.detectOptionalPackage("dankestia-greeter", "Dankestia greetd greeter", o.packageInstalled("dankestia-greeter"))
 }
 
 func (o *OpenSUSEDistribution) GetPackageMapping(wm deps.WindowManager) map[string]PackageMapping {
@@ -122,10 +122,10 @@ func (o *OpenSUSEDistribution) GetPackageMappingWithVariants(wm deps.WindowManag
 		"xdg-desktop-portal-gtk": {Name: "xdg-desktop-portal-gtk", Repository: RepoTypeSystem},
 		"accountsservice":        {Name: "accountsservice", Repository: RepoTypeSystem},
 
-		// DMS packages from OBS
-		"dms (DankMaterialShell)": o.getDmsMapping(variants["dms (DankMaterialShell)"]),
+		// DANKESTIA packages from OBS
+		"dankestia (Dankestia)": o.getDmsMapping(variants["dankestia (Dankestia)"]),
 		"quickshell":              o.getQuickshellMapping(variants["quickshell"]),
-		"dms-greeter":             {Name: "dms-greeter", Repository: RepoTypeOBS, RepoURL: "home:AvengeMedia:danklinux"},
+		"dankestia-greeter":             {Name: "dankestia-greeter", Repository: RepoTypeOBS, RepoURL: "home:AvengeMedia:danklinux"},
 		"ghostty":                 {Name: "ghostty", Repository: RepoTypeOBS, RepoURL: "home:AvengeMedia:danklinux"},
 		"matugen":                 {Name: "matugen", Repository: RepoTypeOBS, RepoURL: "home:AvengeMedia:danklinux"},
 		"dgop":                    {Name: "dgop", Repository: RepoTypeOBS, RepoURL: "home:AvengeMedia:danklinux"},
@@ -148,9 +148,9 @@ func (o *OpenSUSEDistribution) GetPackageMappingWithVariants(wm deps.WindowManag
 
 func (o *OpenSUSEDistribution) getDmsMapping(variant deps.PackageVariant) PackageMapping {
 	if variant == deps.VariantGit {
-		return PackageMapping{Name: "dms-git", Repository: RepoTypeOBS, RepoURL: "home:AvengeMedia:dms-git"}
+		return PackageMapping{Name: "dankestia-git", Repository: RepoTypeOBS, RepoURL: "home:AvengeMedia:dankestia-git"}
 	}
-	return PackageMapping{Name: "dms", Repository: RepoTypeOBS, RepoURL: "home:AvengeMedia:dms"}
+	return PackageMapping{Name: "dankestia", Repository: RepoTypeOBS, RepoURL: "home:AvengeMedia:dankestia"}
 }
 
 func (o *OpenSUSEDistribution) getQuickshellMapping(variant deps.PackageVariant) PackageMapping {
@@ -359,8 +359,8 @@ func (o *OpenSUSEDistribution) InstallPackages(ctx context.Context, dependencies
 		o.log(fmt.Sprintf("Warning: failed to write window manager config: %v", err))
 	}
 
-	if err := o.EnableDMSService(ctx, wm); err != nil {
-		o.log(fmt.Sprintf("Warning: failed to enable dms service: %v", err))
+	if err := o.EnableDANKESTIAService(ctx, wm); err != nil {
+		o.log(fmt.Sprintf("Warning: failed to enable dankestia service: %v", err))
 	}
 
 	// Complete

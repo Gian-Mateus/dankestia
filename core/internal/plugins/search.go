@@ -4,7 +4,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/utils"
+	"github.com/AvengeMedia/Dankestia/core/internal/utils"
 )
 
 func FuzzySearch(query string, plugins []Plugin) []Plugin {

@@ -6,10 +6,10 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/errdefs"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/geolocation"
-	wlclient "github.com/AvengeMedia/DankMaterialShell/core/pkg/go-wayland/wayland/client"
-	"github.com/AvengeMedia/DankMaterialShell/core/pkg/syncmap"
+	"github.com/AvengeMedia/Dankestia/core/internal/errdefs"
+	"github.com/AvengeMedia/Dankestia/core/internal/geolocation"
+	wlclient "github.com/AvengeMedia/Dankestia/core/pkg/go-wayland/wayland/client"
+	"github.com/AvengeMedia/Dankestia/core/pkg/syncmap"
 	"github.com/godbus/dbus/v5"
 )
 

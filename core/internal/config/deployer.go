@@ -9,10 +9,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/deps"
+	"github.com/AvengeMedia/Dankestia/core/internal/deps"
 )
 
-const hyprlandBackupDirName = ".dms-backups"
+const hyprlandBackupDirName = ".dankestia-backups"
 
 type ConfigDeployer struct {
 	logChan chan<- string
@@ -182,9 +182,9 @@ func (cd *ConfigDeployer) deployNiriConfig(terminal deps.Terminal, useSystemd bo
 		return result, result.Error
 	}
 
-	dmsDir := filepath.Join(configDir, "dms")
-	if err := os.MkdirAll(dmsDir, 0o755); err != nil {
-		result.Error = fmt.Errorf("failed to create dms directory: %w", err)
+	dankestiaDir := filepath.Join(configDir, "dankestia")
+	if err := os.MkdirAll(dankestiaDir, 0o755); err != nil {
+		result.Error = fmt.Errorf("failed to create dankestia directory: %w", err)
 		return result, result.Error
 	}
 
@@ -227,7 +227,7 @@ func (cd *ConfigDeployer) deployNiriConfig(terminal deps.Terminal, useSystemd bo
 	}
 
 	if existingConfig != "" {
-		mergedConfig, err := cd.mergeNiriOutputSections(newConfig, existingConfig, dmsDir)
+		mergedConfig, err := cd.mergeNiriOutputSections(newConfig, existingConfig, dankestiaDir)
 		if err != nil {
 			cd.log(fmt.Sprintf("Warning: Failed to merge output sections: %v", err))
 		} else {
@@ -241,8 +241,8 @@ func (cd *ConfigDeployer) deployNiriConfig(terminal deps.Terminal, useSystemd bo
 		return result, result.Error
 	}
 
-	if err := cd.deployNiriDmsConfigs(dmsDir, terminalCommand); err != nil {
-		result.Error = fmt.Errorf("failed to deploy dms configs: %w", err)
+	if err := cd.deployNiriDmsConfigs(dankestiaDir, terminalCommand); err != nil {
+		result.Error = fmt.Errorf("failed to deploy dankestia configs: %w", err)
 		return result, result.Error
 	}
 
@@ -251,7 +251,7 @@ func (cd *ConfigDeployer) deployNiriConfig(terminal deps.Terminal, useSystemd bo
 	return result, nil
 }
 
-func (cd *ConfigDeployer) deployNiriDmsConfigs(dmsDir, terminalCommand string) error {
+func (cd *ConfigDeployer) deployNiriDmsConfigs(dankestiaDir, terminalCommand string) error {
 	configs := []struct {
 		name    string
 		content string
@@ -266,7 +266,7 @@ func (cd *ConfigDeployer) deployNiriDmsConfigs(dmsDir, terminalCommand string) e
 	}
 
 	for _, cfg := range configs {
-		path := filepath.Join(dmsDir, cfg.name)
+		path := filepath.Join(dankestiaDir, cfg.name)
 		// Skip if file already exists and is not empty to preserve user modifications
 		if info, err := os.Stat(path); err == nil && info.Size() > 0 {
 			cd.log(fmt.Sprintf("Skipping %s (already exists)", cfg.name))
@@ -293,9 +293,9 @@ func (cd *ConfigDeployer) deployMangoConfig(terminal deps.Terminal, useSystemd b
 		return result, result.Error
 	}
 
-	dmsDir := filepath.Join(configDir, "dms")
-	if err := os.MkdirAll(dmsDir, 0o755); err != nil {
-		result.Error = fmt.Errorf("failed to create dms directory: %w", err)
+	dankestiaDir := filepath.Join(configDir, "dankestia")
+	if err := os.MkdirAll(dankestiaDir, 0o755); err != nil {
+		result.Error = fmt.Errorf("failed to create dankestia directory: %w", err)
 		return result, result.Error
 	}
 
@@ -311,7 +311,7 @@ func (cd *ConfigDeployer) deployMangoConfig(terminal deps.Terminal, useSystemd b
 		terminalCommand = "ghostty"
 	}
 
-	// DMS owns config.conf for mango (like niri/hyprland): back up and replace.
+	// DANKESTIA owns config.conf for mango (like niri/hyprland): back up and replace.
 	if existingData, err := os.ReadFile(result.Path); err == nil {
 		cd.log("Found existing Mango configuration")
 		timestamp := time.Now().Format("2006-01-02_15-04-05")
@@ -329,8 +329,8 @@ func (cd *ConfigDeployer) deployMangoConfig(terminal deps.Terminal, useSystemd b
 		return result, result.Error
 	}
 
-	if err := cd.deployMangoDmsConfigs(dmsDir, terminalCommand); err != nil {
-		result.Error = fmt.Errorf("failed to deploy dms configs: %w", err)
+	if err := cd.deployMangoDmsConfigs(dankestiaDir, terminalCommand); err != nil {
+		result.Error = fmt.Errorf("failed to deploy dankestia configs: %w", err)
 		return result, result.Error
 	}
 
@@ -339,13 +339,13 @@ func (cd *ConfigDeployer) deployMangoConfig(terminal deps.Terminal, useSystemd b
 	return result, nil
 }
 
-func (cd *ConfigDeployer) deployMangoDmsConfigs(dmsDir, terminalCommand string) error {
+func (cd *ConfigDeployer) deployMangoDmsConfigs(dankestiaDir, terminalCommand string) error {
 	configs := []struct {
 		name      string
 		content   string
 		overwrite bool
 	}{
-		// binds.conf is DMS-owned (overwrite); the rest are runtime/user-managed.
+		// binds.conf is DANKESTIA-owned (overwrite); the rest are runtime/user-managed.
 		{"binds.conf", strings.ReplaceAll(MangoBindsConfig, "{{TERMINAL_COMMAND}}", terminalCommand), true},
 		{"colors.conf", MangoColorsConfig, false},
 		{"layout.conf", MangoLayoutConfig, false},
@@ -355,7 +355,7 @@ func (cd *ConfigDeployer) deployMangoDmsConfigs(dmsDir, terminalCommand string) 
 	}
 
 	for _, cfg := range configs {
-		path := filepath.Join(dmsDir, cfg.name)
+		path := filepath.Join(dankestiaDir, cfg.name)
 		if !cfg.overwrite {
 			if info, err := os.Stat(path); err == nil && info.Size() > 0 {
 				cd.log(fmt.Sprintf("Skipping %s (already exists)", cfg.name))
@@ -565,7 +565,7 @@ func (cd *ConfigDeployer) deployAlacrittyConfig() ([]DeploymentResult, error) {
 	return results, nil
 }
 
-func (cd *ConfigDeployer) mergeNiriOutputSections(newConfig, existingConfig, dmsDir string) (string, error) {
+func (cd *ConfigDeployer) mergeNiriOutputSections(newConfig, existingConfig, dankestiaDir string) (string, error) {
 	outputRegex := regexp.MustCompile(`(?m)^(/-)?\s*output\s+"[^"]+"\s*\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}`)
 	existingOutputs := outputRegex.FindAllString(existingConfig, -1)
 
@@ -573,7 +573,7 @@ func (cd *ConfigDeployer) mergeNiriOutputSections(newConfig, existingConfig, dms
 		return newConfig, nil
 	}
 
-	outputsPath := filepath.Join(dmsDir, "outputs.kdl")
+	outputsPath := filepath.Join(dankestiaDir, "outputs.kdl")
 	if _, err := os.Stat(outputsPath); err != nil {
 		var outputsContent strings.Builder
 		for _, output := range existingOutputs {
@@ -583,7 +583,7 @@ func (cd *ConfigDeployer) mergeNiriOutputSections(newConfig, existingConfig, dms
 		if err := os.WriteFile(outputsPath, []byte(outputsContent.String()), 0o644); err != nil {
 			cd.log(fmt.Sprintf("Warning: Failed to migrate outputs to %s: %v", outputsPath, err))
 		} else {
-			cd.log("Migrated output sections to dms/outputs.kdl")
+			cd.log("Migrated output sections to dankestia/outputs.kdl")
 		}
 	}
 
@@ -626,9 +626,9 @@ func (cd *ConfigDeployer) deployHyprlandConfig(terminal deps.Terminal, useSystem
 		return result, result.Error
 	}
 
-	dmsDir := filepath.Join(configDir, "dms")
-	if err := os.MkdirAll(dmsDir, 0o755); err != nil {
-		result.Error = fmt.Errorf("failed to create dms directory: %w", err)
+	dankestiaDir := filepath.Join(configDir, "dankestia")
+	if err := os.MkdirAll(dankestiaDir, 0o755); err != nil {
+		result.Error = fmt.Errorf("failed to create dankestia directory: %w", err)
 		return result, result.Error
 	}
 
@@ -671,7 +671,7 @@ func (cd *ConfigDeployer) deployHyprlandConfig(terminal deps.Terminal, useSystem
 	}
 
 	if existingConfig != "" {
-		mergedConfig, err := cd.mergeHyprlandMonitorSections(newConfig, existingConfig, dmsDir)
+		mergedConfig, err := cd.mergeHyprlandMonitorSections(newConfig, existingConfig, dankestiaDir)
 		if err != nil {
 			cd.log(fmt.Sprintf("Warning: Failed to merge monitor sections: %v", err))
 		} else {
@@ -685,7 +685,7 @@ func (cd *ConfigDeployer) deployHyprlandConfig(terminal deps.Terminal, useSystem
 		return result, result.Error
 	}
 
-	movedLegacy, err := backupLegacyHyprlandConfFiles(configDir, dmsDir, backupDir)
+	movedLegacy, err := backupLegacyHyprlandConfFiles(configDir, dankestiaDir, backupDir)
 	if err != nil {
 		result.Error = fmt.Errorf("failed to back up legacy hyprlang configs: %w", err)
 		return result, result.Error
@@ -697,8 +697,8 @@ func (cd *ConfigDeployer) deployHyprlandConfig(terminal deps.Terminal, useSystem
 		cd.log(fmt.Sprintf("Moved %d legacy hyprlang config(s) to %s", movedLegacy, backupDir))
 	}
 
-	if err := cd.deployHyprlandDmsConfigs(dmsDir, terminalCommand); err != nil {
-		result.Error = fmt.Errorf("failed to deploy dms configs: %w", err)
+	if err := cd.deployHyprlandDmsConfigs(dankestiaDir, terminalCommand); err != nil {
+		result.Error = fmt.Errorf("failed to deploy dankestia configs: %w", err)
 		return result, result.Error
 	}
 
@@ -726,14 +726,14 @@ func backupHyprlandConfigFile(src, dst string, data []byte, removeSource bool) e
 	return nil
 }
 
-func backupLegacyHyprlandConfFiles(configDir, dmsDir, backupDir string) (int, error) {
+func backupLegacyHyprlandConfFiles(configDir, dankestiaDir, backupDir string) (int, error) {
 	legacyPaths := []string{filepath.Join(configDir, "hyprland.conf")}
-	dmsConfPaths, err := filepath.Glob(filepath.Join(dmsDir, "*.conf"))
+	dankestiaConfPaths, err := filepath.Glob(filepath.Join(dankestiaDir, "*.conf"))
 	if err != nil {
 		return 0, err
 	}
-	legacyPaths = append(legacyPaths, dmsConfPaths...)
-	backupPaths, err := adjacentHyprlandBackupFiles(configDir, dmsDir)
+	legacyPaths = append(legacyPaths, dankestiaConfPaths...)
+	backupPaths, err := adjacentHyprlandBackupFiles(configDir, dankestiaDir)
 	if err != nil {
 		return 0, err
 	}
@@ -773,13 +773,13 @@ func moveHyprlandConfigFile(src, dst string) error {
 	return os.Rename(src, dst)
 }
 
-func adjacentHyprlandBackupFiles(configDir, dmsDir string) ([]string, error) {
+func adjacentHyprlandBackupFiles(configDir, dankestiaDir string) ([]string, error) {
 	var paths []string
 	patterns := []string{
 		filepath.Join(configDir, "hyprland.conf.backup.*"),
 		filepath.Join(configDir, "hyprland.lua.backup.*"),
-		filepath.Join(dmsDir, "*.conf.backup.*"),
-		filepath.Join(dmsDir, "*.lua.backup.*"),
+		filepath.Join(dankestiaDir, "*.conf.backup.*"),
+		filepath.Join(dankestiaDir, "*.lua.backup.*"),
 	}
 	for _, pattern := range patterns {
 		matches, err := filepath.Glob(pattern)
@@ -791,23 +791,23 @@ func adjacentHyprlandBackupFiles(configDir, dmsDir string) ([]string, error) {
 	return paths, nil
 }
 
-func (cd *ConfigDeployer) deployHyprlandDmsConfigs(dmsDir string, terminalCommand string) error {
+func (cd *ConfigDeployer) deployHyprlandDmsConfigs(dankestiaDir string, terminalCommand string) error {
 	configs := []struct {
 		name      string
 		content   string
 		overwrite bool
 	}{
-		{name: "colors.lua", content: DMSColorsLuaConfig},
-		{name: "layout.lua", content: DMSLayoutLuaConfig},
-		{name: "binds.lua", content: strings.ReplaceAll(DMSBindsLuaConfig, "{{TERMINAL_COMMAND}}", terminalCommand), overwrite: true},
-		{name: "binds-user.lua", content: DMSBindsUserLuaConfig},
-		{name: "outputs.lua", content: DMSOutputsLuaConfig},
-		{name: "cursor.lua", content: DMSCursorLuaConfig},
-		{name: "windowrules.lua", content: DMSWindowRulesLuaConfig},
+		{name: "colors.lua", content: DANKESTIAColorsLuaConfig},
+		{name: "layout.lua", content: DANKESTIALayoutLuaConfig},
+		{name: "binds.lua", content: strings.ReplaceAll(DANKESTIABindsLuaConfig, "{{TERMINAL_COMMAND}}", terminalCommand), overwrite: true},
+		{name: "binds-user.lua", content: DANKESTIABindsUserLuaConfig},
+		{name: "outputs.lua", content: DANKESTIAOutputsLuaConfig},
+		{name: "cursor.lua", content: DANKESTIACursorLuaConfig},
+		{name: "windowrules.lua", content: DANKESTIAWindowRulesLuaConfig},
 	}
 
 	for _, cfg := range configs {
-		path := filepath.Join(dmsDir, cfg.name)
+		path := filepath.Join(dankestiaDir, cfg.name)
 		existed := false
 		if info, err := os.Stat(path); err == nil && info.Size() > 0 {
 			existed = true
@@ -829,16 +829,16 @@ func (cd *ConfigDeployer) deployHyprlandDmsConfigs(dmsDir string, terminalComman
 	return nil
 }
 
-func (cd *ConfigDeployer) mergeHyprlandMonitorSections(newConfig, existingConfig, dmsDir string) (string, error) {
+func (cd *ConfigDeployer) mergeHyprlandMonitorSections(newConfig, existingConfig, dankestiaDir string) (string, error) {
 	_ = newConfig
 	lines := extractHyprlangMonitorLines(existingConfig)
 	if len(lines) == 0 {
 		return newConfig, nil
 	}
 
-	outputsPath := filepath.Join(dmsDir, "outputs.lua")
+	outputsPath := filepath.Join(dankestiaDir, "outputs.lua")
 	if info, err := os.Stat(outputsPath); err == nil && info.Size() > 0 {
-		cd.log("Skipping monitor migration: dms/outputs.lua already exists")
+		cd.log("Skipping monitor migration: dankestia/outputs.lua already exists")
 		return newConfig, nil
 	}
 
@@ -864,7 +864,7 @@ func (cd *ConfigDeployer) mergeHyprlandMonitorSections(newConfig, existingConfig
 	if err := os.WriteFile(outputsPath, []byte(b.String()), 0o644); err != nil {
 		return newConfig, err
 	}
-	cd.log("Migrated monitor sections to dms/outputs.lua")
+	cd.log("Migrated monitor sections to dankestia/outputs.lua")
 	return newConfig, nil
 }
 
@@ -880,9 +880,9 @@ func (cd *ConfigDeployer) transformNiriConfigForNonSystemd(config, terminalComma
 
 	config = regexp.MustCompile(`environment \{[^}]*\}`).ReplaceAllString(config, envVars)
 
-	spawnDms := `spawn-at-startup "dms" "run"`
+	spawnDms := `spawn-at-startup "dankestia" "run"`
 	if !strings.Contains(config, spawnDms) {
-		// Insert spawn-at-startup for dms after the environment block
+		// Insert spawn-at-startup for dankestia after the environment block
 		envBlockEnd := regexp.MustCompile(`environment \{[^}]*\}`)
 		if loc := envBlockEnd.FindStringIndex(config); loc != nil {
 			config = config[:loc[1]] + "\n" + spawnDms + config[loc[1]:]

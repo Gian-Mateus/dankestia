@@ -212,7 +212,7 @@ func TestNiriParseRecentWindows(t *testing.T) {
 
 func TestNiriParseInclude(t *testing.T) {
 	tmpDir := t.TempDir()
-	subDir := filepath.Join(tmpDir, "dms")
+	subDir := filepath.Join(tmpDir, "dankestia")
 	if err := os.MkdirAll(subDir, 0o755); err != nil {
 		t.Fatalf("Failed to create subdir: %v", err)
 	}
@@ -223,7 +223,7 @@ func TestNiriParseInclude(t *testing.T) {
 	mainContent := `binds {
     Mod+Q { close-window; }
 }
-include "dms/binds.kdl"
+include "dankestia/binds.kdl"
 `
 	includeContent := `binds {
     Mod+T hotkey-overlay-title="Terminal" { spawn "kitty"; }
@@ -249,7 +249,7 @@ include "dms/binds.kdl"
 
 func TestNiriParseIncludeOverride(t *testing.T) {
 	tmpDir := t.TempDir()
-	subDir := filepath.Join(tmpDir, "dms")
+	subDir := filepath.Join(tmpDir, "dankestia")
 	if err := os.MkdirAll(subDir, 0o755); err != nil {
 		t.Fatalf("Failed to create subdir: %v", err)
 	}
@@ -260,7 +260,7 @@ func TestNiriParseIncludeOverride(t *testing.T) {
 	mainContent := `binds {
     Mod+T hotkey-overlay-title="Main Terminal" { spawn "alacritty"; }
 }
-include "dms/binds.kdl"
+include "dankestia/binds.kdl"
 `
 	includeContent := `binds {
     Mod+T hotkey-overlay-title="Override Terminal" { spawn "kitty"; }
@@ -528,24 +528,24 @@ binds {
 
 func TestNiriKeyIdentityIsCaseInsensitive(t *testing.T) {
 	tmpDir := t.TempDir()
-	dmsDir := filepath.Join(tmpDir, "dms")
-	if err := os.MkdirAll(dmsDir, 0o755); err != nil {
-		t.Fatalf("Failed to create dms dir: %v", err)
+	dankestiaDir := filepath.Join(tmpDir, "dankestia")
+	if err := os.MkdirAll(dankestiaDir, 0o755); err != nil {
+		t.Fatalf("Failed to create dankestia dir: %v", err)
 	}
 
 	config := `binds {
-    Alt+Space hotkey-overlay-title="Spotlight Bar" { spawn "dms" "ipc" "call" "spotlight-bar" "toggle"; }
+    Alt+Space hotkey-overlay-title="Spotlight Bar" { spawn "dankestia" "ipc" "call" "spotlight-bar" "toggle"; }
 }
-include "dms/binds.kdl"
+include "dankestia/binds.kdl"
 `
 	if err := os.WriteFile(filepath.Join(tmpDir, "config.kdl"), []byte(config), 0o644); err != nil {
 		t.Fatalf("Failed to write config: %v", err)
 	}
 	include := `binds {
-    Alt+space hotkey-overlay-title="Default Launcher" { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
+    Alt+space hotkey-overlay-title="Default Launcher" { spawn "dankestia" "ipc" "call" "spotlight" "toggle"; }
 }
 `
-	if err := os.WriteFile(filepath.Join(dmsDir, "binds.kdl"), []byte(include), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(dankestiaDir, "binds.kdl"), []byte(include), 0o644); err != nil {
 		t.Fatalf("Failed to write binds include: %v", err)
 	}
 
@@ -566,7 +566,7 @@ include "dms/binds.kdl"
 		t.Fatalf("Expected one Alt+Space identity, got %d", len(altSpaceBinds))
 	}
 	if got := altSpaceBinds[0].Args; len(got) < 5 || got[3] != "spotlight" || got[4] != "toggle" {
-		t.Fatalf("Expected later DMS include to win with spotlight toggle, got action=%s args=%v", altSpaceBinds[0].Action, got)
+		t.Fatalf("Expected later DANKESTIA include to win with spotlight toggle, got action=%s args=%v", altSpaceBinds[0].Action, got)
 	}
 }
 
@@ -576,7 +576,7 @@ func TestNiriParseMultipleArgs(t *testing.T) {
 
 	content := `binds {
     Mod+Space hotkey-overlay-title="Application Launcher" {
-        spawn "dms" "ipc" "call" "spotlight" "toggle";
+        spawn "dankestia" "ipc" "call" "spotlight" "toggle";
     }
 }
 `
@@ -598,7 +598,7 @@ func TestNiriParseMultipleArgs(t *testing.T) {
 		t.Errorf("Expected 5 args, got %d: %v", len(kb.Args), kb.Args)
 	}
 
-	expectedArgs := []string{"dms", "ipc", "call", "spotlight", "toggle"}
+	expectedArgs := []string{"dankestia", "ipc", "call", "spotlight", "toggle"}
 	for i, arg := range expectedArgs {
 		if i < len(kb.Args) && kb.Args[i] != arg {
 			t.Errorf("Args[%d] = %q, want %q", i, kb.Args[i], arg)

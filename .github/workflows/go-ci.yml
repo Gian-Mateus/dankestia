@@ -45,11 +45,11 @@ jobs:
       - name: Test
         run: go test -v ./...
 
-      - name: Build dms
-        run: go build -v ./cmd/dms
+      - name: Build dankestia
+        run: go build -v ./cmd/dankestia
 
-      - name: Build dms (distropkg)
-        run: go build -v -tags distro_binary ./cmd/dms
+      - name: Build dankestia (distropkg)
+        run: go build -v -tags distro_binary ./cmd/dankestia
 
       - name: Build dankinstall
         run: go build -v ./cmd/dankinstall

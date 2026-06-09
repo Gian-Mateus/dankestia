@@ -4,13 +4,13 @@
   ...
 }:
 let
-  fakeDms = pkgs.writeShellScriptBin "dms" ''
-    printf '%s\n' "$@" > /tmp/dms-service-args
+  fakeDms = pkgs.writeShellScriptBin "dankestia" ''
+    printf '%s\n' "$@" > /tmp/dankestia-service-args
     exec ${pkgs.coreutils}/bin/sleep 300
   '';
 in
 pkgs.testers.runNixOSTest {
-  name = "dms-nixos-service-start-module";
+  name = "dankestia-nixos-service-start-module";
 
   nodes.machine = {
     imports = [
@@ -39,10 +39,10 @@ pkgs.testers.runNixOSTest {
     machine.wait_for_unit("multi-user.target")
     machine.wait_for_unit("user@1000.service")
 
-    machine.succeed("systemctl --machine=danklinux@ --user start dms.service")
-    machine.wait_until_succeeds("systemctl --machine=danklinux@ --user is-active dms.service")
-    machine.wait_until_succeeds("test -f /tmp/dms-service-args")
-    machine.succeed("grep -Fx run /tmp/dms-service-args")
-    machine.succeed("grep -Fx -- --session /tmp/dms-service-args")
+    machine.succeed("systemctl --machine=danklinux@ --user start dankestia.service")
+    machine.wait_until_succeeds("systemctl --machine=danklinux@ --user is-active dankestia.service")
+    machine.wait_until_succeeds("test -f /tmp/dankestia-service-args")
+    machine.succeed("grep -Fx run /tmp/dankestia-service-args")
+    machine.succeed("grep -Fx -- --session /tmp/dankestia-service-args")
   '';
 }

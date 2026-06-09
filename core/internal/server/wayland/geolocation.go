@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/log"
+	"github.com/AvengeMedia/Dankestia/core/internal/log"
 )
 
 type ipAPIResponse struct {

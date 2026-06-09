@@ -10,22 +10,22 @@ import (
 	"strings"
 	"time"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/distros"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/privesc"
+	"github.com/AvengeMedia/Dankestia/core/internal/distros"
+	"github.com/AvengeMedia/Dankestia/core/internal/privesc"
 )
 
 const (
-	GreeterPamManagedBlockStart = "# BEGIN DMS GREETER AUTH (managed by dms greeter sync)"
-	GreeterPamManagedBlockEnd   = "# END DMS GREETER AUTH"
+	GreeterPamManagedBlockStart = "# BEGIN DANKESTIA GREETER AUTH (managed by dankestia greeter sync)"
+	GreeterPamManagedBlockEnd   = "# END DANKESTIA GREETER AUTH"
 
-	LockscreenPamManagedBlockStart = "# BEGIN DMS LOCKSCREEN AUTH (managed by dms greeter sync)"
-	LockscreenPamManagedBlockEnd   = "# END DMS LOCKSCREEN AUTH"
+	LockscreenPamManagedBlockStart = "# BEGIN DANKESTIA LOCKSCREEN AUTH (managed by dankestia greeter sync)"
+	LockscreenPamManagedBlockEnd   = "# END DANKESTIA LOCKSCREEN AUTH"
 
-	LockscreenU2FPamManagedBlockStart = "# BEGIN DMS LOCKSCREEN U2F AUTH (managed by dms auth sync)"
-	LockscreenU2FPamManagedBlockEnd   = "# END DMS LOCKSCREEN U2F AUTH"
+	LockscreenU2FPamManagedBlockStart = "# BEGIN DANKESTIA LOCKSCREEN U2F AUTH (managed by dankestia auth sync)"
+	LockscreenU2FPamManagedBlockEnd   = "# END DANKESTIA LOCKSCREEN U2F AUTH"
 
-	legacyGreeterPamFprintComment = "# DMS greeter fingerprint"
-	legacyGreeterPamU2FComment    = "# DMS greeter U2F"
+	legacyGreeterPamFprintComment = "# DANKESTIA greeter fingerprint"
+	legacyGreeterPamU2FComment    = "# DANKESTIA greeter U2F"
 
 	GreetdPamPath       = "/etc/pam.d/greetd"
 	DankshellPamPath    = "/etc/pam.d/dankshell"
@@ -104,7 +104,7 @@ func IsNixOS() bool {
 }
 
 func ReadAuthSettings(homeDir string) (AuthSettings, error) {
-	settingsPath := filepath.Join(homeDir, ".config", "DankMaterialShell", "settings.json")
+	settingsPath := filepath.Join(homeDir, ".config", "Dankestia", "settings.json")
 	data, err := os.ReadFile(settingsPath)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -200,7 +200,7 @@ func removeManagedGreeterPamBlockWithDeps(logFunc func(string), sudoPassword str
 		return fmt.Errorf("failed to write %s: %w", deps.greetdPath, err)
 	}
 
-	logFunc("✓ Removed DMS managed PAM block from " + deps.greetdPath)
+	logFunc("✓ Removed DANKESTIA managed PAM block from " + deps.greetdPath)
 	return nil
 }
 
@@ -505,14 +505,14 @@ func buildManagedLockscreenU2FPamContent() string {
 
 func syncLockscreenPamConfigWithDeps(logFunc func(string), sudoPassword string, deps syncDeps) error {
 	if deps.isNixOS() {
-		logFunc("ℹ NixOS detected. DMS continues to use /etc/pam.d/login for lock screen password auth on NixOS unless you declare security.pam.services.dankshell yourself. U2F and fingerprint are handled separately and should not be included in dankshell.")
+		logFunc("ℹ NixOS detected. DANKESTIA continues to use /etc/pam.d/login for lock screen password auth on NixOS unless you declare security.pam.services.dankshell yourself. U2F and fingerprint are handled separately and should not be included in dankshell.")
 		return nil
 	}
 
 	existingData, err := deps.readFile(deps.dankshellPath)
 	if err == nil {
 		if !hasManagedLockscreenPamFile(string(existingData)) {
-			logFunc("ℹ Custom /etc/pam.d/dankshell found (no DMS block). Skipping.")
+			logFunc("ℹ Custom /etc/pam.d/dankshell found (no DANKESTIA block). Skipping.")
 			return nil
 		}
 	} else if !os.IsNotExist(err) {
@@ -534,7 +534,7 @@ func syncLockscreenPamConfigWithDeps(logFunc func(string), sudoPassword string, 
 
 func syncLockscreenU2FPamConfigWithDeps(logFunc func(string), sudoPassword string, enabled bool, deps syncDeps) error {
 	if deps.isNixOS() {
-		logFunc("ℹ NixOS detected. DMS does not manage /etc/pam.d/dankshell-u2f on NixOS. Keep using the bundled U2F helper or configure a custom PAM service yourself.")
+		logFunc("ℹ NixOS detected. DANKESTIA does not manage /etc/pam.d/dankshell-u2f on NixOS. Keep using the bundled U2F helper or configure a custom PAM service yourself.")
 		return nil
 	}
 
@@ -545,7 +545,7 @@ func syncLockscreenU2FPamConfigWithDeps(logFunc func(string), sudoPassword strin
 
 	if enabled {
 		if err == nil && !hasManagedLockscreenU2FPamFile(string(existingData)) {
-			logFunc("ℹ Custom /etc/pam.d/dankshell-u2f found (no DMS block). Skipping.")
+			logFunc("ℹ Custom /etc/pam.d/dankshell-u2f found (no DANKESTIA block). Skipping.")
 			return nil
 		}
 		if err := writeManagedPamFile(buildManagedLockscreenU2FPamContent(), deps.dankshellU2fPath, sudoPassword, deps); err != nil {
@@ -559,14 +559,14 @@ func syncLockscreenU2FPamConfigWithDeps(logFunc func(string), sudoPassword strin
 		return nil
 	}
 	if err == nil && !hasManagedLockscreenU2FPamFile(string(existingData)) {
-		logFunc("ℹ Custom /etc/pam.d/dankshell-u2f found (no DMS block). Leaving it untouched.")
+		logFunc("ℹ Custom /etc/pam.d/dankshell-u2f found (no DANKESTIA block). Leaving it untouched.")
 		return nil
 	}
 
 	if err := deps.runSudoCmd(sudoPassword, "rm", "-f", deps.dankshellU2fPath); err != nil {
 		return fmt.Errorf("failed to remove %s: %w", deps.dankshellU2fPath, err)
 	}
-	logFunc("✓ Removed DMS-managed /etc/pam.d/dankshell-u2f")
+	logFunc("✓ Removed DANKESTIA-managed /etc/pam.d/dankshell-u2f")
 	return nil
 }
 
@@ -666,7 +666,7 @@ func syncGreeterPamConfigWithDeps(logFunc func(string), sudoPassword string, set
 	}
 
 	if deps.isNixOS() {
-		logFunc("ℹ NixOS detected: PAM config is managed by NixOS modules. Skipping DMS PAM block write.")
+		logFunc("ℹ NixOS detected: PAM config is managed by NixOS modules. Skipping DANKESTIA PAM block write.")
 		logFunc("  Configure fingerprint/U2F auth via your greetd NixOS module options (e.g. security.pam.services.greetd).")
 		return nil
 	}
@@ -683,24 +683,24 @@ func syncGreeterPamConfigWithDeps(logFunc func(string), sudoPassword string, set
 	includedU2fFile := detectIncludedPamModule(content, "pam_u2f.so", deps)
 	fprintAvailableForCurrentUser := deps.fingerprintAvailableForCurrentUser()
 	if wantFprint && includedFprintFile != "" {
-		logFunc("⚠ pam_fprintd already present in included " + includedFprintFile + " (managed by authselect/pam-auth-update). Skipping DMS fprint block to avoid double-fingerprint auth.")
+		logFunc("⚠ pam_fprintd already present in included " + includedFprintFile + " (managed by authselect/pam-auth-update). Skipping DANKESTIA fprint block to avoid double-fingerprint auth.")
 		wantFprint = false
 	}
 	if wantU2f && includedU2fFile != "" {
-		logFunc("⚠ pam_u2f already present in included " + includedU2fFile + " (managed by authselect/pam-auth-update). Skipping DMS U2F block to avoid double security-key auth.")
+		logFunc("⚠ pam_u2f already present in included " + includedU2fFile + " (managed by authselect/pam-auth-update). Skipping DANKESTIA U2F block to avoid double security-key auth.")
 		wantU2f = false
 	}
 	if !wantFprint && includedFprintFile != "" {
 		if fprintToggleEnabled {
 			logFunc("ℹ Fingerprint auth is still enabled via included " + includedFprintFile + ".")
 			if fprintAvailableForCurrentUser {
-				logFunc("  DMS toggle is enabled, and effective auth is provided by the included PAM stack.")
+				logFunc("  DANKESTIA toggle is enabled, and effective auth is provided by the included PAM stack.")
 			} else {
 				logFunc("  No enrolled fingerprints detected for the current user; password auth remains the effective path.")
 			}
 		} else {
 			if fprintAvailableForCurrentUser {
-				logFunc("ℹ Fingerprint auth is active via included " + includedFprintFile + " while DMS fingerprint toggle is off.")
+				logFunc("ℹ Fingerprint auth is active via included " + includedFprintFile + " while DANKESTIA fingerprint toggle is off.")
 				logFunc("  Password login will work but may be delayed while the fingerprint module runs first.")
 				logFunc("  To eliminate the delay, " + pamManagerHintForCurrentDistro())
 			} else {
@@ -712,9 +712,9 @@ func syncGreeterPamConfigWithDeps(logFunc func(string), sudoPassword string, set
 	if !wantU2f && includedU2fFile != "" {
 		if u2fToggleEnabled {
 			logFunc("ℹ Security-key auth is still enabled via included " + includedU2fFile + ".")
-			logFunc("  DMS toggle is enabled, but effective auth is provided by the included PAM stack.")
+			logFunc("  DANKESTIA toggle is enabled, but effective auth is provided by the included PAM stack.")
 		} else {
-			logFunc("⚠ Security-key auth is active via included " + includedU2fFile + " while DMS security-key toggle is off.")
+			logFunc("⚠ Security-key auth is active via included " + includedU2fFile + " while DANKESTIA security-key toggle is off.")
 			logFunc("  " + pamManagerHintForCurrentDistro())
 		}
 	}
@@ -745,13 +745,13 @@ func syncGreeterPamConfigWithDeps(logFunc func(string), sudoPassword string, set
 	if wantFprint || wantU2f {
 		logFunc("✓ Configured greetd PAM for fingerprint/U2F")
 	} else {
-		logFunc("✓ Cleared DMS-managed greeter PAM auth block")
+		logFunc("✓ Cleared DANKESTIA-managed greeter PAM auth block")
 	}
 	return nil
 }
 
 func writeManagedPamFile(content string, destPath string, sudoPassword string, deps syncDeps) error {
-	tmpFile, err := deps.createTemp("", "dms-pam-*.conf")
+	tmpFile, err := deps.createTemp("", "dankestia-pam-*.conf")
 	if err != nil {
 		return err
 	}

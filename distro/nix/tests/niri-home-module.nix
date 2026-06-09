@@ -18,7 +18,7 @@ let
   };
 in
 pkgs.testers.runNixOSTest {
-  name = "dms-niri-home-module";
+  name = "dankestia-niri-home-module";
 
   nodes.machine = {
     ...
@@ -76,9 +76,9 @@ pkgs.testers.runNixOSTest {
     machine.wait_for_unit("multi-user.target")
 
     machine.succeed("su -- danklinux -c 'test -f ~/.config/niri/config.kdl'")
-    machine.succeed("su -- danklinux -c 'grep -F \"include \\\"dms/binds.kdl\\\"\" ~/.config/niri/config.kdl'")
+    machine.succeed("su -- danklinux -c 'grep -F \"include \\\"dankestia/binds.kdl\\\"\" ~/.config/niri/config.kdl'")
     machine.succeed("su -- danklinux -c 'grep -F \"include \\\"hm.kdl\\\"\" ~/.config/niri/config.kdl'")
     machine.succeed("su -- danklinux -c 'grep -F \"spawn-at-startup\" ~/.config/niri/hm.kdl'")
-    machine.succeed("su -- danklinux -c 'grep -F \"\\\"dms\\\" \\\"run\\\"\" ~/.config/niri/hm.kdl'")
+    machine.succeed("su -- danklinux -c 'grep -F \"\\\"dankestia\\\" \\\"run\\\"\" ~/.config/niri/hm.kdl'")
   '';
 }

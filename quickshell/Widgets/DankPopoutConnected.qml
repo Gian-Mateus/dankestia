@@ -12,7 +12,7 @@ Item {
     readonly property var log: Log.scoped("DankPopoutConnected")
 
     property var popoutHandle: root
-    property string layerNamespace: "dms:popout"
+    property string layerNamespace: "dankestia:popout"
     property alias content: contentLoader.sourceComponent
     property alias contentLoader: contentLoader
     property Component overlayContent: null
@@ -57,7 +57,7 @@ Item {
     property var screen: null
     // Connected resize uses one full-screen surface; body-sized regions are masks.
     readonly property bool useBackgroundWindow: false
-    readonly property var effectivePopoutLayer: LayerShell.fromEnv("DMS_POPOUT_LAYER", root.triggerUsesOverlayLayer ? WlrLayer.Overlay : WlrLayer.Top, {
+    readonly property var effectivePopoutLayer: LayerShell.fromEnv("DANKESTIA_POPOUT_LAYER", root.triggerUsesOverlayLayer ? WlrLayer.Overlay : WlrLayer.Top, {
         "allow": ["top", "overlay"],
         "invalidLayer": WlrLayer.Top,
         "label": "popouts"
@@ -1036,7 +1036,7 @@ Item {
                         borderColor: contentContainer.surfaceBorderColor
                         borderWidth: contentContainer.surfaceBorderWidth
                         useCustomSource: root.usesConnectedSurfaceChrome
-                        shadowEnabled: Theme.elevationEnabled && SettingsData.popoutElevationEnabled && Quickshell.env("DMS_DISABLE_LAYER") !== "true" && Quickshell.env("DMS_DISABLE_LAYER") !== "1" && !(root.suspendShadowWhileResizing && root._resizeActive) && !root.frameOwnsConnectedChrome
+                        shadowEnabled: Theme.elevationEnabled && SettingsData.popoutElevationEnabled && Quickshell.env("DANKESTIA_DISABLE_LAYER") !== "true" && Quickshell.env("DANKESTIA_DISABLE_LAYER") !== "1" && !(root.suspendShadowWhileResizing && root._resizeActive) && !root.frameOwnsConnectedChrome
 
                         Item {
                             anchors.fill: parent

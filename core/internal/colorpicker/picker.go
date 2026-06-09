@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/log"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/proto/keyboard_shortcuts_inhibit"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/proto/wlr_layer_shell"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/proto/wlr_screencopy"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/proto/wp_viewporter"
-	wlhelpers "github.com/AvengeMedia/DankMaterialShell/core/internal/wayland/client"
-	"github.com/AvengeMedia/DankMaterialShell/core/pkg/go-wayland/wayland/client"
+	"github.com/AvengeMedia/Dankestia/core/internal/log"
+	"github.com/AvengeMedia/Dankestia/core/internal/proto/keyboard_shortcuts_inhibit"
+	"github.com/AvengeMedia/Dankestia/core/internal/proto/wlr_layer_shell"
+	"github.com/AvengeMedia/Dankestia/core/internal/proto/wlr_screencopy"
+	"github.com/AvengeMedia/Dankestia/core/internal/proto/wp_viewporter"
+	wlhelpers "github.com/AvengeMedia/Dankestia/core/internal/wayland/client"
+	"github.com/AvengeMedia/Dankestia/core/pkg/go-wayland/wayland/client"
 )
 
 type Config struct {
@@ -341,7 +341,7 @@ func (p *Picker) createLayerSurface(output *Output) (*LayerSurface, error) {
 		surface,
 		output.wlOutput,
 		uint32(wlr_layer_shell.ZwlrLayerShellV1LayerOverlay),
-		"dms-colorpicker",
+		"dankestia-colorpicker",
 	)
 	if err != nil {
 		return nil, fmt.Errorf("get layer surface: %w", err)

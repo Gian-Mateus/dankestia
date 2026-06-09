@@ -6,8 +6,8 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/deps"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/privesc"
+	"github.com/AvengeMedia/Dankestia/core/internal/deps"
+	"github.com/AvengeMedia/Dankestia/core/internal/privesc"
 )
 
 func init() {
@@ -69,8 +69,8 @@ func (f *FedoraDistribution) DetectDependencies(ctx context.Context, wm deps.Win
 func (f *FedoraDistribution) DetectDependenciesWithTerminal(ctx context.Context, wm deps.WindowManager, terminal deps.Terminal) ([]deps.Dependency, error) {
 	var dependencies []deps.Dependency
 
-	// DMS at the top (shell is prominent)
-	dependencies = append(dependencies, f.detectDMS())
+	// DANKESTIA at the top (shell is prominent)
+	dependencies = append(dependencies, f.detectDANKESTIA())
 
 	// Terminal with choice support
 	dependencies = append(dependencies, f.detectSpecificTerminal(terminal))
@@ -83,7 +83,7 @@ func (f *FedoraDistribution) DetectDependenciesWithTerminal(ctx context.Context,
 	}
 	dependencies = append(dependencies, wmDep)
 	dependencies = append(dependencies, f.detectQuickshell())
-	dependencies = append(dependencies, f.detectDMSGreeter())
+	dependencies = append(dependencies, f.detectDANKESTIAGreeter())
 	dependencies = append(dependencies, f.detectXDGPortal())
 	dependencies = append(dependencies, f.detectAccountsService())
 
@@ -134,9 +134,9 @@ func (f *FedoraDistribution) GetPackageMappingWithVariants(wm deps.WindowManager
 
 		// COPR packages
 		"quickshell":              f.getQuickshellMapping(variants["quickshell"]),
-		"dms-greeter":             {Name: "dms-greeter", Repository: RepoTypeCOPR, RepoURL: "avengemedia/danklinux"},
+		"dankestia-greeter":             {Name: "dankestia-greeter", Repository: RepoTypeCOPR, RepoURL: "avengemedia/danklinux"},
 		"matugen":                 {Name: "matugen", Repository: RepoTypeCOPR, RepoURL: "avengemedia/danklinux"},
-		"dms (DankMaterialShell)": f.getDmsMapping(variants["dms (DankMaterialShell)"]),
+		"dankestia (Dankestia)": f.getDmsMapping(variants["dankestia (Dankestia)"]),
 		"dgop":                    {Name: "dgop", Repository: RepoTypeCOPR, RepoURL: "avengemedia/danklinux"},
 	}
 
@@ -166,9 +166,9 @@ func (f *FedoraDistribution) getQuickshellMapping(variant deps.PackageVariant) P
 
 func (f *FedoraDistribution) getDmsMapping(variant deps.PackageVariant) PackageMapping {
 	if variant == deps.VariantGit {
-		return PackageMapping{Name: "dms", Repository: RepoTypeCOPR, RepoURL: "avengemedia/dms-git"}
+		return PackageMapping{Name: "dankestia", Repository: RepoTypeCOPR, RepoURL: "avengemedia/dankestia-git"}
 	}
-	return PackageMapping{Name: "dms", Repository: RepoTypeCOPR, RepoURL: "avengemedia/dms"}
+	return PackageMapping{Name: "dankestia", Repository: RepoTypeCOPR, RepoURL: "avengemedia/dankestia"}
 }
 
 func (f *FedoraDistribution) getHyprlandMapping(_ deps.PackageVariant) PackageMapping {
@@ -210,8 +210,8 @@ func (f *FedoraDistribution) detectAccountsService() deps.Dependency {
 	}
 }
 
-func (f *FedoraDistribution) detectDMSGreeter() deps.Dependency {
-	return f.detectOptionalPackage("dms-greeter", "DankMaterialShell greetd greeter", f.packageInstalled("dms-greeter"))
+func (f *FedoraDistribution) detectDANKESTIAGreeter() deps.Dependency {
+	return f.detectOptionalPackage("dankestia-greeter", "Dankestia greetd greeter", f.packageInstalled("dankestia-greeter"))
 }
 
 func (f *FedoraDistribution) getPrerequisites() []string {
@@ -388,8 +388,8 @@ func (f *FedoraDistribution) InstallPackages(ctx context.Context, dependencies [
 		f.log(fmt.Sprintf("Warning: failed to write window manager config: %v", err))
 	}
 
-	if err := f.EnableDMSService(ctx, wm); err != nil {
-		f.log(fmt.Sprintf("Warning: failed to enable dms service: %v", err))
+	if err := f.EnableDANKESTIAService(ctx, wm); err != nil {
+		f.log(fmt.Sprintf("Warning: failed to enable dankestia service: %v", err))
 	}
 
 	// Phase 7: Complete

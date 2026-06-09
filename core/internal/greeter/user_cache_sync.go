@@ -11,8 +11,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/privesc"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/utils"
+	"github.com/AvengeMedia/Dankestia/core/internal/privesc"
+	"github.com/AvengeMedia/Dankestia/core/internal/utils"
 )
 
 var monitorWallpaperSanitizer = regexp.MustCompile(`[^a-zA-Z0-9]+`)
@@ -72,7 +72,7 @@ func CanSyncOwnUserGreeterProfile(username string) bool {
 }
 
 func GreeterProfileSyncReady() bool {
-	if command := readGreeterSessionCommand(); command != "" && strings.Contains(command, "dms-greeter") {
+	if command := readGreeterSessionCommand(); command != "" && strings.Contains(command, "dankestia-greeter") {
 		return true
 	}
 	usersDir := filepath.Join(GreeterCacheDir, "users")
@@ -121,7 +121,7 @@ func SyncUserProfileCache(logFunc func(string)) error {
 		logFunc = func(string) {}
 	}
 	if !GreeterProfileSyncReady() {
-		return fmt.Errorf("greeter is not set up on this system yet; an administrator must run 'dms greeter install' or 'dms greeter sync' once first")
+		return fmt.Errorf("greeter is not set up on this system yet; an administrator must run 'dankestia greeter install' or 'dankestia greeter sync' once first")
 	}
 
 	currentUser, err := user.Current()
@@ -130,7 +130,7 @@ func SyncUserProfileCache(logFunc func(string)) error {
 	}
 	if !CanSyncOwnUserGreeterProfile(currentUser.Username) {
 		group := DetectGreeterGroup()
-		return fmt.Errorf("cannot sync greeter profile: you must be in the %s group with write access to %s/users\nAsk an administrator to run:\n  sudo usermod -aG %s %s\nThen log out and back in before running:\n  dms greeter sync --profile",
+		return fmt.Errorf("cannot sync greeter profile: you must be in the %s group with write access to %s/users\nAsk an administrator to run:\n  sudo usermod -aG %s %s\nThen log out and back in before running:\n  dankestia greeter sync --profile",
 			group, GreeterCacheDir, group, currentUser.Username)
 	}
 
@@ -240,7 +240,7 @@ func syncUserGreeterCacheSlot(homeDir, cacheDir, username string, state greeterT
 		return err
 	}
 
-	settingsPath := filepath.Join(homeDir, ".config", "DankMaterialShell", "settings.json")
+	settingsPath := filepath.Join(homeDir, ".config", "Dankestia", "settings.json")
 	settingsBytes, err := os.ReadFile(settingsPath)
 	if err != nil {
 		return fmt.Errorf("failed to read settings for user cache slot: %w", err)
@@ -275,7 +275,7 @@ func syncUserGreeterCacheSlot(homeDir, cacheDir, username string, state greeterT
 		return err
 	}
 
-	sessionPath := filepath.Join(homeDir, ".local", "state", "DankMaterialShell", "session.json")
+	sessionPath := filepath.Join(homeDir, ".local", "state", "Dankestia", "session.json")
 	sessionBytes, err := os.ReadFile(sessionPath)
 	if err != nil {
 		return fmt.Errorf("failed to read session for user cache slot: %w", err)
@@ -478,7 +478,7 @@ func writeFileWithPrivesc(path string, data []byte, opts userSlotSyncOpts) error
 		return nil
 	}
 
-	tmp, err := os.CreateTemp("", "dms-greeter-user-cache-*")
+	tmp, err := os.CreateTemp("", "dankestia-greeter-user-cache-*")
 	if err != nil {
 		return fmt.Errorf("failed to create temp file for %s: %w", path, err)
 	}

@@ -8,13 +8,13 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/keybinds"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/utils"
+	"github.com/AvengeMedia/Dankestia/core/internal/keybinds"
+	"github.com/AvengeMedia/Dankestia/core/internal/utils"
 )
 
 type HyprlandProvider struct {
 	configPath       string
-	dmsBindsIncluded bool
+	dankestiaBindsIncluded bool
 	parsed           bool
 }
 
@@ -40,55 +40,55 @@ func (h *HyprlandProvider) Name() string {
 }
 
 func (h *HyprlandProvider) GetCheatSheet() (*keybinds.CheatSheet, error) {
-	result, err := ParseHyprlandKeysWithDMS(h.configPath)
+	result, err := ParseHyprlandKeysWithDANKESTIA(h.configPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse hyprland config: %w", err)
 	}
 
-	h.dmsBindsIncluded = result.DMSBindsIncluded
+	h.dankestiaBindsIncluded = result.DANKESTIABindsIncluded
 	h.parsed = true
 
 	categorizedBinds := make(map[string][]keybinds.Keybind)
-	h.convertSection(result.Section, "", categorizedBinds, result.ConflictingConfigs, result.DefaultDMSKeys)
+	h.convertSection(result.Section, "", categorizedBinds, result.ConflictingConfigs, result.DefaultDANKESTIAKeys)
 
 	sheet := &keybinds.CheatSheet{
 		Title:            "Hyprland Keybinds",
 		Provider:         h.Name(),
 		Binds:            categorizedBinds,
-		DMSBindsIncluded: result.DMSBindsIncluded,
+		DANKESTIABindsIncluded: result.DANKESTIABindsIncluded,
 	}
 
-	if result.DMSStatus != nil {
-		sheet.DMSStatus = &keybinds.DMSBindsStatus{
-			Exists:          result.DMSStatus.Exists,
-			Included:        result.DMSStatus.Included,
-			IncludePosition: result.DMSStatus.IncludePosition,
-			TotalIncludes:   result.DMSStatus.TotalIncludes,
-			BindsAfterDMS:   result.DMSStatus.BindsAfterDMS,
-			Effective:       result.DMSStatus.Effective,
-			OverriddenBy:    result.DMSStatus.OverriddenBy,
-			StatusMessage:   result.DMSStatus.StatusMessage,
-			ConfigFormat:    result.DMSStatus.ConfigFormat,
-			ReadOnly:        result.DMSStatus.ReadOnly,
+	if result.DANKESTIAStatus != nil {
+		sheet.DANKESTIAStatus = &keybinds.DANKESTIABindsStatus{
+			Exists:          result.DANKESTIAStatus.Exists,
+			Included:        result.DANKESTIAStatus.Included,
+			IncludePosition: result.DANKESTIAStatus.IncludePosition,
+			TotalIncludes:   result.DANKESTIAStatus.TotalIncludes,
+			BindsAfterDANKESTIA:   result.DANKESTIAStatus.BindsAfterDANKESTIA,
+			Effective:       result.DANKESTIAStatus.Effective,
+			OverriddenBy:    result.DANKESTIAStatus.OverriddenBy,
+			StatusMessage:   result.DANKESTIAStatus.StatusMessage,
+			ConfigFormat:    result.DANKESTIAStatus.ConfigFormat,
+			ReadOnly:        result.DANKESTIAStatus.ReadOnly,
 		}
 	}
 
 	return sheet, nil
 }
 
-func (h *HyprlandProvider) HasDMSBindsIncluded() bool {
+func (h *HyprlandProvider) HasDANKESTIABindsIncluded() bool {
 	if h.parsed {
-		return h.dmsBindsIncluded
+		return h.dankestiaBindsIncluded
 	}
 
-	result, err := ParseHyprlandKeysWithDMS(h.configPath)
+	result, err := ParseHyprlandKeysWithDANKESTIA(h.configPath)
 	if err != nil {
 		return false
 	}
 
-	h.dmsBindsIncluded = result.DMSBindsIncluded
+	h.dankestiaBindsIncluded = result.DANKESTIABindsIncluded
 	h.parsed = true
-	return h.dmsBindsIncluded
+	return h.dankestiaBindsIncluded
 }
 
 func (h *HyprlandProvider) convertSection(section *HyprlandSection, subcategory string, categorizedBinds map[string][]keybinds.Keybind, conflicts map[string]*HyprlandKeyBinding, defaultKeys map[string]bool) {
@@ -146,14 +146,14 @@ func (h *HyprlandProvider) convertKeybind(kb *HyprlandKeyBinding, subcategory st
 	}
 
 	source := "config"
-	if isDMSBindsUserOverridePath(kb.Source) {
-		source = "dms"
-	} else if isDMSBindsPrimarySourcePath(kb.Source) {
-		source = "dms-default"
+	if isDANKESTIABindsUserOverridePath(kb.Source) {
+		source = "dankestia"
+	} else if isDANKESTIABindsPrimarySourcePath(kb.Source) {
+		source = "dankestia-default"
 	}
 
 	hasDefault := false
-	if source == "dms" && defaultKeys != nil {
+	if source == "dankestia" && defaultKeys != nil {
 		hasDefault = defaultKeys[strings.ToLower(keyStr)]
 	}
 
@@ -167,7 +167,7 @@ func (h *HyprlandProvider) convertKeybind(kb *HyprlandKeyBinding, subcategory st
 		HasDefault:  hasDefault,
 	}
 
-	if (source == "dms" || source == "dms-default") && conflicts != nil {
+	if (source == "dankestia" || source == "dankestia-default") && conflicts != nil {
 		normalizedKey := strings.ToLower(keyStr)
 		if conflictKb, ok := conflicts[normalizedKey]; ok {
 			bind.Conflict = &keybinds.Keybind{
@@ -199,9 +199,9 @@ func (h *HyprlandProvider) formatKey(kb *HyprlandKeyBinding) string {
 func (h *HyprlandProvider) GetOverridePath() string {
 	expanded, err := utils.ExpandPath(h.configPath)
 	if err != nil {
-		return filepath.Join(h.configPath, "dms", "binds-user.lua")
+		return filepath.Join(h.configPath, "dankestia", "binds-user.lua")
 	}
-	return filepath.Join(expanded, "dms", "binds-user.lua")
+	return filepath.Join(expanded, "dankestia", "binds-user.lua")
 }
 
 func (h *HyprlandProvider) validateAction(action string) error {
@@ -231,7 +231,7 @@ func (h *HyprlandProvider) SetBind(key, action, description string, options map[
 	overridePath := h.GetOverridePath()
 
 	if err := os.MkdirAll(filepath.Dir(overridePath), 0o755); err != nil {
-		return fmt.Errorf("failed to create dms directory: %w", err)
+		return fmt.Errorf("failed to create dankestia directory: %w", err)
 	}
 
 	existingBinds, err := h.loadOverrideBinds()
@@ -299,7 +299,7 @@ type hyprlandOverrideBind struct {
 
 func (h *HyprlandProvider) ensureWritableConfig() error {
 	if h.isLegacyConfigReadOnly() {
-		return fmt.Errorf("hyprland legacy conf configs are read-only; run dms setup to migrate to Lua before editing keybinds")
+		return fmt.Errorf("hyprland legacy conf configs are read-only; run dankestia setup to migrate to Lua before editing keybinds")
 	}
 	return nil
 }
@@ -339,7 +339,7 @@ func hyprlandOverrideMapKey(key string) string {
 
 func (h *HyprlandProvider) getBindSortPriority(action string) int {
 	switch {
-	case strings.HasPrefix(action, "exec") && strings.Contains(action, "dms"):
+	case strings.HasPrefix(action, "exec") && strings.Contains(action, "dankestia"):
 		return 0
 	case strings.Contains(action, "workspace"):
 		return 1
@@ -383,7 +383,7 @@ func (h *HyprlandProvider) generateBindsContent(binds map[string]*hyprlandOverri
 	})
 
 	var sb strings.Builder
-	sb.WriteString("-- DMS user keybind overrides (edit via Control Center or dms; do not remove this header)\n\n")
+	sb.WriteString("-- DANKESTIA user keybind overrides (edit via Control Center or dankestia; do not remove this header)\n\n")
 	for _, bind := range bindList {
 		writeLuaBindLine(&sb, bind)
 	}

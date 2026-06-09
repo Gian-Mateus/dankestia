@@ -3,7 +3,7 @@ package distros
 import (
 	"context"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/deps"
+	"github.com/AvengeMedia/Dankestia/core/internal/deps"
 )
 
 // DistroFamily represents a family of related distributions

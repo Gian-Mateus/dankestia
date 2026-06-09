@@ -6,11 +6,11 @@ import (
 	"os"
 	"strings"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/config"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/deps"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/distros"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/greeter"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/privesc"
+	"github.com/AvengeMedia/Dankestia/core/internal/config"
+	"github.com/AvengeMedia/Dankestia/core/internal/deps"
+	"github.com/AvengeMedia/Dankestia/core/internal/distros"
+	"github.com/AvengeMedia/Dankestia/core/internal/greeter"
+	"github.com/AvengeMedia/Dankestia/core/internal/privesc"
 )
 
 // ErrConfirmationRequired is returned when --yes is not set and the user
@@ -214,13 +214,13 @@ func (r *Runner) Run() error {
 		return fmt.Errorf("package installation failed: %w", err)
 	}
 
-	// 9. Greeter setup (if dms-greeter was included)
-	if !disabledItems["dms-greeter"] && r.depExists(dependencies, "dms-greeter") {
+	// 9. Greeter setup (if dankestia-greeter was included)
+	if !disabledItems["dankestia-greeter"] && r.depExists(dependencies, "dankestia-greeter") {
 		compositorName := "niri"
 		if wm == deps.WindowManagerHyprland {
 			compositorName = "Hyprland"
 		}
-		fmt.Fprintln(os.Stdout, "Configuring DMS greeter...")
+		fmt.Fprintln(os.Stdout, "Configuring DANKESTIA greeter...")
 		logFunc := func(line string) {
 			r.log(line)
 			fmt.Fprintf(os.Stdout, "  greeter: %s\n", line)
@@ -268,14 +268,14 @@ func (r *Runner) Run() error {
 
 // buildDisabledItems computes the set of dependencies that should be skipped
 // during installation, applying the --include-deps and --exclude-deps filters.
-// dms-greeter is disabled by default (opt-in), matching TUI behavior.
+// dankestia-greeter is disabled by default (opt-in), matching TUI behavior.
 func (r *Runner) buildDisabledItems(dependencies []deps.Dependency) (map[string]bool, error) {
 	disabledItems := make(map[string]bool)
 
-	// dms-greeter is opt-in (disabled by default), matching TUI behavior
+	// dankestia-greeter is opt-in (disabled by default), matching TUI behavior
 	for i := range dependencies {
-		if dependencies[i].Name == "dms-greeter" {
-			disabledItems["dms-greeter"] = true
+		if dependencies[i].Name == "dankestia-greeter" {
+			disabledItems["dankestia-greeter"] = true
 			break
 		}
 	}
@@ -301,8 +301,8 @@ func (r *Runner) buildDisabledItems(dependencies []deps.Dependency) (map[string]
 		if !r.depExists(dependencies, name) {
 			return nil, fmt.Errorf("--exclude-deps: unknown dependency %q", name)
 		}
-		// Don't allow excluding DMS itself
-		if name == "dms (DankMaterialShell)" {
+		// Don't allow excluding DANKESTIA itself
+		if name == "dankestia (Dankestia)" {
 			return nil, fmt.Errorf("--exclude-deps: cannot exclude required package %q", name)
 		}
 		disabledItems[name] = true

@@ -15,9 +15,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/dank16"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/log"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/utils"
+	"github.com/AvengeMedia/Dankestia/core/internal/dank16"
+	"github.com/AvengeMedia/Dankestia/core/internal/log"
+	"github.com/AvengeMedia/Dankestia/core/internal/utils"
 	"github.com/lucasb-eyer/go-colorful"
 )
 
@@ -118,7 +118,7 @@ type ColorsOutput struct {
 }
 
 func (o *Options) ColorsOutput() string {
-	return filepath.Join(o.StateDir, "dms-colors.json")
+	return filepath.Join(o.StateDir, "dankestia-colors.json")
 }
 
 func (o *Options) ShouldSkipTemplate(name string) bool {
@@ -283,7 +283,7 @@ func buildOnce(opts *Options) (bool, error) {
 		return true, nil
 	}
 
-	if isDMSGTKActive(opts.ConfigDir) {
+	if isDANKESTIAGTKActive(opts.ConfigDir) {
 		switch opts.Mode {
 		case ColorModeLight:
 			syncAccentColor(primaryLight)
@@ -393,7 +393,7 @@ output_path = '%s'
 		}
 	}
 
-	userPluginConfigDir := filepath.Join(opts.ConfigDir, "matugen", "dms", "configs")
+	userPluginConfigDir := filepath.Join(opts.ConfigDir, "matugen", "dankestia", "configs")
 	if entries, err := os.ReadDir(userPluginConfigDir); err == nil {
 		for _, entry := range entries {
 			if !strings.HasSuffix(entry.Name(), ".toml") {
@@ -504,7 +504,7 @@ func appExists(checker utils.AppChecker, checkCmd []string, checkFlatpaks []stri
 }
 
 func appendVSCodeConfig(cfgFile *os.File, name, extBaseDir, shellDir string) {
-	pattern := filepath.Join(extBaseDir, "danklinux.dms-theme-*")
+	pattern := filepath.Join(extBaseDir, "danklinux.dankestia-theme-*")
 	matches, err := filepath.Glob(pattern)
 	if err != nil || len(matches) == 0 {
 		return
@@ -512,15 +512,15 @@ func appendVSCodeConfig(cfgFile *os.File, name, extBaseDir, shellDir string) {
 
 	extDir := matches[0]
 	templateDir := filepath.Join(shellDir, "matugen", "templates")
-	fmt.Fprintf(cfgFile, `[templates.dms%sdefault]
+	fmt.Fprintf(cfgFile, `[templates.dankestia%sdefault]
 input_path = '%s/vscode-color-theme-default.json'
 output_path = '%s/themes/dankshell-default.json'
 
-[templates.dms%sdark]
+[templates.dankestia%sdark]
 input_path = '%s/vscode-color-theme-dark.json'
 output_path = '%s/themes/dankshell-dark.json'
 
-[templates.dms%slight]
+[templates.dankestia%slight]
 input_path = '%s/vscode-color-theme-light.json'
 output_path = '%s/themes/dankshell-light.json'
 
@@ -776,7 +776,7 @@ func generateDank16Variants(primaryDark, primaryLight, surface string, mode Colo
 	return dank16.GenerateVariantJSON(variantColors)
 }
 
-func isDMSGTKActive(configDir string) bool {
+func isDANKESTIAGTKActive(configDir string) bool {
 	gtkCSS := filepath.Join(configDir, "gtk-3.0", "gtk.css")
 
 	info, err := os.Lstat(gtkCSS)
@@ -970,7 +970,7 @@ func checkVSCodeExtension(homeDir string) bool {
 	}
 
 	for _, extDir := range extDirs {
-		pattern := filepath.Join(extDir, "danklinux.dms-theme-*")
+		pattern := filepath.Join(extDir, "danklinux.dankestia-theme-*")
 		if matches, err := filepath.Glob(pattern); err == nil && len(matches) > 0 {
 			return true
 		}

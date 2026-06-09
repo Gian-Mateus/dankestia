@@ -110,13 +110,13 @@ func TestNiriWritableProvider(t *testing.T) {
 		t.Errorf("Name() = %q, want niri", provider.Name())
 	}
 
-	expectedPath := filepath.Join(tmpDir, "dms", "windowrules.kdl")
+	expectedPath := filepath.Join(tmpDir, "dankestia", "windowrules.kdl")
 	if provider.GetOverridePath() != expectedPath {
 		t.Errorf("GetOverridePath() = %q, want %q", provider.GetOverridePath(), expectedPath)
 	}
 }
 
-func TestNiriSetAndLoadDMSRules(t *testing.T) {
+func TestNiriSetAndLoadDANKESTIARules(t *testing.T) {
 	tmpDir := t.TempDir()
 	provider := NewNiriWritableProvider(tmpDir)
 
@@ -128,9 +128,9 @@ func TestNiriSetAndLoadDMSRules(t *testing.T) {
 		t.Fatalf("SetRule failed: %v", err)
 	}
 
-	rules, err := provider.LoadDMSRules()
+	rules, err := provider.LoadDANKESTIARules()
 	if err != nil {
-		t.Fatalf("LoadDMSRules failed: %v", err)
+		t.Fatalf("LoadDANKESTIARules failed: %v", err)
 	}
 
 	if len(rules) != 1 {
@@ -161,7 +161,7 @@ func TestNiriRemoveRule(t *testing.T) {
 		t.Fatalf("RemoveRule failed: %v", err)
 	}
 
-	rules, _ := provider.LoadDMSRules()
+	rules, _ := provider.LoadDANKESTIARules()
 	if len(rules) != 1 {
 		t.Fatalf("expected 1 rule after removal, got %d", len(rules))
 	}
@@ -189,7 +189,7 @@ func TestNiriReorderRules(t *testing.T) {
 		t.Fatalf("ReorderRules failed: %v", err)
 	}
 
-	rules, _ := provider.LoadDMSRules()
+	rules, _ := provider.LoadDANKESTIARules()
 	if len(rules) != 3 {
 		t.Fatalf("expected 3 rules, got %d", len(rules))
 	}
@@ -307,7 +307,7 @@ func TestFormatSizeProperty(t *testing.T) {
 	}
 }
 
-func TestNiriDMSRulesStatus(t *testing.T) {
+func TestNiriDANKESTIARulesStatus(t *testing.T) {
 	tmpDir := t.TempDir()
 
 	config := `
@@ -325,11 +325,11 @@ window-rule {
 		t.Fatalf("ParseNiriWindowRules failed: %v", err)
 	}
 
-	if result.DMSStatus == nil {
-		t.Fatal("DMSStatus should not be nil")
+	if result.DANKESTIAStatus == nil {
+		t.Fatal("DANKESTIAStatus should not be nil")
 	}
 
-	if result.DMSStatus.Exists {
-		t.Error("DMSStatus.Exists should be false when dms rules file doesn't exist")
+	if result.DANKESTIAStatus.Exists {
+		t.Error("DANKESTIAStatus.Exists should be false when dankestia rules file doesn't exist")
 	}
 }

@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/windowrules"
+	"github.com/AvengeMedia/Dankestia/core/internal/windowrules"
 )
 
 func TestParseWindowRuleV1(t *testing.T) {
@@ -154,13 +154,13 @@ func TestHyprlandWritableProvider(t *testing.T) {
 		t.Errorf("Name() = %q, want hyprland", provider.Name())
 	}
 
-	expectedPath := filepath.Join(tmpDir, "dms", "windowrules.lua")
+	expectedPath := filepath.Join(tmpDir, "dankestia", "windowrules.lua")
 	if provider.GetOverridePath() != expectedPath {
 		t.Errorf("GetOverridePath() = %q, want %q", provider.GetOverridePath(), expectedPath)
 	}
 }
 
-func TestHyprlandSetAndLoadDMSRules(t *testing.T) {
+func TestHyprlandSetAndLoadDANKESTIARules(t *testing.T) {
 	tmpDir := t.TempDir()
 	provider := NewHyprlandWritableProvider(tmpDir)
 
@@ -171,9 +171,9 @@ func TestHyprlandSetAndLoadDMSRules(t *testing.T) {
 		t.Fatalf("SetRule failed: %v", err)
 	}
 
-	rules, err := provider.LoadDMSRules()
+	rules, err := provider.LoadDANKESTIARules()
 	if err != nil {
-		t.Fatalf("LoadDMSRules failed: %v", err)
+		t.Fatalf("LoadDANKESTIARules failed: %v", err)
 	}
 
 	if len(rules) != 1 {
@@ -204,7 +204,7 @@ func TestHyprlandSetRuleLeavesConfOnlyInstallReadOnly(t *testing.T) {
 	if !strings.Contains(err.Error(), "read-only") {
 		t.Fatalf("expected read-only error, got %v", err)
 	}
-	if _, err := os.Stat(filepath.Join(tmpDir, "dms", "windowrules.lua")); !os.IsNotExist(err) {
+	if _, err := os.Stat(filepath.Join(tmpDir, "dankestia", "windowrules.lua")); !os.IsNotExist(err) {
 		t.Fatalf("expected no Lua windowrules file to be created for conf-only config, stat err=%v", err)
 	}
 }
@@ -225,7 +225,7 @@ func TestHyprlandRemoveRule(t *testing.T) {
 		t.Fatalf("RemoveRule failed: %v", err)
 	}
 
-	rules, _ := provider.LoadDMSRules()
+	rules, _ := provider.LoadDANKESTIARules()
 	if len(rules) != 1 {
 		t.Fatalf("expected 1 rule after removal, got %d", len(rules))
 	}
@@ -253,7 +253,7 @@ func TestHyprlandReorderRules(t *testing.T) {
 		t.Fatalf("ReorderRules failed: %v", err)
 	}
 
-	rules, _ := provider.LoadDMSRules()
+	rules, _ := provider.LoadDANKESTIARules()
 	if len(rules) != 3 {
 		t.Fatalf("expected 3 rules, got %d", len(rules))
 	}
@@ -296,13 +296,13 @@ windowrulev2 = tile, class:^(extraapp)$
 
 func TestParseHyprlandLuaRequiresFragment(t *testing.T) {
 	tmpDir := t.TempDir()
-	dmsDir := filepath.Join(tmpDir, "dms")
-	if err := os.MkdirAll(dmsDir, 0755); err != nil {
+	dankestiaDir := filepath.Join(tmpDir, "dankestia")
+	if err := os.MkdirAll(dankestiaDir, 0755); err != nil {
 		t.Fatal(err)
 	}
 
 	mainLua := filepath.Join(tmpDir, "hyprland.lua")
-	fragLua := filepath.Join(dmsDir, "windowrules.lua")
+	fragLua := filepath.Join(dankestiaDir, "windowrules.lua")
 
 	if err := os.WriteFile(fragLua, []byte(`
 hl.window_rule({ match = { class = "^test$" }, float = true })
@@ -311,7 +311,7 @@ hl.window_rule({ match = { class = "^test$" }, float = true })
 	}
 
 	if err := os.WriteFile(mainLua, []byte(`
-require("dms.windowrules")
+require("dankestia.windowrules")
 `), 0644); err != nil {
 		t.Fatal(err)
 	}
@@ -323,8 +323,8 @@ require("dms.windowrules")
 	if len(res.Rules) != 1 {
 		t.Fatalf("expected 1 rule, got %d", len(res.Rules))
 	}
-	if !res.DMSRulesIncluded {
-		t.Fatal("expected dms.windowrules fragment to be marked included")
+	if !res.DANKESTIARulesIncluded {
+		t.Fatal("expected dankestia.windowrules fragment to be marked included")
 	}
 	wr := ConvertHyprlandRulesToWindowRules(res.Rules)[0]
 	if wr.MatchCriteria.AppID != "^test$" || wr.Actions.OpenFloating == nil || !*wr.Actions.OpenFloating {

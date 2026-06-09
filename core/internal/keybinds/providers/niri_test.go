@@ -120,9 +120,9 @@ func TestNiriFormatRawAction(t *testing.T) {
 		expected string
 	}{
 		{"spawn", []string{"kitty"}, "spawn kitty"},
-		{"spawn", []string{"dms", "ipc", "call"}, "spawn dms ipc call"},
-		{"spawn", []string{"dms", "ipc", "call", "brightness", "increment", "5", ""}, `spawn dms ipc call brightness increment 5 ""`},
-		{"spawn", []string{"dms", "ipc", "call", "dash", "toggle", ""}, `spawn dms ipc call dash toggle ""`},
+		{"spawn", []string{"dankestia", "ipc", "call"}, "spawn dankestia ipc call"},
+		{"spawn", []string{"dankestia", "ipc", "call", "brightness", "increment", "5", ""}, `spawn dankestia ipc call brightness increment 5 ""`},
+		{"spawn", []string{"dankestia", "ipc", "call", "dash", "toggle", ""}, `spawn dankestia ipc call dash toggle ""`},
 		{"close-window", nil, "close-window"},
 		{"fullscreen-window", nil, "fullscreen-window"},
 		{"focus-workspace", []string{"1"}, "focus-workspace 1"},
@@ -220,12 +220,12 @@ func TestNiriGenerateBindsContent(t *testing.T) {
 			binds: map[string]*overrideBind{
 				"Mod+Space": {
 					Key:         "Mod+Space",
-					Action:      `spawn "dms" "ipc" "call" "spotlight" "toggle"`,
+					Action:      `spawn "dankestia" "ipc" "call" "spotlight" "toggle"`,
 					Description: "Application Launcher",
 				},
 			},
 			expected: `binds {
-    Mod+Space hotkey-overlay-title="Application Launcher" { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
+    Mod+Space hotkey-overlay-title="Application Launcher" { spawn "dankestia" "ipc" "call" "spotlight" "toggle"; }
 }
 `,
 		},
@@ -234,12 +234,12 @@ func TestNiriGenerateBindsContent(t *testing.T) {
 			binds: map[string]*overrideBind{
 				"XF86AudioMute": {
 					Key:     "XF86AudioMute",
-					Action:  `spawn "dms" "ipc" "call" "audio" "mute"`,
+					Action:  `spawn "dankestia" "ipc" "call" "audio" "mute"`,
 					Options: map[string]any{"allow-when-locked": true},
 				},
 			},
 			expected: `binds {
-    XF86AudioMute allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "mute"; }
+    XF86AudioMute allow-when-locked=true { spawn "dankestia" "ipc" "call" "audio" "mute"; }
 }
 `,
 		},
@@ -293,12 +293,12 @@ func TestNiriGenerateBindsContentRoundTrip(t *testing.T) {
 	binds := map[string]*overrideBind{
 		"Mod+Space": {
 			Key:         "Mod+Space",
-			Action:      `spawn "dms" "ipc" "call" "spotlight" "toggle"`,
+			Action:      `spawn "dankestia" "ipc" "call" "spotlight" "toggle"`,
 			Description: "Application Launcher",
 		},
 		"XF86AudioMute": {
 			Key:     "XF86AudioMute",
-			Action:  `spawn "dms" "ipc" "call" "audio" "mute"`,
+			Action:  `spawn "dankestia" "ipc" "call" "audio" "mute"`,
 			Options: map[string]any{"allow-when-locked": true},
 		},
 		"Mod+Q": {
@@ -332,17 +332,17 @@ func TestNiriEmptyArgsPreservation(t *testing.T) {
 	binds := map[string]*overrideBind{
 		"XF86MonBrightnessUp": {
 			Key:         "XF86MonBrightnessUp",
-			Action:      `spawn dms ipc call brightness increment 5 ""`,
+			Action:      `spawn dankestia ipc call brightness increment 5 ""`,
 			Description: "Brightness Up",
 		},
 		"XF86MonBrightnessDown": {
 			Key:         "XF86MonBrightnessDown",
-			Action:      `spawn dms ipc call brightness decrement 5 ""`,
+			Action:      `spawn dankestia ipc call brightness decrement 5 ""`,
 			Description: "Brightness Down",
 		},
 		"Super+Alt+Page_Up": {
 			Key:         "Super+Alt+Page_Up",
-			Action:      `spawn dms ipc call dash toggle ""`,
+			Action:      `spawn dankestia ipc call dash toggle ""`,
 			Description: "Dashboard Toggle",
 		},
 	}
@@ -350,12 +350,12 @@ func TestNiriEmptyArgsPreservation(t *testing.T) {
 	content := provider.generateBindsContent(binds)
 
 	tmpDir := t.TempDir()
-	dmsDir := filepath.Join(tmpDir, "dms")
-	if err := os.MkdirAll(dmsDir, 0o755); err != nil {
-		t.Fatalf("Failed to create dms directory: %v", err)
+	dankestiaDir := filepath.Join(tmpDir, "dankestia")
+	if err := os.MkdirAll(dankestiaDir, 0o755); err != nil {
+		t.Fatalf("Failed to create dankestia directory: %v", err)
 	}
 
-	bindsFile := filepath.Join(dmsDir, "binds.kdl")
+	bindsFile := filepath.Join(dankestiaDir, "binds.kdl")
 	if err := os.WriteFile(bindsFile, []byte(content), 0o644); err != nil {
 		t.Fatalf("Failed to write binds file: %v", err)
 	}
@@ -390,14 +390,14 @@ func TestNiriProviderWithRealWorldConfig(t *testing.T) {
 
     Mod+T hotkey-overlay-title="Open Terminal" { spawn "kitty"; }
     Mod+Space hotkey-overlay-title="Application Launcher" {
-        spawn "dms" "ipc" "call" "spotlight" "toggle";
+        spawn "dankestia" "ipc" "call" "spotlight" "toggle";
     }
 
     XF86AudioRaiseVolume allow-when-locked=true {
-        spawn "dms" "ipc" "call" "audio" "increment" "3";
+        spawn "dankestia" "ipc" "call" "audio" "increment" "3";
     }
     XF86AudioLowerVolume allow-when-locked=true {
-        spawn "dms" "ipc" "call" "audio" "decrement" "3";
+        spawn "dankestia" "ipc" "call" "audio" "decrement" "3";
     }
 
     Mod+Q repeat=false { close-window; }
@@ -555,14 +555,14 @@ func TestNiriGenerateSpawnWithNumericArgs(t *testing.T) {
 	binds := map[string]*overrideBind{
 		"XF86AudioLowerVolume": {
 			Key:     "XF86AudioLowerVolume",
-			Action:  `spawn "dms" "ipc" "call" "audio" "decrement" "3"`,
+			Action:  `spawn "dankestia" "ipc" "call" "audio" "decrement" "3"`,
 			Options: map[string]any{"allow-when-locked": true},
 		},
 	}
 
 	content := provider.generateBindsContent(binds)
 	expected := `binds {
-    XF86AudioLowerVolume allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "decrement" "3"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn "dankestia" "ipc" "call" "audio" "decrement" "3"; }
 }
 `
 	if content != expected {
@@ -576,14 +576,14 @@ func TestNiriGenerateSpawnNumericArgFromCLI(t *testing.T) {
 	binds := map[string]*overrideBind{
 		"XF86AudioLowerVolume": {
 			Key:     "XF86AudioLowerVolume",
-			Action:  "spawn dms ipc call audio decrement 3",
+			Action:  "spawn dankestia ipc call audio decrement 3",
 			Options: map[string]any{"allow-when-locked": true},
 		},
 	}
 
 	content := provider.generateBindsContent(binds)
 	expected := `binds {
-    XF86AudioLowerVolume allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "decrement" "3"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn "dankestia" "ipc" "call" "audio" "decrement" "3"; }
 }
 `
 	if content != expected {

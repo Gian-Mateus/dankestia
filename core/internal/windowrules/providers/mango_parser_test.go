@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/windowrules"
+	"github.com/AvengeMedia/Dankestia/core/internal/windowrules"
 )
 
 func TestParseMangoWindowRuleLine(t *testing.T) {
@@ -73,14 +73,14 @@ func TestMangoSetAndLoadRoundTrip(t *testing.T) {
 		t.Fatalf("SetRule: %v", err)
 	}
 
-	expectedPath := filepath.Join(tmpDir, "dms", "windowrules.conf")
+	expectedPath := filepath.Join(tmpDir, "dankestia", "windowrules.conf")
 	if _, err := os.Stat(expectedPath); err != nil {
 		t.Fatalf("override file not written: %v", err)
 	}
 
-	loaded, err := provider.LoadDMSRules()
+	loaded, err := provider.LoadDANKESTIARules()
 	if err != nil {
-		t.Fatalf("LoadDMSRules: %v", err)
+		t.Fatalf("LoadDANKESTIARules: %v", err)
 	}
 	if len(loaded) != 1 {
 		t.Fatalf("got %d rules, want 1", len(loaded))
@@ -109,7 +109,7 @@ func TestMangoSetAndLoadRoundTrip(t *testing.T) {
 	if err := provider.RemoveRule("rule_test"); err != nil {
 		t.Fatalf("RemoveRule: %v", err)
 	}
-	loaded, _ = provider.LoadDMSRules()
+	loaded, _ = provider.LoadDANKESTIARules()
 	if len(loaded) != 0 {
 		t.Errorf("after remove got %d rules, want 0", len(loaded))
 	}

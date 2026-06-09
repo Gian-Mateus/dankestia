@@ -1,0 +1,84 @@
+#!/usr/bin/make -f
+
+export DH_VERBOSE = 1
+
+# Extract version from debian/changelog
+DEB_VERSION := $(shell dpkg-parsechangelog -S Version)
+# Get upstream version (strip -1ppa1 suffix)
+UPSTREAM_VERSION := $(shell echo $(DEB_VERSION) | sed 's/-[^-]*$$//')
+# Strip ppa suffix and handle git versions
+# Examples: 0.5.2ppa9 -> 0.5.2, 0.5.2+git20251116 -> 0.5.2
+BASE_VERSION := $(shell echo $(UPSTREAM_VERSION) | sed 's/ppa[0-9]*$$//' | sed 's/+git.*//')
+
+%:
+	dh $@
+
+override_dh_installsystemd:
+	dh_installsystemd --name=dankestia
+
+override_dh_auto_build:
+	# All files are included in source package (downloaded by build-source.sh)
+	# Launchpad build environment has no internet access
+	$(eval DEB_HOST_ARCH := $(shell dpkg-architecture -qDEB_HOST_ARCH))
+	@echo "Building for architecture: $(DEB_HOST_ARCH)"
+
+	test -f dankestia-distropkg-$(DEB_HOST_ARCH).gz || (echo "ERROR: dankestia-distropkg-$(DEB_HOST_ARCH).gz not found!" && exit 1)
+	test -f dankestia-source.tar.gz || (echo "ERROR: dankestia-source.tar.gz not found!" && exit 1)
+
+	# Extract pre-built binary
+	gunzip -c dankestia-distropkg-$(DEB_HOST_ARCH).gz > dankestia
+	chmod +x dankestia
+
+	# Extract source tarball for QML files
+	tar -xzf dankestia-source.tar.gz
+	# Find the extracted directory (it might have various names)
+	# and rename it to the expected BASE_VERSION name for consistent install
+	SOURCE_DIR=$$(find . -maxdepth 1 -type d -name "Dankestia-*" ! -name "Dankestia-$(BASE_VERSION)" | head -n1); \
+	if [ -n "$$SOURCE_DIR" ] && [ "$$SOURCE_DIR" != "./Dankestia-$(BASE_VERSION)" ]; then \
+		echo "Renaming $$SOURCE_DIR to Dankestia-$(BASE_VERSION)"; \
+		mv "$$SOURCE_DIR" Dankestia-$(BASE_VERSION); \
+	elif [ ! -d "Dankestia-$(BASE_VERSION)" ]; then \
+		echo "ERROR: No Dankestia directory found after extraction!"; \
+		ls -la; \
+		exit 1; \
+	fi
+
+override_dh_auto_install:
+	# Install binary
+	install -Dm755 dankestia debian/dankestia/usr/bin/dankestia
+
+	# Install systemd user service (before copying everything else)
+	install -Dm644 Dankestia-$(BASE_VERSION)/assets/systemd/dankestia.service \
+		debian/dankestia/usr/lib/systemd/user/dankestia.service
+
+	# Install desktop file and icon
+	install -Dm644 Dankestia-$(BASE_VERSION)/assets/dankestia-open.desktop \
+		debian/dankestia/usr/share/applications/dankestia-open.desktop
+	install -Dm644 Dankestia-$(BASE_VERSION)/assets/danklogo.svg \
+		debian/dankestia/usr/share/icons/hicolor/scalable/apps/danklogo.svg
+
+	# Install QML files from source tarball
+	mkdir -p debian/dankestia/usr/share/quickshell/dankestia
+	cp -r Dankestia-$(BASE_VERSION)/* debian/dankestia/usr/share/quickshell/dankestia/
+
+	# Remove unnecessary directories
+	rm -rf debian/dankestia/usr/share/quickshell/dankestia/core
+	rm -rf debian/dankestia/usr/share/quickshell/dankestia/distro
+	rm -rf debian/dankestia/usr/share/quickshell/dankestia/assets
+
+	# Create VERSION file for Quickshell (stable release format)
+	echo "$(BASE_VERSION)" > debian/dankestia/usr/share/quickshell/dankestia/VERSION
+
+	# Generate and install shell completions (if applicable)
+	# Uncomment if dankestia supports completion generation
+	# ./dankestia completion bash > dankestia.bash
+	# ./dankestia completion zsh > dankestia.zsh
+	# install -Dm644 dankestia.bash debian/dankestia/usr/share/bash-completion/completions/dankestia
+	# install -Dm644 dankestia.zsh debian/dankestia/usr/share/zsh/vendor-completions/_dankestia
+
+override_dh_auto_clean:
+	rm -f dankestia
+	rm -rf Dankestia-*
+	# Don't remove dankestia-distropkg-amd64.gz and dankestia-source.tar.gz
+	# They need to be included in the source package for Launchpad builds
+	dh_auto_clean

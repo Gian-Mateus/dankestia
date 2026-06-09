@@ -1,0 +1,82 @@
+#!/usr/bin/make -f
+
+DEB_VERSION := $(shell dpkg-parsechangelog -S Version)
+UPSTREAM_VERSION := $(shell echo $(DEB_VERSION) | sed 's/-[^-]*$$//')
+DEB_HOST_ARCH := $(shell dpkg-architecture -qDEB_HOST_ARCH)
+
+%:
+	dh $@
+
+override_dh_installsystemd:
+	dh_installsystemd --name=dankestia
+
+override_dh_auto_build:
+	if [ "$(DEB_HOST_ARCH)" = "amd64" ]; then \
+		if [ -f dankestia-distropkg-amd64.gz ]; then \
+			gunzip -c dankestia-distropkg-amd64.gz > dankestia; \
+		elif [ -f ../SOURCES/dankestia-distropkg-amd64.gz ]; then \
+			gunzip -c ../SOURCES/dankestia-distropkg-amd64.gz > dankestia; \
+		elif [ -f ../../SOURCES/dankestia-distropkg-amd64.gz ]; then \
+			gunzip -c ../../SOURCES/dankestia-distropkg-amd64.gz > dankestia; \
+		else \
+			echo "ERROR: dankestia-distropkg-amd64.gz not found!" && exit 1; \
+		fi \
+	elif [ "$(DEB_HOST_ARCH)" = "arm64" ]; then \
+		if [ -f dankestia-distropkg-arm64.gz ]; then \
+			gunzip -c dankestia-distropkg-arm64.gz > dankestia; \
+		elif [ -f ../SOURCES/dankestia-distropkg-arm64.gz ]; then \
+			gunzip -c ../SOURCES/dankestia-distropkg-arm64.gz > dankestia; \
+		elif [ -f ../../SOURCES/dankestia-distropkg-arm64.gz ]; then \
+			gunzip -c ../../SOURCES/dankestia-distropkg-arm64.gz > dankestia; \
+		else \
+			echo "ERROR: dankestia-distropkg-arm64.gz not found!" && exit 1; \
+		fi \
+	else \
+		echo "Unsupported architecture: $(DEB_HOST_ARCH)" && exit 1; \
+	fi
+	chmod +x dankestia
+
+	# Extract source if needed
+	if [ ! -d Dankestia-$(UPSTREAM_VERSION) ]; then \
+		if [ -f ../SOURCES/dankestia-source.tar.gz ]; then \
+			tar -xzf ../SOURCES/dankestia-source.tar.gz; \
+		elif [ -f dankestia-source.tar.gz ]; then \
+			tar -xzf dankestia-source.tar.gz; \
+		fi; \
+	fi
+	# Rename directory to match expected version
+	SOURCE_DIR=$$(find . -maxdepth 1 -type d -name "Dankestia-*" ! -name "Dankestia-$(UPSTREAM_VERSION)" | head -n1); \
+	if [ -n "$$SOURCE_DIR" ]; then \
+		echo "Renaming $$SOURCE_DIR to Dankestia-$(UPSTREAM_VERSION)"; \
+		mv "$$SOURCE_DIR" Dankestia-$(UPSTREAM_VERSION); \
+	fi
+
+
+override_dh_auto_install:
+	install -Dm755 dankestia debian/dankestia/usr/bin/dankestia
+
+	mkdir -p debian/dankestia/usr/share/quickshell/dankestia debian/dankestia/usr/lib/systemd/user
+	# Ensure directory has correct version name for install step
+	SOURCE_DIR=$$(find . -maxdepth 1 -type d -name "Dankestia-*" ! -name "Dankestia-$(UPSTREAM_VERSION)" | head -n1); \
+	if [ -n "$$SOURCE_DIR" ]; then \
+		echo "Renaming $$SOURCE_DIR to Dankestia-$(UPSTREAM_VERSION) for install"; \
+		mv "$$SOURCE_DIR" Dankestia-$(UPSTREAM_VERSION); \
+	fi
+	if [ -d Dankestia-$(UPSTREAM_VERSION) ]; then \
+		cp -r Dankestia-$(UPSTREAM_VERSION)/quickshell/* debian/dankestia/usr/share/quickshell/dankestia/; \
+		install -Dm644 Dankestia-$(UPSTREAM_VERSION)/assets/systemd/dankestia.service debian/dankestia/usr/lib/systemd/user/dankestia.service; \
+		install -Dm644 Dankestia-$(UPSTREAM_VERSION)/assets/dankestia-open.desktop debian/dankestia/usr/share/applications/dankestia-open.desktop; \
+		install -Dm644 Dankestia-$(UPSTREAM_VERSION)/assets/danklogo.svg debian/dankestia/usr/share/icons/hicolor/scalable/apps/danklogo.svg; \
+	else \
+		echo "ERROR: Dankestia-$(UPSTREAM_VERSION) directory not found!" && \
+		echo "Contents of current directory:" && ls -la && \
+		exit 1; \
+	fi
+
+	rm -rf debian/dankestia/usr/share/quickshell/dankestia/core \
+		debian/dankestia/usr/share/quickshell/dankestia/distro
+
+override_dh_auto_clean:
+	rm -f dankestia
+	rm -rf Dankestia-$(UPSTREAM_VERSION)
+	dh_auto_clean

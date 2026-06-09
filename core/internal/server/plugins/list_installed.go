@@ -5,8 +5,8 @@ import (
 	"net"
 	"strings"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/plugins"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/models"
+	"github.com/AvengeMedia/Dankestia/core/internal/plugins"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/models"
 )
 
 func HandleListInstalled(conn net.Conn, req models.Request) {
@@ -60,7 +60,7 @@ func HandleListInstalled(conn net.Conn, req models.Request) {
 				Dependencies: plugin.Dependencies,
 				FirstParty:   strings.HasPrefix(plugin.Repo, "https://github.com/AvengeMedia"),
 				HasUpdate:    hasUpdate,
-				RequiresDMS:  plugin.RequiresDMS,
+				RequiresDANKESTIA:  plugin.RequiresDANKESTIA,
 			})
 		} else {
 			result = append(result, PluginInfo{

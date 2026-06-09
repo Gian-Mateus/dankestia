@@ -1,6 +1,6 @@
 {
   lib,
-  dmsPkgs,
+  dankestiaPkgs,
   pkgs,
   ...
 }:
@@ -11,7 +11,7 @@ let
     "dank-material-shell"
   ];
   jsonFormat = pkgs.formats.json { };
-  builtInRemovedMsg = "This is now built-in in DMS and doesn't need additional dependencies.";
+  builtInRemovedMsg = "This is now built-in in DANKESTIA and doesn't need additional dependencies.";
 in
 {
   imports = [
@@ -20,22 +20,22 @@ in
     (lib.mkRemovedOptionModule (path ++ [ "enableClipboard" ]) builtInRemovedMsg)
     (lib.mkRemovedOptionModule (
       path ++ [ "enableSystemSound" ]
-    ) "qtmultimedia is now included on dms-shell package.")
-    ./dms-rename.nix
+    ) "qtmultimedia is now included on dankestia-shell package.")
+    ./dankestia-rename.nix
   ];
 
   options.programs.dank-material-shell = {
-    enable = lib.mkEnableOption "DankMaterialShell";
-    package = lib.mkPackageOption dmsPkgs "dms-shell" {
-      extraDescription = "The DankMaterialShell package to use (defaults to be built from source)";
+    enable = lib.mkEnableOption "Dankestia";
+    package = lib.mkPackageOption dankestiaPkgs "dankestia-shell" {
+      extraDescription = "The Dankestia package to use (defaults to be built from source)";
     };
 
     systemd = {
-      enable = lib.mkEnableOption "DankMaterialShell systemd startup";
+      enable = lib.mkEnableOption "Dankestia systemd startup";
       restartIfChanged = lib.mkOption {
         type = types.bool;
         default = true;
-        description = "Auto-restart dms.service when dank-material-shell changes";
+        description = "Auto-restart dankestia.service when dank-material-shell changes";
       };
     };
 
@@ -107,7 +107,7 @@ in
         }
       );
       default = { };
-      description = "DMS Plugins to install and enable";
+      description = "DANKESTIA Plugins to install and enable";
       example = lib.literalExpression ''
         {
           DockerManager = {

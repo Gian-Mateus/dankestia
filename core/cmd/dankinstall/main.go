@@ -5,9 +5,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/headless"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/log"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/tui"
+	"github.com/AvengeMedia/Dankestia/core/internal/headless"
+	"github.com/AvengeMedia/Dankestia/core/internal/log"
+	"github.com/AvengeMedia/Dankestia/core/internal/tui"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
 )
@@ -27,8 +27,8 @@ var (
 
 var rootCmd = &cobra.Command{
 	Use:   "dankinstall",
-	Short: "Install DankMaterialShell and its dependencies",
-	Long: `dankinstall sets up DankMaterialShell with your chosen compositor and terminal.
+	Short: "Install Dankestia and its dependencies",
+	Long: `dankinstall sets up Dankestia with your chosen compositor and terminal.
 
 Without flags, it launches an interactive TUI. Providing either --compositor
 or --term activates headless (unattended) mode, which requires both flags.
@@ -44,7 +44,7 @@ configure passwordless sudo for your user.`,
 func init() {
 	rootCmd.Flags().StringVarP(&compositor, "compositor", "c", "", "Compositor/WM to install: niri, hyprland, or mango (enables headless mode)")
 	rootCmd.Flags().StringVarP(&term, "term", "t", "", "Terminal emulator to install: ghostty, kitty, or alacritty (enables headless mode)")
-	rootCmd.Flags().StringSliceVar(&includeDeps, "include-deps", []string{}, "Optional deps to enable (e.g. dms-greeter)")
+	rootCmd.Flags().StringSliceVar(&includeDeps, "include-deps", []string{}, "Optional deps to enable (e.g. dankestia-greeter)")
 	rootCmd.Flags().StringSliceVar(&excludeDeps, "exclude-deps", []string{}, "Deps to skip during installation")
 	rootCmd.Flags().StringSliceVar(&replaceConfigs, "replace-configs", []string{}, "Deploy only named configs (e.g. niri,ghostty)")
 	rootCmd.Flags().BoolVar(&replaceConfigsAll, "replace-configs-all", false, "Deploy and replace all configurations")

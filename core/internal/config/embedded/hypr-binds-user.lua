@@ -1,1 +1,1 @@
--- Optional per-user keybind overrides (managed by DMS). Loaded after default binds.
+-- Optional per-user keybind overrides (managed by DANKESTIA). Loaded after default binds.

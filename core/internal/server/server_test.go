@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/models"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/network"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/models"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/network"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

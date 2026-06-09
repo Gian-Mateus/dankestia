@@ -6,10 +6,10 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/proto/dwl_ipc"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/proto/wlr_output_management"
-	wlhelpers "github.com/AvengeMedia/DankMaterialShell/core/internal/wayland/client"
-	"github.com/AvengeMedia/DankMaterialShell/core/pkg/go-wayland/wayland/client"
+	"github.com/AvengeMedia/Dankestia/core/internal/proto/dwl_ipc"
+	"github.com/AvengeMedia/Dankestia/core/internal/proto/wlr_output_management"
+	wlhelpers "github.com/AvengeMedia/Dankestia/core/internal/wayland/client"
+	"github.com/AvengeMedia/Dankestia/core/pkg/go-wayland/wayland/client"
 )
 
 type Compositor int

@@ -21,7 +21,7 @@ PanelWindow {
     visible: win._frameVisible
     updatesEnabled: win._frameVisible
 
-    WlrLayershell.namespace: "dms:frame"
+    WlrLayershell.namespace: "dankestia:frame"
     WlrLayershell.layer: WlrLayer.Top
     WlrLayershell.exclusionMode: ExclusionMode.Ignore
 
@@ -150,7 +150,7 @@ PanelWindow {
     readonly property color _opaqueSurfaceColor: Qt.rgba(_surfaceColor.r, _surfaceColor.g, _surfaceColor.b, 1)
     readonly property real _surfaceRadius: Theme.connectedSurfaceRadius
     readonly property real _seamOverlap: Theme.hairline(win._dpr)
-    readonly property bool _disableLayer: Quickshell.env("DMS_DISABLE_LAYER") === "true" || Quickshell.env("DMS_DISABLE_LAYER") === "1"
+    readonly property bool _disableLayer: Quickshell.env("DANKESTIA_DISABLE_LAYER") === "true" || Quickshell.env("DANKESTIA_DISABLE_LAYER") === "1"
     property bool _surfaceRefreshNeedsLayerRecreate: false
     property bool _surfaceLayerRecoveryActive: false
 

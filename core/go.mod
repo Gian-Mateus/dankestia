@@ -1,4 +1,4 @@
-module github.com/AvengeMedia/DankMaterialShell/core
+module github.com/AvengeMedia/Dankestia/core
 
 go 1.26.1
 

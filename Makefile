@@ -1,8 +1,8 @@
-# Root Makefile for DankMaterialShell (DMS)
+# Root Makefile for Dankestia (DANKESTIA)
 # Orchestrates building, installation, and systemd management
 
 # Build configuration
-BINARY_NAME=dms
+BINARY_NAME=dankestia
 CORE_DIR=core
 BUILD_DIR=$(CORE_DIR)/bin
 PREFIX ?= /usr/local
@@ -14,7 +14,7 @@ USER_HOME := $(if $(SUDO_USER),$(shell getent passwd $(SUDO_USER) | cut -d: -f6)
 SYSTEMD_USER_DIR=$(USER_HOME)/.config/systemd/user
 
 SHELL_DIR=quickshell
-SHELL_INSTALL_DIR=$(DATA_DIR)/quickshell/dms
+SHELL_INSTALL_DIR=$(DATA_DIR)/quickshell/dankestia
 ASSETS_DIR=assets
 APPLICATIONS_DIR=$(DATA_DIR)/applications
 
@@ -53,19 +53,19 @@ install-completions:
 	@mkdir -p $(DATA_DIR)/bash-completion/completions
 	@mkdir -p $(DATA_DIR)/zsh/site-functions
 	@mkdir -p $(DATA_DIR)/fish/vendor_completions.d
-	@$(BUILD_DIR)/$(BINARY_NAME) completion bash > $(DATA_DIR)/bash-completion/completions/dms 2>/dev/null || true
-	@$(BUILD_DIR)/$(BINARY_NAME) completion zsh > $(DATA_DIR)/zsh/site-functions/_dms 2>/dev/null || true
-	@$(BUILD_DIR)/$(BINARY_NAME) completion fish > $(DATA_DIR)/fish/vendor_completions.d/dms.fish 2>/dev/null || true
+	@$(BUILD_DIR)/$(BINARY_NAME) completion bash > $(DATA_DIR)/bash-completion/completions/dankestia 2>/dev/null || true
+	@$(BUILD_DIR)/$(BINARY_NAME) completion zsh > $(DATA_DIR)/zsh/site-functions/_dankestia 2>/dev/null || true
+	@$(BUILD_DIR)/$(BINARY_NAME) completion fish > $(DATA_DIR)/fish/vendor_completions.d/dankestia.fish 2>/dev/null || true
 	@echo "Shell completions installed"
 
 install-systemd:
 	@echo "Installing systemd user service..."
 	@mkdir -p $(SYSTEMD_USER_DIR)
 	@if [ -n "$(SUDO_USER)" ]; then chown -R $(SUDO_USER):"$(id -gn $SUDO_USER)" $(SYSTEMD_USER_DIR); fi
-	@sed 's|/usr/bin/dms|$(INSTALL_DIR)/dms|g' $(ASSETS_DIR)/systemd/dms.service > $(SYSTEMD_USER_DIR)/dms.service
-	@chmod 644 $(SYSTEMD_USER_DIR)/dms.service
-	@if [ -n "$(SUDO_USER)" ]; then chown $(SUDO_USER):"$(id -gn $SUDO_USER)" $(SYSTEMD_USER_DIR)/dms.service; fi
-	@echo "Systemd service installed to $(SYSTEMD_USER_DIR)/dms.service"
+	@sed 's|/usr/bin/dankestia|$(INSTALL_DIR)/dankestia|g' $(ASSETS_DIR)/systemd/dankestia.service > $(SYSTEMD_USER_DIR)/dankestia.service
+	@chmod 644 $(SYSTEMD_USER_DIR)/dankestia.service
+	@if [ -n "$(SUDO_USER)" ]; then chown $(SUDO_USER):"$(id -gn $SUDO_USER)" $(SYSTEMD_USER_DIR)/dankestia.service; fi
+	@echo "Systemd service installed to $(SYSTEMD_USER_DIR)/dankestia.service"
 
 install-icon:
 	@echo "Installing icon..."
@@ -75,7 +75,7 @@ install-icon:
 
 install-desktop:
 	@echo "Installing desktop entry..."
-	@install -D -m 644 $(ASSETS_DIR)/dms-open.desktop $(APPLICATIONS_DIR)/dms-open.desktop
+	@install -D -m 644 $(ASSETS_DIR)/dankestia-open.desktop $(APPLICATIONS_DIR)/dankestia-open.desktop
 	@update-desktop-database -q $(APPLICATIONS_DIR) 2>/dev/null || true
 	@echo "Desktop entry installed"
 
@@ -83,7 +83,7 @@ install: install-bin install-shell install-completions install-systemd install-i
 	@echo ""
 	@echo "Installation complete!"
 	@echo ""
-	@echo "=== Cheers, the DMS Team! ==="
+	@echo "=== Cheers, the DANKESTIA Team! ==="
 
 # Uninstallation targets
 uninstall-bin:
@@ -98,16 +98,16 @@ uninstall-shell:
 
 uninstall-completions:
 	@echo "Removing shell completions..."
-	@rm -f $(DATA_DIR)/bash-completion/completions/dms
-	@rm -f $(DATA_DIR)/zsh/site-functions/_dms
-	@rm -f $(DATA_DIR)/fish/vendor_completions.d/dms.fish
+	@rm -f $(DATA_DIR)/bash-completion/completions/dankestia
+	@rm -f $(DATA_DIR)/zsh/site-functions/_dankestia
+	@rm -f $(DATA_DIR)/fish/vendor_completions.d/dankestia.fish
 	@echo "Shell completions removed"
 
 uninstall-systemd:
 	@echo "Removing systemd user service..."
-	@rm -f $(SYSTEMD_USER_DIR)/dms.service
+	@rm -f $(SYSTEMD_USER_DIR)/dankestia.service
 	@echo "Systemd service removed"
-	@echo "Note: Stop/disable service manually if running: systemctl --user stop dms"
+	@echo "Note: Stop/disable service manually if running: systemctl --user stop dankestia"
 
 uninstall-icon:
 	@echo "Removing icon..."
@@ -117,7 +117,7 @@ uninstall-icon:
 
 uninstall-desktop:
 	@echo "Removing desktop entry..."
-	@rm -f $(APPLICATIONS_DIR)/dms-open.desktop
+	@rm -f $(APPLICATIONS_DIR)/dankestia-open.desktop
 	@update-desktop-database -q $(APPLICATIONS_DIR) 2>/dev/null || true
 	@echo "Desktop entry removed"
 
@@ -130,7 +130,7 @@ help:
 	@echo "Available targets:"
 	@echo ""
 	@echo "Build:"
-	@echo "  all (default)        - Build the DMS binary"
+	@echo "  all (default)        - Build the DANKESTIA binary"
 	@echo "  build                - Same as 'all'"
 	@echo "  clean                - Clean build artifacts"
 	@echo "  lint-qml             - Run qmllint on shell entrypoints using the Quickshell tooling VFS"
@@ -154,6 +154,6 @@ help:
 	@echo "  uninstall-desktop    - Remove only desktop entry"
 	@echo ""
 	@echo "Usage:"
-	@echo "  sudo make install              - Build and install DMS"
-	@echo "  sudo make uninstall            - Remove DMS"
-	@echo "  systemctl --user enable --now dms  - Enable and start service"
+	@echo "  sudo make install              - Build and install DANKESTIA"
+	@echo "  sudo make uninstall            - Remove DANKESTIA"
+	@echo "  systemctl --user enable --now dankestia  - Enable and start service"

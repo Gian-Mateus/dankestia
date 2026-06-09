@@ -9,7 +9,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/log"
+	"github.com/AvengeMedia/Dankestia/core/internal/log"
 	"github.com/pilebones/go-udev/netlink"
 )
 

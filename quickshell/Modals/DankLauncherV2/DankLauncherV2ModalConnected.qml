@@ -42,7 +42,7 @@ Item {
     readonly property real screenHeight: effectiveScreen?.height ?? 1080
     readonly property real dpr: effectiveScreen ? CompositorService.getScreenScale(effectiveScreen) : 1
     readonly property bool usesOverlayLayer: SettingsData.launcherUseOverlayLayer || triggerUsesOverlayLayer
-    readonly property var effectiveLauncherLayer: LayerShell.fromEnv("DMS_MODAL_LAYER", root.usesOverlayLayer ? WlrLayer.Overlay : WlrLayer.Top, {
+    readonly property var effectiveLauncherLayer: LayerShell.fromEnv("DANKESTIA_MODAL_LAYER", root.usesOverlayLayer ? WlrLayer.Overlay : WlrLayer.Top, {
         "allow": ["top", "overlay"],
         "invalidLayer": WlrLayer.Top,
         "label": "modals",
@@ -241,7 +241,7 @@ Item {
     ConnectedModalChrome {
         id: modalChrome
         modalHandle: root.modalHandle
-        claimPrefix: "dms:launcher-v2"
+        claimPrefix: "dankestia:launcher-v2"
         screenName: root._currentScreenName()
         enabled: root.frameOwnsConnectedChrome
         active: root.spotlightOpen
@@ -587,7 +587,7 @@ Item {
         readonly property real _leftMargin: contentContainer.dockLeft ? contentContainer.dockThickness : (typeof SettingsData !== "undefined" && SettingsData.barPosition === 2 ? Theme.px(42, root.dpr) : 0)
         readonly property real _rightMargin: contentContainer.dockRight ? contentContainer.dockThickness : (typeof SettingsData !== "undefined" && SettingsData.barPosition === 3 ? Theme.px(42, root.dpr) : 0)
 
-        WlrLayershell.namespace: "dms:spotlight:bg"
+        WlrLayershell.namespace: "dankestia:spotlight:bg"
         WlrLayershell.layer: root.effectiveLauncherLayer
         WlrLayershell.exclusiveZone: -1
         WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
@@ -660,7 +660,7 @@ Item {
             blurRadius: root.cornerRadius
         }
 
-        WlrLayershell.namespace: "dms:spotlight"
+        WlrLayershell.namespace: "dankestia:spotlight"
         WlrLayershell.layer: root.effectiveLauncherLayer
         WlrLayershell.exclusiveZone: -1
         WlrLayershell.keyboardFocus: PopoutManager.screenshotActive ? WlrKeyboardFocus.None : (keyboardActive ? (root.useHyprlandFocusGrab ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.Exclusive) : WlrKeyboardFocus.None)
@@ -829,7 +829,7 @@ Item {
                         borderColor: root.frameOwnsConnectedChrome ? "transparent" : root.effectiveBorderColor
                         borderWidth: root.frameOwnsConnectedChrome ? 0 : root.effectiveBorderWidth
                         targetRadius: root.cornerRadius
-                        shadowEnabled: !root.frameOwnsConnectedChrome && Theme.elevationEnabled && SettingsData.modalElevationEnabled && Quickshell.env("DMS_DISABLE_LAYER") !== "true" && Quickshell.env("DMS_DISABLE_LAYER") !== "1"
+                        shadowEnabled: !root.frameOwnsConnectedChrome && Theme.elevationEnabled && SettingsData.modalElevationEnabled && Quickshell.env("DANKESTIA_DISABLE_LAYER") !== "true" && Quickshell.env("DANKESTIA_DISABLE_LAYER") !== "1"
                     }
 
                     // contentWrapper moves inside static contentContainer — DankPopout pattern

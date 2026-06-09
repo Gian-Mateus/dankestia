@@ -14,28 +14,28 @@ import (
 	"strings"
 	"time"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/config"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/distros"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/matugen"
-	sharedpam "github.com/AvengeMedia/DankMaterialShell/core/internal/pam"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/privesc"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/utils"
+	"github.com/AvengeMedia/Dankestia/core/internal/config"
+	"github.com/AvengeMedia/Dankestia/core/internal/distros"
+	"github.com/AvengeMedia/Dankestia/core/internal/matugen"
+	sharedpam "github.com/AvengeMedia/Dankestia/core/internal/pam"
+	"github.com/AvengeMedia/Dankestia/core/internal/privesc"
+	"github.com/AvengeMedia/Dankestia/core/internal/utils"
 	"github.com/sblinch/kdl-go"
 	"github.com/sblinch/kdl-go/document"
 )
 
 var appArmorProfileData []byte
 
-const appArmorProfileDest = "/etc/apparmor.d/usr.bin.dms-greeter"
+const appArmorProfileDest = "/etc/apparmor.d/usr.bin.dankestia-greeter"
 
-const GreeterCacheDir = "/var/cache/dms-greeter"
+const GreeterCacheDir = "/var/cache/dankestia-greeter"
 
-func DetectDMSPath() (string, error) {
-	return config.LocateDMSConfig()
+func DetectDANKESTIAPath() (string, error) {
+	return config.LocateDANKESTIAConfig()
 }
 
 // IsNixOS returns true when running on NixOS, which manages PAM configs through
-// its module system. The DMS PAM managed block won't be written on NixOS.
+// its module system. The DANKESTIA PAM managed block won't be written on NixOS.
 func IsNixOS() bool {
 	_, err := os.Stat("/etc/NIXOS")
 	return err == nil
@@ -384,7 +384,7 @@ func execFromDesktopFile(path string) (string, error) {
 func resolveGreeterAutoLoginState(cacheDir, homeDir string) (enabled bool, loginUser string, sessionExec string, err error) {
 	settingsPath := filepath.Join(cacheDir, "settings.json")
 	if _, statErr := os.Stat(settingsPath); statErr != nil {
-		settingsPath = filepath.Join(homeDir, ".config", "DankMaterialShell", "settings.json")
+		settingsPath = filepath.Join(homeDir, ".config", "Dankestia", "settings.json")
 	}
 
 	cfg, err := readGreeterAutoLoginConfig(settingsPath)
@@ -636,39 +636,39 @@ func DetectGreeterUser() string {
 }
 
 func resolveGreeterWrapperPath() string {
-	if override := strings.TrimSpace(os.Getenv("DMS_GREETER_WRAPPER_CMD")); override != "" {
+	if override := strings.TrimSpace(os.Getenv("DANKESTIA_GREETER_WRAPPER_CMD")); override != "" {
 		return override
 	}
 
 	// Packaged installs only use the official wrapper; never fall back to /usr/local/bin.
 	if IsGreeterPackaged() {
-		packagedWrapper := "/usr/bin/dms-greeter"
+		packagedWrapper := "/usr/bin/dankestia-greeter"
 		if info, err := os.Stat(packagedWrapper); err == nil && !info.IsDir() && (info.Mode()&0o111) != 0 {
 			return packagedWrapper
 		}
-		fmt.Fprintln(os.Stderr, "⚠ Warning: packaged dms-greeter detected, but /usr/bin/dms-greeter is missing or not executable")
+		fmt.Fprintln(os.Stderr, "⚠ Warning: packaged dankestia-greeter detected, but /usr/bin/dankestia-greeter is missing or not executable")
 		return packagedWrapper
 	}
 
-	for _, candidate := range []string{"/usr/bin/dms-greeter", "/usr/local/bin/dms-greeter"} {
+	for _, candidate := range []string{"/usr/bin/dankestia-greeter", "/usr/local/bin/dankestia-greeter"} {
 		if info, err := os.Stat(candidate); err == nil && !info.IsDir() && (info.Mode()&0o111) != 0 {
 			return candidate
 		}
 	}
 
-	if path, err := exec.LookPath("dms-greeter"); err == nil {
+	if path, err := exec.LookPath("dankestia-greeter"); err == nil {
 		resolved := path
 		if realPath, realErr := filepath.EvalSymlinks(path); realErr == nil {
 			resolved = realPath
 		}
 		if strings.HasPrefix(resolved, "/home/") || strings.HasPrefix(resolved, "/tmp/") {
-			fmt.Fprintf(os.Stderr, "⚠ Warning: ignoring non-system dms-greeter on PATH: %s\n", path)
+			fmt.Fprintf(os.Stderr, "⚠ Warning: ignoring non-system dankestia-greeter on PATH: %s\n", path)
 		} else {
 			return path
 		}
 	}
 
-	return "/usr/bin/dms-greeter"
+	return "/usr/bin/dankestia-greeter"
 }
 
 func DetectCompositors() []string {
@@ -773,23 +773,23 @@ func EnsureGreetdInstalled(logFunc func(string), sudoPassword string) error {
 	return nil
 }
 
-// IsGreeterPackaged returns true if dms-greeter was installed from a system package.
+// IsGreeterPackaged returns true if dankestia-greeter was installed from a system package.
 func IsGreeterPackaged() bool {
-	if !utils.CommandExists("dms-greeter") {
+	if !utils.CommandExists("dankestia-greeter") {
 		return false
 	}
-	packagedPath := "/usr/share/quickshell/dms-greeter"
+	packagedPath := "/usr/share/quickshell/dankestia-greeter"
 	info, err := os.Stat(packagedPath)
 	return err == nil && info.IsDir()
 }
 
 // HasLegacyLocalGreeterWrapper returns true when a manually installed wrapper exists.
 func HasLegacyLocalGreeterWrapper() bool {
-	info, err := os.Stat("/usr/local/bin/dms-greeter")
+	info, err := os.Stat("/usr/local/bin/dankestia-greeter")
 	return err == nil && !info.IsDir()
 }
 
-// TryInstallGreeterPackage attempts to install dms-greeter from the distro's official repo.
+// TryInstallGreeterPackage attempts to install dankestia-greeter from the distro's official repo.
 func TryInstallGreeterPackage(logFunc func(string), sudoPassword string) bool {
 	osInfo, err := distros.GetOSInfo()
 	if err != nil {
@@ -801,7 +801,7 @@ func TryInstallGreeterPackage(logFunc func(string), sudoPassword string) bool {
 	}
 
 	if IsGreeterPackaged() {
-		logFunc("✓ dms-greeter package already installed")
+		logFunc("✓ dankestia-greeter package already installed")
 		return true
 	}
 
@@ -814,7 +814,7 @@ func TryInstallGreeterPackage(logFunc func(string), sudoPassword string) bool {
 		obsSlug := getDebianOBSSlug(osInfo)
 		keyURL := fmt.Sprintf("https://download.opensuse.org/repositories/home:AvengeMedia:danklinux/%s/Release.key", obsSlug)
 		repoLine := fmt.Sprintf("deb [signed-by=/etc/apt/keyrings/danklinux.gpg] https://download.opensuse.org/repositories/home:/AvengeMedia:/danklinux/%s/ /", obsSlug)
-		failHint = fmt.Sprintf("⚠ dms-greeter install failed. Add OBS repo manually:\nsudo apt-get install -y gnupg\nsudo mkdir -p /etc/apt/keyrings\ncurl -fsSL %s | sudo gpg --dearmor -o /etc/apt/keyrings/danklinux.gpg\necho '%s' | sudo tee /etc/apt/sources.list.d/danklinux.list\nsudo apt update && sudo apt-get install -y dms-greeter", keyURL, repoLine)
+		failHint = fmt.Sprintf("⚠ dankestia-greeter install failed. Add OBS repo manually:\nsudo apt-get install -y gnupg\nsudo mkdir -p /etc/apt/keyrings\ncurl -fsSL %s | sudo gpg --dearmor -o /etc/apt/keyrings/danklinux.gpg\necho '%s' | sudo tee /etc/apt/sources.list.d/danklinux.list\nsudo apt update && sudo apt-get install -y dankestia-greeter", keyURL, repoLine)
 		logFunc(fmt.Sprintf("Adding DankLinux OBS repository (%s)...", obsSlug))
 		if _, err := exec.LookPath("gpg"); err != nil {
 			logFunc("Installing gnupg for OBS repository key import...")
@@ -840,34 +840,34 @@ func TryInstallGreeterPackage(logFunc func(string), sudoPassword string) bool {
 		addRepoCmd.Stderr = os.Stderr
 		addRepoCmd.Run()
 		privesc.ExecCommand(ctx, sudoPassword, "apt-get update").Run()
-		installCmd = privesc.ExecCommand(ctx, sudoPassword, "apt-get install -y dms-greeter")
+		installCmd = privesc.ExecCommand(ctx, sudoPassword, "apt-get install -y dankestia-greeter")
 	case distros.FamilySUSE:
 		repoURL := getOpenSUSEOBSRepoURL(osInfo)
-		failHint = fmt.Sprintf("⚠ dms-greeter install failed. Add OBS repo manually:\nsudo zypper addrepo %s\nsudo zypper refresh && sudo zypper install dms-greeter", repoURL)
+		failHint = fmt.Sprintf("⚠ dankestia-greeter install failed. Add OBS repo manually:\nsudo zypper addrepo %s\nsudo zypper refresh && sudo zypper install dankestia-greeter", repoURL)
 		logFunc("Adding DankLinux OBS repository...")
 		addRepoCmd := privesc.ExecCommand(ctx, sudoPassword, fmt.Sprintf("zypper addrepo %s", repoURL))
 		addRepoCmd.Stdout = os.Stdout
 		addRepoCmd.Stderr = os.Stderr
 		addRepoCmd.Run()
 		privesc.ExecCommand(ctx, sudoPassword, "zypper refresh").Run()
-		installCmd = privesc.ExecCommand(ctx, sudoPassword, "zypper install -y dms-greeter")
+		installCmd = privesc.ExecCommand(ctx, sudoPassword, "zypper install -y dankestia-greeter")
 	case distros.FamilyUbuntu:
-		failHint = "⚠ dms-greeter install failed. Add PPA manually: sudo add-apt-repository ppa:avengemedia/danklinux && sudo apt-get update && sudo apt-get install -y dms-greeter"
+		failHint = "⚠ dankestia-greeter install failed. Add PPA manually: sudo add-apt-repository ppa:avengemedia/danklinux && sudo apt-get update && sudo apt-get install -y dankestia-greeter"
 		logFunc("Enabling PPA ppa:avengemedia/danklinux...")
 		ppacmd := privesc.ExecCommand(ctx, sudoPassword, "add-apt-repository -y ppa:avengemedia/danklinux")
 		ppacmd.Stdout = os.Stdout
 		ppacmd.Stderr = os.Stderr
 		ppacmd.Run()
 		privesc.ExecCommand(ctx, sudoPassword, "apt-get update").Run()
-		installCmd = privesc.ExecCommand(ctx, sudoPassword, "apt-get install -y dms-greeter")
+		installCmd = privesc.ExecCommand(ctx, sudoPassword, "apt-get install -y dankestia-greeter")
 	case distros.FamilyFedora:
-		failHint = "⚠ dms-greeter install failed. Enable COPR manually: sudo dnf copr enable avengemedia/danklinux && sudo dnf install dms-greeter"
+		failHint = "⚠ dankestia-greeter install failed. Enable COPR manually: sudo dnf copr enable avengemedia/danklinux && sudo dnf install dankestia-greeter"
 		logFunc("Enabling COPR avengemedia/danklinux...")
 		coprcmd := privesc.ExecCommand(ctx, sudoPassword, "dnf copr enable -y avengemedia/danklinux")
 		coprcmd.Stdout = os.Stdout
 		coprcmd.Stderr = os.Stderr
 		coprcmd.Run()
-		installCmd = privesc.ExecCommand(ctx, sudoPassword, "dnf install -y dms-greeter")
+		installCmd = privesc.ExecCommand(ctx, sudoPassword, "dnf install -y dankestia-greeter")
 	case distros.FamilyArch:
 		aurHelper := ""
 		for _, helper := range []string{"paru", "yay"} {
@@ -877,16 +877,16 @@ func TryInstallGreeterPackage(logFunc func(string), sudoPassword string) bool {
 			}
 		}
 		if aurHelper == "" {
-			logFunc("⚠ No AUR helper found (paru/yay). Install greetd-dms-greeter-git from AUR: https://aur.archlinux.org/packages/greetd-dms-greeter-git")
+			logFunc("⚠ No AUR helper found (paru/yay). Install greetd-dankestia-greeter-git from AUR: https://aur.archlinux.org/packages/greetd-dankestia-greeter-git")
 			return false
 		}
-		failHint = fmt.Sprintf("⚠ dms-greeter install failed. Install from AUR: %s -S greetd-dms-greeter-git", aurHelper)
-		installCmd = exec.CommandContext(ctx, aurHelper, "-S", "--noconfirm", "greetd-dms-greeter-git")
+		failHint = fmt.Sprintf("⚠ dankestia-greeter install failed. Install from AUR: %s -S greetd-dankestia-greeter-git", aurHelper)
+		installCmd = exec.CommandContext(ctx, aurHelper, "-S", "--noconfirm", "greetd-dankestia-greeter-git")
 	default:
 		return false
 	}
 
-	logFunc("Installing dms-greeter from official repository...")
+	logFunc("Installing dankestia-greeter from official repository...")
 	installCmd.Stdout = os.Stdout
 	installCmd.Stderr = os.Stderr
 
@@ -895,35 +895,35 @@ func TryInstallGreeterPackage(logFunc func(string), sudoPassword string) bool {
 		return false
 	}
 
-	logFunc("✓ dms-greeter package installed")
+	logFunc("✓ dankestia-greeter package installed")
 	return true
 }
 
-// CopyGreeterFiles installs the dms-greeter wrapper and sets up cache directory
-func CopyGreeterFiles(dmsPath, compositor string, logFunc func(string), sudoPassword string) error {
+// CopyGreeterFiles installs the dankestia-greeter wrapper and sets up cache directory
+func CopyGreeterFiles(dankestiaPath, compositor string, logFunc func(string), sudoPassword string) error {
 	if IsGreeterPackaged() {
-		logFunc("✓ dms-greeter package already installed")
+		logFunc("✓ dankestia-greeter package already installed")
 	} else {
-		if dmsPath == "" {
-			return fmt.Errorf("dms path is required for manual dms-greeter wrapper installs")
+		if dankestiaPath == "" {
+			return fmt.Errorf("dankestia path is required for manual dankestia-greeter wrapper installs")
 		}
 
-		assetsDir := filepath.Join(dmsPath, "Modules", "Greetd", "assets")
-		wrapperSrc := filepath.Join(assetsDir, "dms-greeter")
+		assetsDir := filepath.Join(dankestiaPath, "Modules", "Greetd", "assets")
+		wrapperSrc := filepath.Join(assetsDir, "dankestia-greeter")
 
 		if _, err := os.Stat(wrapperSrc); os.IsNotExist(err) {
-			return fmt.Errorf("dms-greeter wrapper not found at %s", wrapperSrc)
+			return fmt.Errorf("dankestia-greeter wrapper not found at %s", wrapperSrc)
 		}
 
-		wrapperDst := "/usr/local/bin/dms-greeter"
+		wrapperDst := "/usr/local/bin/dankestia-greeter"
 		action := "Installed"
 		if info, err := os.Stat(wrapperDst); err == nil && !info.IsDir() {
 			action = "Updated"
 		}
 		if err := privesc.Run(context.Background(), sudoPassword, "cp", wrapperSrc, wrapperDst); err != nil {
-			return fmt.Errorf("failed to copy dms-greeter wrapper: %w", err)
+			return fmt.Errorf("failed to copy dankestia-greeter wrapper: %w", err)
 		}
-		logFunc(fmt.Sprintf("✓ %s dms-greeter wrapper at %s", action, wrapperDst))
+		logFunc(fmt.Sprintf("✓ %s dankestia-greeter wrapper at %s", action, wrapperDst))
 
 		if err := privesc.Run(context.Background(), sudoPassword, "chmod", "+x", wrapperDst); err != nil {
 			return fmt.Errorf("failed to make wrapper executable: %w", err)
@@ -935,13 +935,13 @@ func CopyGreeterFiles(dmsPath, compositor string, logFunc func(string), sudoPass
 				if err := privesc.Run(context.Background(), sudoPassword, "semanage", "fcontext", "-a", "-t", "bin_t", wrapperDst); err != nil {
 					logFunc(fmt.Sprintf("⚠ Warning: Failed to set SELinux fcontext: %v", err))
 				} else {
-					logFunc("✓ Set SELinux fcontext for dms-greeter")
+					logFunc("✓ Set SELinux fcontext for dankestia-greeter")
 				}
 
 				if err := privesc.Run(context.Background(), sudoPassword, "restorecon", "-v", wrapperDst); err != nil {
 					logFunc(fmt.Sprintf("⚠ Warning: Failed to restore SELinux context: %v", err))
 				} else {
-					logFunc("✓ Restored SELinux context for dms-greeter")
+					logFunc("✓ Restored SELinux context for dankestia-greeter")
 				}
 			}
 		}
@@ -954,7 +954,7 @@ func CopyGreeterFiles(dmsPath, compositor string, logFunc func(string), sudoPass
 	return nil
 }
 
-// EnsureGreeterCacheDir creates /var/cache/dms-greeter with correct ownership if it does not exist.
+// EnsureGreeterCacheDir creates /var/cache/dankestia-greeter with correct ownership if it does not exist.
 // It is safe to call multiple times (idempotent) and will repair ownership/mode
 // when the directory already exists with stale permissions.
 func EnsureGreeterCacheDir(logFunc func(string), sudoPassword string) error {
@@ -1078,7 +1078,7 @@ func InstallAppArmorProfile(logFunc func(string), sudoPassword string) error {
 		return fmt.Errorf("failed to create /etc/apparmor.d: %w", err)
 	}
 
-	tmp, err := os.CreateTemp("", "dms-apparmor-*")
+	tmp, err := os.CreateTemp("", "dankestia-apparmor-*")
 	if err != nil {
 		return fmt.Errorf("failed to create temp file for AppArmor profile: %w", err)
 	}
@@ -1113,7 +1113,7 @@ func InstallAppArmorProfile(logFunc func(string), sudoPassword string) error {
 	return nil
 }
 
-// UninstallAppArmorProfile removes the DMS AppArmor profile and reloads AppArmor.
+// UninstallAppArmorProfile removes the DANKESTIA AppArmor profile and reloads AppArmor.
 // It is a no-op when AppArmor is not active or the profile does not exist.
 func UninstallAppArmorProfile(logFunc func(string), sudoPassword string) error {
 	if IsNixOS() {
@@ -1132,7 +1132,7 @@ func UninstallAppArmorProfile(logFunc func(string), sudoPassword string) error {
 	if err := privesc.Run(context.Background(), sudoPassword, "rm", "-f", appArmorProfileDest); err != nil {
 		return fmt.Errorf("failed to remove AppArmor profile: %w", err)
 	}
-	logFunc("  ✓ Removed DMS AppArmor profile")
+	logFunc("  ✓ Removed DANKESTIA AppArmor profile")
 	return nil
 }
 
@@ -1257,9 +1257,9 @@ func RemediateStaleACLs(logFunc func(string), sudoPassword string) {
 	dirs := []string{
 		homeDir,
 		filepath.Join(homeDir, ".config"),
-		filepath.Join(homeDir, ".config", "DankMaterialShell"),
+		filepath.Join(homeDir, ".config", "Dankestia"),
 		filepath.Join(homeDir, ".cache"),
-		filepath.Join(homeDir, ".cache", "DankMaterialShell"),
+		filepath.Join(homeDir, ".cache", "Dankestia"),
 		filepath.Join(homeDir, ".local"),
 		filepath.Join(homeDir, ".local", "state"),
 		filepath.Join(homeDir, ".local", "share"),
@@ -1305,7 +1305,7 @@ func RemediateStaleAppArmor(logFunc func(string), sudoPassword string) {
 	_ = UninstallAppArmorProfile(logFunc, sudoPassword)
 }
 
-func SetupDMSGroup(logFunc func(string), sudoPassword string) error {
+func SetupDANKESTIAGroup(logFunc func(string), sudoPassword string) error {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return fmt.Errorf("failed to get user home directory: %w", err)
@@ -1362,9 +1362,9 @@ func SetupDMSGroup(logFunc func(string), sudoPassword string) error {
 		path string
 		desc string
 	}{
-		{filepath.Join(homeDir, ".config", "DankMaterialShell"), "DankMaterialShell config"},
-		{filepath.Join(homeDir, ".local", "state", "DankMaterialShell"), "DankMaterialShell state"},
-		{filepath.Join(homeDir, ".cache", "DankMaterialShell"), "DankMaterialShell cache"},
+		{filepath.Join(homeDir, ".config", "Dankestia"), "Dankestia config"},
+		{filepath.Join(homeDir, ".local", "state", "Dankestia"), "Dankestia state"},
+		{filepath.Join(homeDir, ".cache", "Dankestia"), "Dankestia cache"},
 		{filepath.Join(homeDir, ".cache", "quickshell"), "quickshell cache"},
 		{filepath.Join(homeDir, ".config", "quickshell"), "quickshell config"},
 		{filepath.Join(homeDir, ".local", "share", "wayland-sessions"), "wayland sessions"},
@@ -1427,15 +1427,15 @@ type greeterThemeSyncState struct {
 }
 
 func defaultGreeterColorsSource(homeDir string) string {
-	return filepath.Join(homeDir, ".cache", "DankMaterialShell", "dms-colors.json")
+	return filepath.Join(homeDir, ".cache", "Dankestia", "dankestia-colors.json")
 }
 
 func greeterOverrideColorsStateDir(homeDir string) string {
-	return filepath.Join(homeDir, ".cache", "DankMaterialShell", "greeter-colors")
+	return filepath.Join(homeDir, ".cache", "Dankestia", "greeter-colors")
 }
 
 func greeterOverrideColorsSource(homeDir string) string {
-	return filepath.Join(greeterOverrideColorsStateDir(homeDir), "dms-colors.json")
+	return filepath.Join(greeterOverrideColorsStateDir(homeDir), "dankestia-colors.json")
 }
 
 func readOptionalJSONFile(path string, dst any) error {
@@ -1458,7 +1458,7 @@ func readGreeterThemeSyncSettings(homeDir string) (greeterThemeSyncSettings, err
 		MatugenScheme:    "scheme-tonal-spot",
 		IconTheme:        "System Default",
 	}
-	settingsPath := filepath.Join(homeDir, ".config", "DankMaterialShell", "settings.json")
+	settingsPath := filepath.Join(homeDir, ".config", "Dankestia", "settings.json")
 	if err := readOptionalJSONFile(settingsPath, &settings); err != nil {
 		return greeterThemeSyncSettings{}, fmt.Errorf("failed to parse settings at %s: %w", settingsPath, err)
 	}
@@ -1467,7 +1467,7 @@ func readGreeterThemeSyncSettings(homeDir string) (greeterThemeSyncSettings, err
 
 func readGreeterThemeSyncSession(homeDir string) (greeterThemeSyncSession, error) {
 	session := greeterThemeSyncSession{}
-	sessionPath := filepath.Join(homeDir, ".local", "state", "DankMaterialShell", "session.json")
+	sessionPath := filepath.Join(homeDir, ".local", "state", "Dankestia", "session.json")
 	if err := readOptionalJSONFile(sessionPath, &session); err != nil {
 		return greeterThemeSyncSession{}, fmt.Errorf("failed to parse session at %s: %w", sessionPath, err)
 	}
@@ -1541,7 +1541,7 @@ func ensureGreeterSyncSourceFile(path string) error {
 	return nil
 }
 
-func syncGreeterDynamicOverrideColors(dmsPath, homeDir string, state greeterThemeSyncState, logFunc func(string)) error {
+func syncGreeterDynamicOverrideColors(dankestiaPath, homeDir string, state greeterThemeSyncState, logFunc func(string)) error {
 	if !state.UsesDynamicWallpaperOverride {
 		return nil
 	}
@@ -1561,7 +1561,7 @@ func syncGreeterDynamicOverrideColors(dmsPath, homeDir string, state greeterThem
 
 	opts := matugen.Options{
 		StateDir:         greeterOverrideColorsStateDir(homeDir),
-		ShellDir:         dmsPath,
+		ShellDir:         dankestiaPath,
 		ConfigDir:        filepath.Join(homeDir, ".config"),
 		Kind:             "image",
 		Value:            state.ResolvedGreeterWallpaperPath,
@@ -1610,7 +1610,7 @@ func syncGreeterColorSource(homeDir, cacheDir string, state greeterThemeSyncStat
 	return nil
 }
 
-func SyncDMSConfigs(dmsPath, compositor string, logFunc func(string), sudoPassword string) error {
+func SyncDANKESTIAConfigs(dankestiaPath, compositor string, logFunc func(string), sudoPassword string) error {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return fmt.Errorf("failed to get user home directory: %w", err)
@@ -1624,12 +1624,12 @@ func SyncDMSConfigs(dmsPath, compositor string, logFunc func(string), sudoPasswo
 		desc   string
 	}{
 		{
-			source: filepath.Join(homeDir, ".config", "DankMaterialShell", "settings.json"),
+			source: filepath.Join(homeDir, ".config", "Dankestia", "settings.json"),
 			target: filepath.Join(cacheDir, "settings.json"),
 			desc:   "core settings (theme, clock formats, etc)",
 		},
 		{
-			source: filepath.Join(homeDir, ".local", "state", "DankMaterialShell", "session.json"),
+			source: filepath.Join(homeDir, ".local", "state", "Dankestia", "session.json"),
 			target: filepath.Join(cacheDir, "session.json"),
 			desc:   "state (wallpaper configuration)",
 		},
@@ -1663,7 +1663,7 @@ func SyncDMSConfigs(dmsPath, compositor string, logFunc func(string), sudoPasswo
 		return fmt.Errorf("failed to resolve greeter color source: %w", err)
 	}
 
-	if err := syncGreeterDynamicOverrideColors(dmsPath, homeDir, state, logFunc); err != nil {
+	if err := syncGreeterDynamicOverrideColors(dankestiaPath, homeDir, state, logFunc); err != nil {
 		return err
 	}
 
@@ -1795,30 +1795,30 @@ func syncNiriGreeterConfig(logFunc func(string), sudoPassword string) error {
 		return fmt.Errorf("failed to set greetd niri directory permissions: %w", err)
 	}
 
-	dmsTemp, err := os.CreateTemp("", "dms-greeter-niri-dms-*.kdl")
+	dankestiaTemp, err := os.CreateTemp("", "dankestia-greeter-niri-dankestia-*.kdl")
 	if err != nil {
 		return fmt.Errorf("failed to create temp file: %w", err)
 	}
-	defer os.Remove(dmsTemp.Name())
+	defer os.Remove(dankestiaTemp.Name())
 
-	if _, err := dmsTemp.WriteString(content); err != nil {
-		_ = dmsTemp.Close()
+	if _, err := dankestiaTemp.WriteString(content); err != nil {
+		_ = dankestiaTemp.Close()
 		return fmt.Errorf("failed to write temp niri config: %w", err)
 	}
-	if err := dmsTemp.Close(); err != nil {
+	if err := dankestiaTemp.Close(); err != nil {
 		return fmt.Errorf("failed to close temp niri config: %w", err)
 	}
 
-	dmsPath := filepath.Join(greeterDir, "dms.kdl")
-	if err := backupFileIfExists(sudoPassword, dmsPath, ".backup"); err != nil {
-		return fmt.Errorf("failed to backup %s: %w", dmsPath, err)
+	dankestiaPath := filepath.Join(greeterDir, "dankestia.kdl")
+	if err := backupFileIfExists(sudoPassword, dankestiaPath, ".backup"); err != nil {
+		return fmt.Errorf("failed to backup %s: %w", dankestiaPath, err)
 	}
-	if err := privesc.Run(context.Background(), sudoPassword, "install", "-o", "root", "-g", greeterGroup, "-m", "0644", dmsTemp.Name(), dmsPath); err != nil {
-		return fmt.Errorf("failed to install greetd niri dms config: %w", err)
+	if err := privesc.Run(context.Background(), sudoPassword, "install", "-o", "root", "-g", greeterGroup, "-m", "0644", dankestiaTemp.Name(), dankestiaPath); err != nil {
+		return fmt.Errorf("failed to install greetd niri dankestia config: %w", err)
 	}
 
-	mainContent := fmt.Sprintf("%s\ninclude \"%s\"\n", config.NiriGreeterConfig, dmsPath)
-	mainTemp, err := os.CreateTemp("", "dms-greeter-niri-main-*.kdl")
+	mainContent := fmt.Sprintf("%s\ninclude \"%s\"\n", config.NiriGreeterConfig, dankestiaPath)
+	mainTemp, err := os.CreateTemp("", "dankestia-greeter-niri-main-*.kdl")
 	if err != nil {
 		return fmt.Errorf("failed to create temp file: %w", err)
 	}
@@ -1844,7 +1844,7 @@ func syncNiriGreeterConfig(logFunc func(string), sudoPassword string) error {
 		logFunc(fmt.Sprintf("⚠ Warning: Failed to update greetd config for niri: %v", err))
 	}
 
-	logFunc(fmt.Sprintf("✓ Synced niri greeter config (%d input, %d output, %d cursor, %d debug) to %s", extractor.inputCount, extractor.outputCount, extractor.cursorCount, extractor.debugCount, dmsPath))
+	logFunc(fmt.Sprintf("✓ Synced niri greeter config (%d input, %d output, %d cursor, %d debug) to %s", extractor.inputCount, extractor.outputCount, extractor.cursorCount, extractor.debugCount, dankestiaPath))
 	return nil
 }
 
@@ -1873,7 +1873,7 @@ func ensureGreetdNiriConfig(logFunc func(string), sudoPassword string, niriConfi
 		}
 
 		command := strings.Trim(strings.TrimSpace(parts[1]), "\"")
-		if !strings.Contains(command, "dms-greeter") {
+		if !strings.Contains(command, "dankestia-greeter") {
 			continue
 		}
 		if !strings.Contains(command, "--command niri") {
@@ -2116,7 +2116,7 @@ func (s *niriGreeterSync) render() string {
 	return builder.String()
 }
 
-func ConfigureGreetd(dmsPath, compositor string, logFunc func(string), sudoPassword string) error {
+func ConfigureGreetd(dankestiaPath, compositor string, logFunc func(string), sudoPassword string) error {
 	configPath := "/etc/greetd/config.toml"
 
 	backupPath := fmt.Sprintf("%s.backup-%s", configPath, time.Now().Format("20060102-150405"))
@@ -2146,8 +2146,8 @@ vt = 1
 
 	compositorLower := strings.ToLower(compositor)
 	commandValue := fmt.Sprintf("%s --command %s --cache-dir %s", wrapperCmd, compositorLower, GreeterCacheDir)
-	if dmsPath != "" {
-		commandValue = fmt.Sprintf("%s -p %s", commandValue, dmsPath)
+	if dankestiaPath != "" {
+		commandValue = fmt.Sprintf("%s -p %s", commandValue, dankestiaPath)
 	}
 
 	commandLine := fmt.Sprintf(`command = "%s"`, commandValue)
@@ -2329,8 +2329,8 @@ func EnsureGraphicalTarget(sudoPassword string, logFunc func(string)) error {
 // AutoSetupGreeter performs the full non-interactive greeter setup
 func AutoSetupGreeter(compositor, sudoPassword string, logFunc func(string)) error {
 	if IsGreeterPackaged() && HasLegacyLocalGreeterWrapper() {
-		return fmt.Errorf("legacy manual wrapper detected at /usr/local/bin/dms-greeter; " +
-			"remove it before using packaged dms-greeter: sudo rm -f /usr/local/bin/dms-greeter")
+		return fmt.Errorf("legacy manual wrapper detected at /usr/local/bin/dankestia-greeter; " +
+			"remove it before using packaged dankestia-greeter: sudo rm -f /usr/local/bin/dankestia-greeter")
 	}
 
 	logFunc("Ensuring greetd is installed...")
@@ -2338,39 +2338,39 @@ func AutoSetupGreeter(compositor, sudoPassword string, logFunc func(string)) err
 		return fmt.Errorf("greetd install failed: %w", err)
 	}
 
-	dmsPath := ""
+	dankestiaPath := ""
 	if !IsGreeterPackaged() {
-		detected, err := DetectDMSPath()
+		detected, err := DetectDANKESTIAPath()
 		if err != nil {
-			return fmt.Errorf("DMS installation not found: %w", err)
+			return fmt.Errorf("DANKESTIA installation not found: %w", err)
 		}
-		dmsPath = detected
-		logFunc(fmt.Sprintf("✓ Found DMS at: %s", dmsPath))
+		dankestiaPath = detected
+		logFunc(fmt.Sprintf("✓ Found DANKESTIA at: %s", dankestiaPath))
 	} else {
-		logFunc("✓ Using packaged dms-greeter (/usr/share/quickshell/dms-greeter)")
+		logFunc("✓ Using packaged dankestia-greeter (/usr/share/quickshell/dankestia-greeter)")
 	}
 
-	logFunc("Setting up dms-greeter group and permissions...")
-	if err := SetupDMSGroup(logFunc, sudoPassword); err != nil {
+	logFunc("Setting up dankestia-greeter group and permissions...")
+	if err := SetupDANKESTIAGroup(logFunc, sudoPassword); err != nil {
 		logFunc(fmt.Sprintf("⚠ Warning: group/permissions setup error: %v", err))
 	}
 
 	logFunc("Copying greeter files...")
-	if err := CopyGreeterFiles(dmsPath, compositor, logFunc, sudoPassword); err != nil {
+	if err := CopyGreeterFiles(dankestiaPath, compositor, logFunc, sudoPassword); err != nil {
 		return fmt.Errorf("failed to copy greeter files: %w", err)
 	}
 
 	logFunc("Configuring greetd...")
 	greeterPathForConfig := ""
 	if !IsGreeterPackaged() {
-		greeterPathForConfig = dmsPath
+		greeterPathForConfig = dankestiaPath
 	}
 	if err := ConfigureGreetd(greeterPathForConfig, compositor, logFunc, sudoPassword); err != nil {
 		return fmt.Errorf("failed to configure greetd: %w", err)
 	}
 
-	logFunc("Synchronizing DMS configurations...")
-	if err := SyncDMSConfigs(dmsPath, compositor, logFunc, sudoPassword); err != nil {
+	logFunc("Synchronizing DANKESTIA configurations...")
+	if err := SyncDANKESTIAConfigs(dankestiaPath, compositor, logFunc, sudoPassword); err != nil {
 		logFunc(fmt.Sprintf("⚠ Warning: config sync error: %v", err))
 	}
 
@@ -2394,6 +2394,6 @@ func AutoSetupGreeter(compositor, sudoPassword string, logFunc func(string)) err
 		logFunc(fmt.Sprintf("⚠ Warning: %v", err))
 	}
 
-	logFunc("✓ DMS greeter setup complete")
+	logFunc("✓ DANKESTIA greeter setup complete")
 	return nil
 }

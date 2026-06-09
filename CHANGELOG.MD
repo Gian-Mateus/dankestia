@@ -2,7 +2,7 @@ This file is more of a quick reference so I know what to account for before next
 
 # 1.5.0
 - Overhauled shadows
-- App ID changed to com.danklinux.dms - breaking for window rules
+- App ID changed to com.danklinux.dankestia - breaking for window rules
 - Greeter stuff
 - Terminal mux
 - Locale overrides
@@ -35,7 +35,7 @@ This file is more of a quick reference so I know what to account for before next
 - Theme registry
 - Notification persistence & history
 - **BREAKING** vscode theme needs re-installed
-- dms doctor cmd
+- dankestia doctor cmd
 - niri/hypr/mango gaps/window/border overrides
 - settings search
 - notification display ops on lock screen

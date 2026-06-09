@@ -5,10 +5,10 @@ import (
 	"math"
 	"sync"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/log"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/proto/wlr_screencopy"
-	wlhelpers "github.com/AvengeMedia/DankMaterialShell/core/internal/wayland/client"
-	"github.com/AvengeMedia/DankMaterialShell/core/pkg/go-wayland/wayland/client"
+	"github.com/AvengeMedia/Dankestia/core/internal/log"
+	"github.com/AvengeMedia/Dankestia/core/internal/proto/wlr_screencopy"
+	wlhelpers "github.com/AvengeMedia/Dankestia/core/internal/wayland/client"
+	"github.com/AvengeMedia/Dankestia/core/pkg/go-wayland/wayland/client"
 )
 
 type WaylandOutput struct {

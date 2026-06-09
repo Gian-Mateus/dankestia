@@ -264,10 +264,10 @@ recent-windows {
     }
 }
 
-// Include dms files
-include "dms/colors.kdl"
-include "dms/layout.kdl"
-include "dms/alttab.kdl"
-include "dms/binds.kdl"
-include "dms/outputs.kdl"
-include "dms/cursor.kdl"
+// Include dankestia files
+include "dankestia/colors.kdl"
+include "dankestia/layout.kdl"
+include "dankestia/alttab.kdl"
+include "dankestia/binds.kdl"
+include "dankestia/outputs.kdl"
+include "dankestia/cursor.kdl"

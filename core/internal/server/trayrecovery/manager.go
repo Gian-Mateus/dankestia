@@ -5,8 +5,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/log"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/loginctl"
+	"github.com/AvengeMedia/Dankestia/core/internal/log"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/loginctl"
 	"github.com/godbus/dbus/v5"
 	"golang.org/x/sys/unix"
 )

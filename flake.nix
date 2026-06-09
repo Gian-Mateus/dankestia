@@ -51,7 +51,7 @@
         args@{ pkgs, ... }:
         {
           imports = [
-            (import modulePath (args // { dmsPkgs = buildDmsPkgs pkgs; }))
+            (import modulePath (args // { dankestiaPkgs = buildDmsPkgs pkgs; }))
           ];
         };
 
@@ -104,11 +104,11 @@
             in
             {
               inherit version;
-              pname = "dms-shell";
+              pname = "dankestia-shell";
               src = ./core;
               vendorHash = "sha256-nvxFHQhOfBGl3h51fgYDb39K0NCj+H8mAEyKr1qOwJQ=";
 
-              subPackages = [ "cmd/dms" ];
+              subPackages = [ "cmd/dankestia" ];
 
               ldflags = [
                 "-s"
@@ -122,51 +122,51 @@
               ];
 
               postInstall = ''
-                mkdir -p $out/share/quickshell/dms
-                cp -r ${rootSrc}/quickshell/. $out/share/quickshell/dms/
+                mkdir -p $out/share/quickshell/dankestia
+                cp -r ${rootSrc}/quickshell/. $out/share/quickshell/dankestia/
 
-                chmod u+w $out/share/quickshell/dms/VERSION
-                echo "${version}" > $out/share/quickshell/dms/VERSION
+                chmod u+w $out/share/quickshell/dankestia/VERSION
+                echo "${version}" > $out/share/quickshell/dankestia/VERSION
 
                 # Install desktop file and icon
-                install -D ${rootSrc}/assets/dms-open.desktop \
-                  $out/share/applications/dms-open.desktop
+                install -D ${rootSrc}/assets/dankestia-open.desktop \
+                  $out/share/applications/dankestia-open.desktop
                 install -D ${rootSrc}/core/assets/danklogo.svg \
                   $out/share/hicolor/scalable/apps/danklogo.svg
 
-                wrapProgram $out/bin/dms \
-                  --add-flags "-c $out/share/quickshell/dms" \
+                wrapProgram $out/bin/dankestia \
+                  --add-flags "-c $out/share/quickshell/dankestia" \
                   --prefix "NIXPKGS_QT6_QML_IMPORT_PATH" ":" "${mkQmlImportPath pkgs qtPackages}" \
                   --prefix "QT_PLUGIN_PATH" ":" "${mkQtPluginPath pkgs qtPackages}"
 
-                install -Dm644 ${rootSrc}/assets/systemd/dms.service \
-                  $out/lib/systemd/user/dms.service
+                install -Dm644 ${rootSrc}/assets/systemd/dankestia.service \
+                  $out/lib/systemd/user/dankestia.service
 
-                substituteInPlace $out/lib/systemd/user/dms.service \
-                  --replace-fail /usr/bin/dms $out/bin/dms \
+                substituteInPlace $out/lib/systemd/user/dankestia.service \
+                  --replace-fail /usr/bin/dankestia $out/bin/dankestia \
                   --replace-fail /usr/bin/pkill ${pkgs.procps}/bin/pkill
 
-                substituteInPlace $out/share/quickshell/dms/Modules/Greetd/assets/dms-greeter \
+                substituteInPlace $out/share/quickshell/dankestia/Modules/Greetd/assets/dankestia-greeter \
                   --replace-fail /bin/bash ${pkgs.bashInteractive}/bin/bash
 
-                substituteInPlace $out/share/quickshell/dms/assets/pam/fprint \
+                substituteInPlace $out/share/quickshell/dankestia/assets/pam/fprint \
                   --replace-fail pam_fprintd.so ${pkgs.fprintd}/lib/security/pam_fprintd.so
 
-                substituteInPlace $out/share/quickshell/dms/assets/pam/u2f \
+                substituteInPlace $out/share/quickshell/dankestia/assets/pam/u2f \
                   --replace-fail pam_u2f.so ${pkgs.pam_u2f}/lib/security/pam_u2f.so
 
-                installShellCompletion --cmd dms \
-                  --bash <($out/bin/dms completion bash) \
-                  --fish <($out/bin/dms completion fish) \
-                  --zsh <($out/bin/dms completion zsh)
+                installShellCompletion --cmd dankestia \
+                  --bash <($out/bin/dankestia completion bash) \
+                  --fish <($out/bin/dankestia completion fish) \
+                  --zsh <($out/bin/dankestia completion zsh)
               '';
 
               meta = {
                 description = "Desktop shell for wayland compositors built with Quickshell & GO";
                 homepage = "https://danklinux.com";
-                changelog = "https://github.com/AvengeMedia/DankMaterialShell/releases/tag/v${version}";
+                changelog = "https://github.com/AvengeMedia/Dankestia/releases/tag/v${version}";
                 license = pkgs.lib.licenses.mit;
-                mainProgram = "dms";
+                mainProgram = "dankestia";
                 platforms = pkgs.lib.platforms.linux;
               };
             }
@@ -174,15 +174,15 @@
         ) { };
 
       buildDmsPkgs = pkgs: {
-        dms-shell = mkDmsShell pkgs;
+        dankestia-shell = mkDmsShell pkgs;
       };
     in
     {
       packages = forEachSystem (
         system: pkgs: {
-          dms-shell = mkDmsShell pkgs;
-          default = self.packages.${system}.dms-shell;
-          quickshell = builtins.warn "dank-material-shell: the package Quickshell is not included in the DMS flake anymore. We recommend you to use the one from nixos-unstable branch of Nixpkgs or the upstream flake." pkgs.quickshell;
+          dankestia-shell = mkDmsShell pkgs;
+          default = self.packages.${system}.dankestia-shell;
+          quickshell = builtins.warn "dank-material-shell: the package Quickshell is not included in the DANKESTIA flake anymore. We recommend you to use the one from nixos-unstable branch of Nixpkgs or the upstream flake." pkgs.quickshell;
         }
       );
 

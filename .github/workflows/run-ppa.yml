@@ -8,11 +8,11 @@ on:
         required: true
         type: choice
         options:
-          - dms
-          - dms-greeter
-          - dms-git
+          - dankestia
+          - dankestia-greeter
+          - dankestia-git
           - all
-        default: "dms"
+        default: "dankestia"
       rebuild_release:
         description: "Release number for rebuilds (e.g., 2, 3, 4 for ppa2, ppa3, ppa4)"
         required: false
@@ -47,7 +47,7 @@ jobs:
           chmod +x distro/scripts/ppa-sync-plan.sh
 
           if [[ "${{ github.event_name }}" == "schedule" ]]; then
-            PACKAGE="dms-git"
+            PACKAGE="dankestia-git"
           else
             PACKAGE="${{ github.event.inputs.package }}"
           fi
@@ -85,7 +85,7 @@ jobs:
       matrix:
         target: ${{ fromJson(needs.check-updates.outputs.targets_json) }}
     concurrency:
-      group: ppa-dms-${{ matrix.target }}
+      group: ppa-dankestia-${{ matrix.target }}
       cancel-in-progress: false
 
     steps:
@@ -130,9 +130,9 @@ jobs:
           IFS=':' read -r PACKAGE UBUNTU_SERIES PPA_NUM <<< "$TARGET"
 
           case "$PACKAGE" in
-            dms) PPA_NAME="dms" ;;
-            dms-git) PPA_NAME="dms-git" ;;
-            dms-greeter) PPA_NAME="danklinux" ;;
+            dankestia) PPA_NAME="dankestia" ;;
+            dankestia-git) PPA_NAME="dankestia-git" ;;
+            dankestia-greeter) PPA_NAME="danklinux" ;;
             *) echo "::error::Unknown package $PACKAGE"; exit 1 ;;
           esac
 
@@ -145,6 +145,6 @@ jobs:
           echo "### PPA Package Upload" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "- **Target:** ${{ matrix.target }}" >> "$GITHUB_STEP_SUMMARY"
-          echo "- **DMS PPA:** https://launchpad.net/~avengemedia/+archive/ubuntu/dms/+packages" >> "$GITHUB_STEP_SUMMARY"
-          echo "- **DMS-Git PPA:** https://launchpad.net/~avengemedia/+archive/ubuntu/dms-git/+packages" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **DANKESTIA PPA:** https://launchpad.net/~avengemedia/+archive/ubuntu/dankestia/+packages" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **DANKESTIA-Git PPA:** https://launchpad.net/~avengemedia/+archive/ubuntu/dankestia-git/+packages" >> "$GITHUB_STEP_SUMMARY"
           echo "- **DankLinux PPA:** https://launchpad.net/~avengemedia/+archive/ubuntu/danklinux/+packages" >> "$GITHUB_STEP_SUMMARY"

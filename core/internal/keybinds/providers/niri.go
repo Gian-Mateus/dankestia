@@ -9,13 +9,13 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/keybinds"
+	"github.com/AvengeMedia/Dankestia/core/internal/keybinds"
 	"github.com/sblinch/kdl-go/document"
 )
 
 type NiriProvider struct {
 	configDir        string
-	dmsBindsIncluded bool
+	dankestiaBindsIncluded bool
 	parsed           bool
 }
 
@@ -46,7 +46,7 @@ func (n *NiriProvider) GetCheatSheet() (*keybinds.CheatSheet, error) {
 		return nil, fmt.Errorf("failed to parse niri config: %w", err)
 	}
 
-	n.dmsBindsIncluded = result.DMSBindsIncluded
+	n.dankestiaBindsIncluded = result.DANKESTIABindsIncluded
 	n.parsed = true
 
 	categorizedBinds := make(map[string][]keybinds.Keybind)
@@ -56,28 +56,28 @@ func (n *NiriProvider) GetCheatSheet() (*keybinds.CheatSheet, error) {
 		Title:            "Niri Keybinds",
 		Provider:         n.Name(),
 		Binds:            categorizedBinds,
-		DMSBindsIncluded: result.DMSBindsIncluded,
+		DANKESTIABindsIncluded: result.DANKESTIABindsIncluded,
 	}
 
-	if result.DMSStatus != nil {
-		sheet.DMSStatus = &keybinds.DMSBindsStatus{
-			Exists:          result.DMSStatus.Exists,
-			Included:        result.DMSStatus.Included,
-			IncludePosition: result.DMSStatus.IncludePosition,
-			TotalIncludes:   result.DMSStatus.TotalIncludes,
-			BindsAfterDMS:   result.DMSStatus.BindsAfterDMS,
-			Effective:       result.DMSStatus.Effective,
-			OverriddenBy:    result.DMSStatus.OverriddenBy,
-			StatusMessage:   result.DMSStatus.StatusMessage,
+	if result.DANKESTIAStatus != nil {
+		sheet.DANKESTIAStatus = &keybinds.DANKESTIABindsStatus{
+			Exists:          result.DANKESTIAStatus.Exists,
+			Included:        result.DANKESTIAStatus.Included,
+			IncludePosition: result.DANKESTIAStatus.IncludePosition,
+			TotalIncludes:   result.DANKESTIAStatus.TotalIncludes,
+			BindsAfterDANKESTIA:   result.DANKESTIAStatus.BindsAfterDANKESTIA,
+			Effective:       result.DANKESTIAStatus.Effective,
+			OverriddenBy:    result.DANKESTIAStatus.OverriddenBy,
+			StatusMessage:   result.DANKESTIAStatus.StatusMessage,
 		}
 	}
 
 	return sheet, nil
 }
 
-func (n *NiriProvider) HasDMSBindsIncluded() bool {
+func (n *NiriProvider) HasDANKESTIABindsIncluded() bool {
 	if n.parsed {
-		return n.dmsBindsIncluded
+		return n.dankestiaBindsIncluded
 	}
 
 	result, err := ParseNiriKeys(n.configDir)
@@ -85,9 +85,9 @@ func (n *NiriProvider) HasDMSBindsIncluded() bool {
 		return false
 	}
 
-	n.dmsBindsIncluded = result.DMSBindsIncluded
+	n.dankestiaBindsIncluded = result.DANKESTIABindsIncluded
 	n.parsed = true
-	return n.dmsBindsIncluded
+	return n.dankestiaBindsIncluded
 }
 
 func (n *NiriProvider) convertSection(section *NiriSection, subcategory string, categorizedBinds map[string][]keybinds.Keybind, conflicts map[string]*NiriKeyBinding) {
@@ -148,8 +148,8 @@ func (n *NiriProvider) convertKeybind(kb *NiriKeyBinding, subcategory string, co
 	keyStr := n.formatKey(kb)
 
 	source := "config"
-	if strings.Contains(kb.Source, "dms/binds.kdl") {
-		source = "dms-default"
+	if strings.Contains(kb.Source, "dankestia/binds.kdl") {
+		source = "dankestia-default"
 	}
 
 	bind := keybinds.Keybind{
@@ -165,7 +165,7 @@ func (n *NiriProvider) convertKeybind(kb *NiriKeyBinding, subcategory string, co
 		Repeat:          kb.Repeat,
 	}
 
-	if source == "dms-default" && conflicts != nil {
+	if source == "dankestia-default" && conflicts != nil {
 		if conflictKb, ok := conflicts[normalizeNiriBindKey(keyStr)]; ok {
 			bind.Conflict = &keybinds.Keybind{
 				Key:         keyStr,
@@ -211,7 +211,7 @@ func (n *NiriProvider) formatKey(kb *NiriKeyBinding) string {
 }
 
 func (n *NiriProvider) GetOverridePath() string {
-	return filepath.Join(n.configDir, "dms", "binds.kdl")
+	return filepath.Join(n.configDir, "dankestia", "binds.kdl")
 }
 
 func (n *NiriProvider) validateAction(action string) error {
@@ -241,7 +241,7 @@ func (n *NiriProvider) SetBind(key, action, description string, options map[stri
 	overridePath := n.GetOverridePath()
 
 	if err := os.MkdirAll(filepath.Dir(overridePath), 0o755); err != nil {
-		return fmt.Errorf("failed to create dms directory: %w", err)
+		return fmt.Errorf("failed to create dankestia directory: %w", err)
 	}
 
 	existingBinds, err := n.loadOverrideBinds()
@@ -503,7 +503,7 @@ func (n *NiriProvider) writeOverrideBinds(binds map[string]*overrideBind) error 
 
 func (n *NiriProvider) getBindSortPriority(action string) int {
 	switch {
-	case strings.HasPrefix(action, "spawn") && strings.Contains(action, "dms"):
+	case strings.HasPrefix(action, "spawn") && strings.Contains(action, "dankestia"):
 		return 0
 	case strings.Contains(action, "workspace"):
 		return 1
@@ -631,7 +631,7 @@ func (n *NiriProvider) isNumericArg(val string) bool {
 }
 
 func (n *NiriProvider) validateBindsContent(content string) error {
-	tmpFile, err := os.CreateTemp("", "dms-binds-*.kdl")
+	tmpFile, err := os.CreateTemp("", "dankestia-binds-*.kdl")
 	if err != nil {
 		return fmt.Errorf("failed to create temp file: %w", err)
 	}

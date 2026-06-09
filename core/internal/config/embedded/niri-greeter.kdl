@@ -3,7 +3,7 @@ hotkey-overlay {
 }
 
 environment {
-    DMS_RUN_GREETER "1"
+    DANKESTIA_RUN_GREETER "1"
 }
 
 gestures {

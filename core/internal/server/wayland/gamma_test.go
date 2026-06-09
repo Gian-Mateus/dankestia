@@ -3,7 +3,7 @@ package wayland
 import (
 	"testing"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/utils"
+	"github.com/AvengeMedia/Dankestia/core/internal/utils"
 )
 
 func TestGenerateGammaRamp(t *testing.T) {

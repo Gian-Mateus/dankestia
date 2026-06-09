@@ -1,8 +1,8 @@
-# DankMaterialShell
+# Dankestia
 
 <div align="center">
   <a href="https://danklinux.com">
-    <img src="assets/danklogo.svg" alt="DankMaterialShell" width="200">
+    <img src="assets/danklogo.svg" alt="Dankestia" width="200">
   </a>
 
 ### A modern desktop shell for Wayland
@@ -10,30 +10,30 @@
 Built with [Quickshell](https://quickshell.org/) and [Go](https://go.dev/)
 
 [![Documentation](https://img.shields.io/badge/docs-danklinux.com-9ccbfb?style=for-the-badge&labelColor=101418)](https://danklinux.com/docs)
-[![GitHub stars](https://img.shields.io/github/stars/AvengeMedia/DankMaterialShell?style=for-the-badge&labelColor=101418&color=ffd700)](https://github.com/AvengeMedia/DankMaterialShell/stargazers)
-[![GitHub License](https://img.shields.io/github/license/AvengeMedia/DankMaterialShell?style=for-the-badge&labelColor=101418&color=b9c8da)](https://github.com/AvengeMedia/DankMaterialShell/blob/master/LICENSE)
-[![GitHub release](https://img.shields.io/github/v/release/AvengeMedia/DankMaterialShell?style=for-the-badge&labelColor=101418&color=9ccbfb)](https://github.com/AvengeMedia/DankMaterialShell/releases)
-[![Arch version](https://img.shields.io/archlinux/v/extra/x86_64/dms-shell?style=for-the-badge&labelColor=101418&color=9ccbfb)](https://archlinux.org/packages/extra/x86_64/dms-shell/)
-[![AUR version (git)](<https://img.shields.io/aur/version/dms-shell-git?style=for-the-badge&labelColor=101418&color=9ccbfb&label=AUR%20(git)>)](https://aur.archlinux.org/packages/dms-shell-git)
+[![GitHub stars](https://img.shields.io/github/stars/AvengeMedia/Dankestia?style=for-the-badge&labelColor=101418&color=ffd700)](https://github.com/AvengeMedia/Dankestia/stargazers)
+[![GitHub License](https://img.shields.io/github/license/AvengeMedia/Dankestia?style=for-the-badge&labelColor=101418&color=b9c8da)](https://github.com/AvengeMedia/Dankestia/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/v/release/AvengeMedia/Dankestia?style=for-the-badge&labelColor=101418&color=9ccbfb)](https://github.com/AvengeMedia/Dankestia/releases)
+[![Arch version](https://img.shields.io/archlinux/v/extra/x86_64/dankestia-shell?style=for-the-badge&labelColor=101418&color=9ccbfb)](https://archlinux.org/packages/extra/x86_64/dankestia-shell/)
+[![AUR version (git)](<https://img.shields.io/aur/version/dankestia-shell-git?style=for-the-badge&labelColor=101418&color=9ccbfb&label=AUR%20(git)>)](https://aur.archlinux.org/packages/dankestia-shell-git)
 [![Ko-Fi donate](https://img.shields.io/badge/donate-kofi?style=for-the-badge&logo=ko-fi&logoColor=ffffff&label=ko-fi&labelColor=101418&color=f16061&link=https%3A%2F%2Fko-fi.com%2Fdanklinux)](https://ko-fi.com/danklinux)
 
 </div>
 
-DankMaterialShell is a complete desktop shell for [niri](https://github.com/YaLTeR/niri), [Hyprland](https://hyprland.org/), [MangoWC](https://github.com/DreamMaoMao/mangowc), [Sway](https://swaywm.org), [labwc](https://labwc.github.io/), [Scroll](https://github.com/dawsers/scroll), [Miracle WM](https://github.com/miracle-wm-org/miracle-wm), and other Wayland compositors. It replaces waybar, swaylock, swayidle, mako, fuzzel, polkit, and everything else you'd normally stitch together to make a desktop.
+Dankestia is a complete desktop shell for [niri](https://github.com/YaLTeR/niri), [Hyprland](https://hyprland.org/), [MangoWC](https://github.com/DreamMaoMao/mangowc), [Sway](https://swaywm.org), [labwc](https://labwc.github.io/), [Scroll](https://github.com/dawsers/scroll), [Miracle WM](https://github.com/miracle-wm-org/miracle-wm), and other Wayland compositors. It replaces waybar, swaylock, swayidle, mako, fuzzel, polkit, and everything else you'd normally stitch together to make a desktop.
 
 ## Repository Structure
 
 This is a monorepo containing both the shell interface and the core backend services:
 
 ```
-DankMaterialShell/
+Dankestia/
 ├── quickshell/         # QML-based shell interface
 │   ├── Modules/        # UI components (panels, widgets, overlays)
 │   ├── Services/       # System integration (audio, network, bluetooth)
 │   ├── Widgets/        # Reusable UI controls
 │   └── Common/         # Shared resources and themes
 ├── core/               # Go backend and CLI
-│   ├── cmd/            # dms CLI and dankinstall binaries
+│   ├── cmd/            # dankestia CLI and dankinstall binaries
 │   ├── internal/       # System integration, IPC, distro support
 │   └── pkg/            # Shared packages
 ├── distro/             # Distribution packaging
@@ -73,7 +73,7 @@ https://github.com/user-attachments/assets/1200a739-7770-4601-8b85-695ca527819a
 curl -fsSL https://install.danklinux.com | sh
 ```
 
-One command installs DMS and all dependencies on Arch, Fedora, Debian, Ubuntu, openSUSE, or Gentoo.
+One command installs DANKESTIA and all dependencies on Arch, Fedora, Debian, Ubuntu, openSUSE, or Gentoo.
 
 **[Manual installation guide](https://danklinux.com/docs/dankmaterialshell/installation)**
 
@@ -114,12 +114,12 @@ Works best with [niri](https://github.com/YaLTeR/niri), [Hyprland](https://hyprl
 Control the shell from the command line or keybinds:
 
 ```bash
-dms run              # Start the shell
-dms ipc call spotlight toggle
-dms ipc call audio setvolume 50
-dms ipc call wallpaper set /path/to/image.jpg
-dms brightness list  # List available displays
-dms plugins search   # Browse plugin registry
+dankestia run              # Start the shell
+dankestia ipc call spotlight toggle
+dankestia ipc call audio setvolume 50
+dankestia ipc call wallpaper set /path/to/image.jpg
+dankestia brightness list  # List available displays
+dankestia plugins search   # Browse plugin registry
 ```
 
 [Full CLI and IPC documentation](https://danklinux.com/docs/dankmaterialshell/keybinds-ipc)
@@ -146,7 +146,7 @@ See component-specific documentation:
 
 ```bash
 cd core
-make              # Build dms CLI
+make              # Build dankestia CLI
 make dankinstall  # Build installer
 ```
 
@@ -160,10 +160,10 @@ quickshell -p quickshell/
 
 ```nix
 {
-  inputs.dms.url = "github:AvengeMedia/DankMaterialShell";
+  inputs.dankestia.url = "github:AvengeMedia/Dankestia";
 
   # Use in home-manager or NixOS configuration
-  imports = [ inputs.dms.homeModules.dank-material-shell ];
+  imports = [ inputs.dankestia.homeModules.dank-material-shell ];
 }
 ```
 
@@ -188,7 +188,7 @@ For documentation contributions, see [DankLinux-Docs](https://github.com/AvengeM
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=AvengeMedia/DankMaterialShell&type=date&legend=top-left)](https://www.star-history.com/#AvengeMedia/DankMaterialShell&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=AvengeMedia/Dankestia&type=date&legend=top-left)](https://www.star-history.com/#AvengeMedia/Dankestia&type=date&legend=top-left)
 
 ## License
 

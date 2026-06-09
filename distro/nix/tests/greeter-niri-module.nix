@@ -4,7 +4,7 @@
   ...
 }:
 pkgs.testers.runNixOSTest {
-  name = "dms-greeter-niri-module";
+  name = "dankestia-greeter-niri-module";
 
   nodes.machine = {
     imports = [
@@ -45,9 +45,9 @@ pkgs.testers.runNixOSTest {
 
     greetd_config_path = config_match.group(1)
     greetd_config = machine.succeed(f"cat {greetd_config_path}")
-    t.assertIn("dms-greeter", greetd_config)
+    t.assertIn("dankestia-greeter", greetd_config)
 
-    script_match = re.search(r'command\s*=\s*"([^"]+/bin/dms-greeter)"', greetd_config)
+    script_match = re.search(r'command\s*=\s*"([^"]+/bin/dankestia-greeter)"', greetd_config)
     if script_match is None:
         raise AssertionError(greetd_config)
 
@@ -55,6 +55,6 @@ pkgs.testers.runNixOSTest {
     script = machine.succeed(f"cat {script_path}")
     t.assertIn("--command", script)
     t.assertIn("niri", script)
-    t.assertIn("/share/quickshell/dms", script)
+    t.assertIn("/share/quickshell/dankestia", script)
   '';
 }

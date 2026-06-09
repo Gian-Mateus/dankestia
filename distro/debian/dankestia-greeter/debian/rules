@@ -1,0 +1,50 @@
+#!/usr/bin/make -f
+
+export DH_VERBOSE = 1
+
+DEB_VERSION := $(shell dpkg-parsechangelog -S Version)
+UPSTREAM_VERSION := $(shell echo $(DEB_VERSION) | sed 's/-[^-]*$$//')
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	: nothing to build, we use prebuilt tarball content
+
+override_dh_auto_install:
+	# Same pattern as dankestia: upstream from combined tarball (native format)
+	# Build root is either . (we're inside dankestia-qml) or has dankestia-qml/ subdir
+	SOURCE_DIR=""; \
+	if [ -d dankestia-qml ]; then SOURCE_DIR="dankestia-qml"; \
+	elif [ -f Modules/Greetd/assets/dankestia-greeter ]; then SOURCE_DIR="."; \
+	fi; \
+	if [ -n "$$SOURCE_DIR" ]; then \
+		mkdir -p debian/dankestia-greeter/usr/share/quickshell/dankestia-greeter && \
+		( cd $$SOURCE_DIR && tar cf - --exclude=debian . ) | \
+		( cd debian/dankestia-greeter/usr/share/quickshell/dankestia-greeter && tar xf - ) && \
+		install -Dm755 $$SOURCE_DIR/Modules/Greetd/assets/dankestia-greeter \
+			debian/dankestia-greeter/usr/bin/dankestia-greeter && \
+		install -Dm644 $$SOURCE_DIR/Modules/Greetd/README.md \
+			debian/dankestia-greeter/usr/share/doc/dankestia-greeter/README.md && \
+		install -Dm644 $$SOURCE_DIR/LICENSE \
+			debian/dankestia-greeter/usr/share/doc/dankestia-greeter/LICENSE && \
+		install -Dpm0644 $$SOURCE_DIR/systemd/tmpfiles-dankestia-greeter.conf \
+			debian/dankestia-greeter/usr/lib/tmpfiles.d/dankestia-greeter.conf && \
+		install -Dm644 $$SOURCE_DIR/systemd/sysusers-dankestia-greeter.conf \
+			debian/dankestia-greeter/usr/lib/sysusers.d/dankestia-greeter.conf; \
+	else \
+		echo "ERROR: No upstream source (dankestia-qml or Modules/Greetd/assets/dankestia-greeter)!" && \
+		echo "Contents of current directory:" && ls -la && exit 1; \
+	fi
+
+	# Remove build and development files
+	rm -rf debian/dankestia-greeter/usr/share/quickshell/dankestia-greeter/core
+	rm -rf debian/dankestia-greeter/usr/share/quickshell/dankestia-greeter/distro
+	rm -rf debian/dankestia-greeter/usr/share/quickshell/dankestia-greeter/.git*
+	rm -f debian/dankestia-greeter/usr/share/quickshell/dankestia-greeter/.gitignore
+	rm -rf debian/dankestia-greeter/usr/share/quickshell/dankestia-greeter/.github
+
+override_dh_auto_clean:
+	rm -rf dankestia-qml
+	# When build root is dankestia-qml itself, we're inside it - nothing extra to remove
+	dh_auto_clean

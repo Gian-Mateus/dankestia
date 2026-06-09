@@ -24,8 +24,8 @@ in
     default = "graphical-session.target";
   };
   config = lib.mkIf cfg.enable {
-    systemd.user.services.dms = lib.mkIf cfg.systemd.enable {
-      description = "DankMaterialShell";
+    systemd.user.services.dankestia = lib.mkIf cfg.systemd.enable {
+      description = "Dankestia";
       path = lib.mkForce [ ];
 
       partOf = [ cfg.systemd.target ];
@@ -42,7 +42,7 @@ in
     environment.systemPackages = [ cfg.quickshell.package ] ++ common.packages;
 
     environment.etc = lib.mapAttrs' (name: value: {
-      name = "xdg/quickshell/dms-plugins/${name}";
+      name = "xdg/quickshell/dankestia-plugins/${name}";
       inherit value;
     }) common.plugins;
 

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/desktop"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/models"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/params"
+	"github.com/AvengeMedia/Dankestia/core/internal/desktop"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/models"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/params"
 )
 
 type defaultResult struct {

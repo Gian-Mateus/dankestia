@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/deps"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/distros"
+	"github.com/AvengeMedia/Dankestia/core/internal/deps"
+	"github.com/AvengeMedia/Dankestia/core/internal/distros"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
@@ -120,15 +120,15 @@ func (m Model) viewInstallingPackages() string {
 	return b.String()
 }
 
-func dmsPackageName(distroID string, dependencies []deps.Dependency) string {
+func dankestiaPackageName(distroID string, dependencies []deps.Dependency) string {
 	config, ok := distros.Registry[distroID]
 	if !ok {
-		return "dms"
+		return "dankestia"
 	}
 
 	var isGit bool
 	for _, dep := range dependencies {
-		if dep.Name == "dms (DankMaterialShell)" {
+		if dep.Name == "dankestia (Dankestia)" {
 			isGit = dep.Variant == deps.VariantGit
 			break
 		}
@@ -137,16 +137,16 @@ func dmsPackageName(distroID string, dependencies []deps.Dependency) string {
 	switch config.Family {
 	case distros.FamilyArch:
 		if isGit {
-			return "dms-shell-git"
+			return "dankestia-shell-git"
 		}
-		return "dms-shell"
+		return "dankestia-shell"
 	case distros.FamilyFedora, distros.FamilyUbuntu, distros.FamilyDebian, distros.FamilySUSE:
 		if isGit {
-			return "dms-git"
+			return "dankestia-git"
 		}
-		return "dms"
+		return "dankestia"
 	default:
-		return "dms"
+		return "dankestia"
 	}
 }
 
@@ -158,7 +158,7 @@ func uninstallCommand(distroID string, dependencies []deps.Dependency) string {
 	if config.Family == distros.FamilyGentoo {
 		return "sudo emerge --deselect gui-apps/dankmaterialshell && sudo emerge --depclean gui-apps/dankmaterialshell"
 	}
-	pkg := dmsPackageName(distroID, dependencies)
+	pkg := dankestiaPackageName(distroID, dependencies)
 	switch config.Family {
 	case distros.FamilyArch:
 		return "sudo pacman -Rs " + pkg
@@ -191,7 +191,7 @@ func (m Model) viewInstallComplete() string {
 		"• Window manager and dependencies installed",
 		"• Terminal and development tools configured",
 		"• Configuration files deployed with backups",
-		"• System optimized for DankMaterialShell",
+		"• System optimized for Dankestia",
 	}
 
 	for _, item := range accomplishments {
@@ -201,7 +201,7 @@ func (m Model) viewInstallComplete() string {
 
 	wm := m.selectedWindowManager()
 
-	// mango launches DMS via `exec-once=dms run` (not a systemd session target)
+	// mango launches DANKESTIA via `exec-once=dankestia run` (not a systemd session target)
 	loginHint := "If you do not have a greeter, login with \"niri-session\" or \"Hyprland\""
 	switch wm {
 	case deps.WindowManagerNiri:
@@ -223,11 +223,11 @@ func (m Model) viewInstallComplete() string {
 
 	b.WriteString(labelStyle.Render("Troubleshooting:") + "\n")
 	if wm == deps.WindowManagerMango {
-		b.WriteString(labelStyle.Render("  Disable autostart: ") + cmdStyle.Render("remove 'exec-once=dms run' from ~/.config/mango/config.conf") + "\n")
-		b.WriteString(labelStyle.Render("  View logs:         ") + cmdStyle.Render("qs -p ~/.config/quickshell/dms log") + "\n")
+		b.WriteString(labelStyle.Render("  Disable autostart: ") + cmdStyle.Render("remove 'exec-once=dankestia run' from ~/.config/mango/config.conf") + "\n")
+		b.WriteString(labelStyle.Render("  View logs:         ") + cmdStyle.Render("qs -p ~/.config/quickshell/dankestia log") + "\n")
 	} else {
-		b.WriteString(labelStyle.Render("  Disable autostart: ") + cmdStyle.Render("systemctl --user disable dms") + "\n")
-		b.WriteString(labelStyle.Render("  View logs:         ") + cmdStyle.Render("journalctl --user -u dms") + "\n")
+		b.WriteString(labelStyle.Render("  Disable autostart: ") + cmdStyle.Render("systemctl --user disable dankestia") + "\n")
+		b.WriteString(labelStyle.Render("  View logs:         ") + cmdStyle.Render("journalctl --user -u dankestia") + "\n")
 	}
 
 	if m.osInfo != nil {

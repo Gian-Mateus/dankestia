@@ -5,8 +5,8 @@ import (
 	"net"
 	"strings"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/plugins"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/models"
+	"github.com/AvengeMedia/Dankestia/core/internal/plugins"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/models"
 )
 
 func HandleSearch(conn net.Conn, req models.Request) {
@@ -66,7 +66,7 @@ func HandleSearch(conn net.Conn, req models.Request) {
 			Dependencies: p.Dependencies,
 			Installed:    installed,
 			FirstParty:   strings.HasPrefix(p.Repo, "https://github.com/AvengeMedia"),
-			RequiresDMS:  p.RequiresDMS,
+			RequiresDANKESTIA:  p.RequiresDANKESTIA,
 		}
 	}
 

@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"syscall"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/log"
+	"github.com/AvengeMedia/Dankestia/core/internal/log"
 	"github.com/godbus/dbus/v5"
 )
 
@@ -77,7 +77,7 @@ func SendNotification(result NotifyResult) {
 	call := obj.Call(
 		notifyInterface+".Notify",
 		0,
-		"DMS",
+		"DANKESTIA",
 		uint32(0),
 		"",
 		summary,

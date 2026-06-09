@@ -37,7 +37,7 @@ func TestResolveGreeterThemeSyncState(t *testing.T) {
   "iconTheme": "Papirus"
 }`,
 			sessionJSON:             `{"isLightMode":true}`,
-			wantSourcePath:          filepath.Join(".cache", "DankMaterialShell", "greeter-colors", "dms-colors.json"),
+			wantSourcePath:          filepath.Join(".cache", "Dankestia", "greeter-colors", "dankestia-colors.json"),
 			wantResolvedWallpaper:   filepath.Join("Pictures", "blue.jpg"),
 			wantDynamicOverrideUsed: true,
 		},
@@ -48,7 +48,7 @@ func TestResolveGreeterThemeSyncState(t *testing.T) {
   "greeterWallpaperPath": ""
 }`,
 			sessionJSON:             `{"isLightMode":false}`,
-			wantSourcePath:          filepath.Join(".cache", "DankMaterialShell", "dms-colors.json"),
+			wantSourcePath:          filepath.Join(".cache", "Dankestia", "dankestia-colors.json"),
 			wantResolvedWallpaper:   "",
 			wantDynamicOverrideUsed: false,
 		},
@@ -59,7 +59,7 @@ func TestResolveGreeterThemeSyncState(t *testing.T) {
   "greeterWallpaperPath": "/tmp/blue.jpg"
 }`,
 			sessionJSON:             `{"isLightMode":false}`,
-			wantSourcePath:          filepath.Join(".cache", "DankMaterialShell", "dms-colors.json"),
+			wantSourcePath:          filepath.Join(".cache", "Dankestia", "dankestia-colors.json"),
 			wantResolvedWallpaper:   "/tmp/blue.jpg",
 			wantDynamicOverrideUsed: false,
 		},
@@ -71,8 +71,8 @@ func TestResolveGreeterThemeSyncState(t *testing.T) {
 			t.Parallel()
 
 			homeDir := t.TempDir()
-			writeTestFile(t, filepath.Join(homeDir, ".config", "DankMaterialShell", "settings.json"), tt.settingsJSON)
-			writeTestFile(t, filepath.Join(homeDir, ".local", "state", "DankMaterialShell", "session.json"), tt.sessionJSON)
+			writeTestFile(t, filepath.Join(homeDir, ".config", "Dankestia", "settings.json"), tt.settingsJSON)
+			writeTestFile(t, filepath.Join(homeDir, ".local", "state", "Dankestia", "session.json"), tt.sessionJSON)
 
 			state, err := resolveGreeterThemeSyncState(homeDir)
 			if err != nil {
@@ -106,7 +106,7 @@ vt = 1
 
 [default_session]
 user = "greeter"
-command = "/usr/bin/dms-greeter --command niri"
+command = "/usr/bin/dankestia-greeter --command niri"
 `
 
 	t.Run("inserts initial session", func(t *testing.T) {

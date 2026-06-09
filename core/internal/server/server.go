@@ -14,29 +14,29 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/geolocation"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/log"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/apppicker"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/bluez"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/brightness"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/clipboard"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/cups"
-	serverDbus "github.com/AvengeMedia/DankMaterialShell/core/internal/server/dbus"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/dwl"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/evdev"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/freedesktop"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/location"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/loginctl"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/models"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/network"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/sysupdate"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/tailscale"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/thememode"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/trayrecovery"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/wayland"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/wlcontext"
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/server/wlroutput"
-	"github.com/AvengeMedia/DankMaterialShell/core/pkg/syncmap"
+	"github.com/AvengeMedia/Dankestia/core/internal/geolocation"
+	"github.com/AvengeMedia/Dankestia/core/internal/log"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/apppicker"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/bluez"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/brightness"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/clipboard"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/cups"
+	serverDbus "github.com/AvengeMedia/Dankestia/core/internal/server/dbus"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/dwl"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/evdev"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/freedesktop"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/location"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/loginctl"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/models"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/network"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/sysupdate"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/tailscale"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/thememode"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/trayrecovery"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/wayland"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/wlcontext"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/wlroutput"
+	"github.com/AvengeMedia/Dankestia/core/pkg/syncmap"
 )
 
 const APIVersion = 24
@@ -79,7 +79,7 @@ var locationManager *location.Manager
 var sysUpdateManager *sysupdate.Manager
 var geoClientInstance geolocation.Client
 
-const dbusClientID = "dms-dbus-client"
+const dbusClientID = "dankestia-dbus-client"
 
 var capabilitySubscribers syncmap.Map[string, chan ServerInfo]
 var cupsSubscribers syncmap.Map[string, bool]
@@ -116,7 +116,7 @@ func FindSocket() (string, error) {
 			return filepath.Join(dir, entry.Name()), nil
 		}
 	}
-	return "", fmt.Errorf("no dms socket found")
+	return "", fmt.Errorf("no dankestia socket found")
 }
 
 func cleanupStaleSockets() {
@@ -1395,7 +1395,7 @@ func Start(printDocs bool) error {
 	defer listener.Close()
 	defer cleanupManagers()
 
-	log.Infof("DMS API Server listening on: %s", socketPath)
+	log.Infof("DANKESTIA API Server listening on: %s", socketPath)
 	log.Infof("API Version: %d", APIVersion)
 	log.Info("Protocol: JSON over Unix socket")
 	log.Info("Request format: {\"id\": <any>, \"method\": \"...\", \"params\": {...}}")
@@ -1617,8 +1617,8 @@ func Start(printDocs bool) error {
 			return
 		}
 
-		ch := loginctlManager.Subscribe("dms-lock-bridge")
-		defer loginctlManager.Unsubscribe("dms-lock-bridge")
+		ch := loginctlManager.Subscribe("dankestia-lock-bridge")
+		defer loginctlManager.Unsubscribe("dankestia-lock-bridge")
 
 		initial := loginctlManager.GetState()
 		lastLocked := initial.Locked

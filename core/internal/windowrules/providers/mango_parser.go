@@ -8,11 +8,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/AvengeMedia/DankMaterialShell/core/internal/windowrules"
+	"github.com/AvengeMedia/Dankestia/core/internal/windowrules"
 )
 
-// Mango window rules are flat `windowrule=key:value,...` lines. DMS-managed rules
-// live in dms/windowrules.conf (sourced from config.conf), each preceded by an
+// Mango window rules are flat `windowrule=key:value,...` lines. DANKESTIA-managed rules
+// live in dankestia/windowrules.conf (sourced from config.conf), each preceded by an
 // `# @id=<id> @name=<name>` comment so they round-trip.
 
 type MangoWindowRule struct {
@@ -58,7 +58,7 @@ func mangoConfigPath(configDir string) string {
 }
 
 func mangoOverridePath(configDir string) string {
-	return filepath.Join(configDir, "dms", "windowrules.conf")
+	return filepath.Join(configDir, "dankestia", "windowrules.conf")
 }
 
 // parseMangoRulesFile reads a config file and returns its windowrule= lines.
@@ -79,8 +79,8 @@ func parseMangoRulesFile(path, source string) []MangoWindowRule {
 
 type MangoRulesParseResult struct {
 	Rules            []MangoWindowRule
-	DMSRulesIncluded bool
-	DMSStatus        *windowrules.DMSRulesStatus
+	DANKESTIARulesIncluded bool
+	DANKESTIAStatus        *windowrules.DANKESTIARulesStatus
 }
 
 func ParseMangoWindowRules(configDir string) (*MangoRulesParseResult, error) {
@@ -89,13 +89,13 @@ func ParseMangoWindowRules(configDir string) (*MangoRulesParseResult, error) {
 
 	var rules []MangoWindowRule
 	rules = append(rules, parseMangoRulesFile(mainPath, "config.conf")...)
-	rules = append(rules, parseMangoRulesFile(overridePath, "dms/windowrules.conf")...)
+	rules = append(rules, parseMangoRulesFile(overridePath, "dankestia/windowrules.conf")...)
 
-	included := mangoDMSRulesIncluded(mainPath)
+	included := mangoDANKESTIARulesIncluded(mainPath)
 	return &MangoRulesParseResult{
 		Rules:            rules,
-		DMSRulesIncluded: included,
-		DMSStatus: &windowrules.DMSRulesStatus{
+		DANKESTIARulesIncluded: included,
+		DANKESTIAStatus: &windowrules.DANKESTIARulesStatus{
 			Exists:        fileExists(overridePath),
 			Included:      included,
 			Effective:     included,
@@ -110,14 +110,14 @@ func fileExists(path string) bool {
 	return err == nil
 }
 
-func mangoDMSRulesIncluded(mainPath string) bool {
+func mangoDANKESTIARulesIncluded(mainPath string) bool {
 	data, err := os.ReadFile(mainPath)
 	if err != nil {
 		return false
 	}
 	for _, line := range strings.Split(string(data), "\n") {
 		trimmed := strings.TrimSpace(line)
-		if strings.HasPrefix(trimmed, "source") && strings.Contains(trimmed, "dms/windowrules.conf") {
+		if strings.HasPrefix(trimmed, "source") && strings.Contains(trimmed, "dankestia/windowrules.conf") {
 			return true
 		}
 	}
@@ -126,9 +126,9 @@ func mangoDMSRulesIncluded(mainPath string) bool {
 
 func mangoIncludeMessage(included bool) string {
 	if included {
-		return "DMS window rules are sourced from config.conf"
+		return "DANKESTIA window rules are sourced from config.conf"
 	}
-	return "Add `source=./dms/windowrules.conf` to config.conf to apply DMS window rules"
+	return "Add `source=./dankestia/windowrules.conf` to config.conf to apply DANKESTIA window rules"
 }
 
 func mangoBoolField(fields map[string]string, key string) *bool {
@@ -259,13 +259,13 @@ func (p *MangoWritableProvider) GetRuleSet() (*windowrules.RuleSet, error) {
 		Title:            "Mango Window Rules",
 		Provider:         "mango",
 		Rules:            ConvertMangoRulesToWindowRules(result.Rules),
-		DMSRulesIncluded: result.DMSRulesIncluded,
-		DMSStatus:        result.DMSStatus,
+		DANKESTIARulesIncluded: result.DANKESTIARulesIncluded,
+		DANKESTIAStatus:        result.DANKESTIAStatus,
 	}, nil
 }
 
 func (p *MangoWritableProvider) SetRule(rule windowrules.WindowRule) error {
-	rules, err := p.LoadDMSRules()
+	rules, err := p.LoadDANKESTIARules()
 	if err != nil {
 		rules = []windowrules.WindowRule{}
 	}
@@ -280,11 +280,11 @@ func (p *MangoWritableProvider) SetRule(rule windowrules.WindowRule) error {
 	if !found {
 		rules = append(rules, rule)
 	}
-	return p.writeDMSRules(rules)
+	return p.writeDANKESTIARules(rules)
 }
 
 func (p *MangoWritableProvider) RemoveRule(id string) error {
-	rules, err := p.LoadDMSRules()
+	rules, err := p.LoadDANKESTIARules()
 	if err != nil {
 		return err
 	}
@@ -294,11 +294,11 @@ func (p *MangoWritableProvider) RemoveRule(id string) error {
 			newRules = append(newRules, r)
 		}
 	}
-	return p.writeDMSRules(newRules)
+	return p.writeDANKESTIARules(newRules)
 }
 
 func (p *MangoWritableProvider) ReorderRules(ids []string) error {
-	rules, err := p.LoadDMSRules()
+	rules, err := p.LoadDANKESTIARules()
 	if err != nil {
 		return err
 	}
@@ -316,11 +316,11 @@ func (p *MangoWritableProvider) ReorderRules(ids []string) error {
 	for _, r := range ruleMap {
 		newRules = append(newRules, r)
 	}
-	return p.writeDMSRules(newRules)
+	return p.writeDANKESTIARules(newRules)
 }
 
-// LoadDMSRules parses only the DMS override file, preserving @id/@name metadata.
-func (p *MangoWritableProvider) LoadDMSRules() ([]windowrules.WindowRule, error) {
+// LoadDANKESTIARules parses only the DANKESTIA override file, preserving @id/@name metadata.
+func (p *MangoWritableProvider) LoadDANKESTIARules() ([]windowrules.WindowRule, error) {
 	data, err := os.ReadFile(p.GetOverridePath())
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -340,7 +340,7 @@ func (p *MangoWritableProvider) LoadDMSRules() ([]windowrules.WindowRule, error)
 			continue
 		}
 		if m := mangoWindowRuleRegex.FindStringSubmatch(trimmed); m != nil {
-			converted := ConvertMangoRulesToWindowRules([]MangoWindowRule{{Source: "dms/windowrules.conf", Fields: parseMangoWindowRuleLine(m[1])}})
+			converted := ConvertMangoRulesToWindowRules([]MangoWindowRule{{Source: "dankestia/windowrules.conf", Fields: parseMangoWindowRuleLine(m[1])}})
 			wr := converted[0]
 			if curID != "" {
 				wr.ID = curID
@@ -356,14 +356,14 @@ func (p *MangoWritableProvider) LoadDMSRules() ([]windowrules.WindowRule, error)
 	return rules, nil
 }
 
-func (p *MangoWritableProvider) writeDMSRules(rules []windowrules.WindowRule) error {
+func (p *MangoWritableProvider) writeDANKESTIARules(rules []windowrules.WindowRule) error {
 	overridePath := p.GetOverridePath()
 	if err := os.MkdirAll(filepath.Dir(overridePath), 0o755); err != nil {
 		return err
 	}
 
 	var sb strings.Builder
-	sb.WriteString("# Auto-generated by DMS - DMS-managed mango window rules\n\n")
+	sb.WriteString("# Auto-generated by DANKESTIA - DANKESTIA-managed mango window rules\n\n")
 	for i, r := range rules {
 		id := r.ID
 		if id == "" {
