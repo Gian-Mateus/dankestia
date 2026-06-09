@@ -1,0 +1,9 @@
+module Caelestia.Services
+singleton Cpu Cpu.qml
+singleton Memory Memory.qml
+singleton NetworkUsage NetworkUsage.qml
+singleton Power Power.qml
+singleton Audio Audio.qml
+singleton AudioCava AudioCava.qml
+singleton Settings Settings.qml
+singleton DBus DBus.qml

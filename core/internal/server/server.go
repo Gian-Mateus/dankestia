@@ -29,6 +29,7 @@ import (
 	"github.com/AvengeMedia/Dankestia/core/internal/server/loginctl"
 	"github.com/AvengeMedia/Dankestia/core/internal/server/models"
 	"github.com/AvengeMedia/Dankestia/core/internal/server/network"
+	"github.com/AvengeMedia/Dankestia/core/internal/server/sysinfo"
 	"github.com/AvengeMedia/Dankestia/core/internal/server/sysupdate"
 	"github.com/AvengeMedia/Dankestia/core/internal/server/tailscale"
 	"github.com/AvengeMedia/Dankestia/core/internal/server/thememode"
@@ -77,6 +78,7 @@ var themeModeManager *thememode.Manager
 var trayRecoveryManager *trayrecovery.Manager
 var locationManager *location.Manager
 var sysUpdateManager *sysupdate.Manager
+var sysInfoManager *sysinfo.Manager
 var geoClientInstance geolocation.Client
 
 const dbusClientID = "dankestia-dbus-client"
@@ -410,6 +412,19 @@ func InitializeSysUpdateManager() error {
 	return nil
 }
 
+func InitializeSysInfoManager() error {
+	manager, err := sysinfo.NewManager()
+	if err != nil {
+		log.Warnf("Failed to initialize sysinfo manager: %v", err)
+		return err
+	}
+
+	sysInfoManager = manager
+
+	log.Info("Sysinfo manager initialized")
+	return nil
+}
+
 func handleConnection(conn net.Conn) {
 	defer conn.Close()
 
@@ -500,6 +515,10 @@ func getCapabilities() Capabilities {
 		caps = append(caps, "sysupdate")
 	}
 
+	if sysInfoManager != nil {
+		caps = append(caps, "sysinfo")
+	}
+
 	return Capabilities{Capabilities: caps}
 }
 
@@ -572,6 +591,10 @@ func getServerInfo() ServerInfo {
 
 	if sysUpdateManager != nil {
 		caps = append(caps, "sysupdate")
+	}
+
+	if sysInfoManager != nil {
+		caps = append(caps, "sysinfo")
 	}
 
 	return ServerInfo{
@@ -768,6 +791,38 @@ func handleSubscribe(conn net.Conn, req models.Request) {
 					}
 					select {
 					case eventChan <- ServiceEvent{Service: "freedesktop", Data: state}:
+					case <-stopChan:
+						return
+					}
+				case <-stopChan:
+					return
+				}
+			}
+		}()
+	}
+
+	if shouldSubscribe("sysinfo") && sysInfoManager != nil {
+		wg.Add(1)
+		sysInfoChan := sysInfoManager.Subscribe(clientID + "-sysinfo")
+		go func() {
+			defer wg.Done()
+			defer sysInfoManager.Unsubscribe(clientID + "-sysinfo")
+
+			initialState := sysInfoManager.GetState()
+			select {
+			case eventChan <- ServiceEvent{Service: "sysinfo", Data: initialState}:
+			case <-stopChan:
+				return
+			}
+
+			for {
+				select {
+				case state, ok := <-sysInfoChan:
+					if !ok {
+						return
+					}
+					select {
+					case eventChan <- ServiceEvent{Service: "sysinfo", Data: state}:
 					case <-stopChan:
 						return
 					}
@@ -1674,6 +1729,14 @@ func Start(printDocs bool) error {
 
 		if err := InitializeLocationManager(geoClient); err != nil {
 			log.Warnf("Location manager unavailable: %v", err)
+		} else {
+			notifyCapabilityChange()
+		}
+	}()
+
+	go func() {
+		if err := InitializeSysInfoManager(); err != nil {
+			log.Warnf("SysInfo manager unavailable: %v", err)
 		} else {
 			notifyCapabilityChange()
 		}
