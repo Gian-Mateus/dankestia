@@ -12,7 +12,7 @@ candidates = []
 def is_icon_or_symbol(s):
     if len(s) == 0:
         return True
-    if s in ["caelestiafetch.sh", "Caelestia", "Dankestia", "°C", "°F", "•••", "•", ">"]:
+    if s in ["dankestiafetch.sh", "Dankestia", "Dankestia", "°C", "°F", "•••", "•", ">"]:
         return True
     # If all lowercase with underscores, highly likely a material icon
     if re.match(r'^[a-z_]+$', s):

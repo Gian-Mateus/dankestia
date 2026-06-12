@@ -183,7 +183,7 @@ For documentation contributions, see [DankLinux-Docs](https://github.com/AvengeM
 - [quickshell](https://quickshell.org/) - Shell framework
 - [niri](https://github.com/YaLTeR/niri) - Scrolling window manager
 - [Ly-sec](http://github.com/ly-sec) - Wallpaper effects from [Noctalia](https://github.com/noctalia-dev/noctalia-shell)
-- [soramanew](https://github.com/soramanew) - [Caelestia](https://github.com/caelestia-dots/shell) inspiration
+- [soramanew](https://github.com/soramanew) - [Dankestia](https://github.com/dankestia-dots/shell) inspiration
 - [end-4](https://github.com/end-4) - [dots-hyprland](https://github.com/end-4/dots-hyprland) inspiration
 
 ## Star History

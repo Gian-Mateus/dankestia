@@ -14,7 +14,7 @@ def is_icon_or_symbol(s):
     if len(s) == 0:
         return True
     # Ignore single chars like ":" or symbols
-    if s in ["caelestiafetch.sh", "Caelestia", "Dankestia", "°C", "°F", "•••", "•", ">", "/", ":", " "]:
+    if s in ["dankestiafetch.sh", "Dankestia", "Dankestia", "°C", "°F", "•••", "•", ">", "/", ":", " "]:
         return True
     # Ignore material icons (all lowercase, underscores)
     if re.match(r'^[a-z0-9_]+$', s):
