@@ -1,0 +1,77 @@
+--- EXACT MATCHES: 154 ---
+--- RENAMED CANDIDATES (>70% similarity): 14 ---
+modules/lock/center/InputField.qml -> modules/lock/InputField.qml (0.87)
+modules/BatteryMonitor.qml -> services/BatteryMonitor.qml (0.79)
+modules/bar/popouts/PopoutState.qml -> modules/controlcenter/state/EthernetState.qml (0.67)
+components/controls/CollapsibleSection.qml -> components/widgets/DankCollapsibleSection.qml (0.62)
+services/Screens.qml -> services/Cava.qml (0.61)
+modules/dashboard/WeatherTab.qml -> modules/dashboard/WeatherPanel.qml (0.56)
+modules/GSFLoader.qml -> components/effects/OpacityMask.qml (0.53)
+modules/launcher/services/M3Variants.qml -> services/M3Variants.qml (0.52)
+modules/sidebar/Props.qml -> components/effects/OpacityMask.qml (0.50)
+modules/ConfigToasts.qml -> modules/osd/Interactions.qml (0.46)
+modules/sidebar/Content.qml -> modules/controlcenter/components/SettingsHeader.qml (0.44)
+modules/lock/center/PasswordInput.qml -> modules/launcher/items/ClipItem.qml (0.42)
+modules/windowinfo/WindowInfo.qml -> modules/controlcenter/WindowFactory.qml (0.40)
+modules/dashboard/media/LyricsAndSelector.qml -> modules/controlcenter/components/DeviceDetails.qml (0.40)
+
+--- TRULY MISSING: 59 ---
+components/AnchorAnim.qml
+components/AnimLoader.qml
+components/DashboardState.qml
+components/DrawerVisibilities.qml
+components/containers/VerticalFadeFlickable.qml
+components/controls/ButtonBase.qml
+components/controls/LoadingIndicator.qml
+components/controls/StyledProgressBar.qml
+components/effects/Mask.qml
+components/images/FadeImage.qml
+components/misc/CustomShortcut.qml
+components/widgets/CoverArt.qml
+components/widgets/WavyTopRect.qml
+modules/IdleMonitors.qml
+modules/bar/components/workspaces/SpecialWorkspaces.qml
+modules/bar/popouts/ActiveWindow.qml
+modules/bar/popouts/ClipWrapper.qml
+modules/bar/popouts/kblayout/KbLayout.qml
+modules/bar/popouts/kblayout/KbLayoutModel.qml
+modules/dashboard/dash/SmallWeather.qml
+modules/dashboard/media/BackgroundShapes.qml
+modules/dashboard/media/CoverVisualiser.qml
+modules/dashboard/media/Details.qml
+modules/dashboard/media/LyricList.qml
+modules/dashboard/media/LyricsInfo.qml
+modules/dashboard/performance/BatteryTank.qml
+modules/dashboard/performance/HeroCard.qml
+modules/dashboard/performance/MemoryCard.qml
+modules/dashboard/performance/NetworkCard.qml
+modules/dashboard/performance/StorageCard.qml
+modules/drawers/ContentWindow.qml
+modules/drawers/Regions.qml
+modules/launcher/services/Schemes.qml
+modules/lock/center/Clock.qml
+modules/lock/center/ProfilePic.qml
+modules/lock/center/StateMessage.qml
+modules/lock/weather/BriefInfo.qml
+modules/lock/weather/Forecast.qml
+modules/sidebar/Notif.qml
+modules/sidebar/NotifActionList.qml
+modules/sidebar/NotifDock.qml
+modules/sidebar/NotifDockList.qml
+modules/sidebar/NotifGroup.qml
+modules/sidebar/NotifGroupList.qml
+modules/sidebar/Wrapper.qml
+modules/utilities/RecordingDeleteModal.qml
+modules/utilities/cards/IdleInhibit.qml
+modules/utilities/cards/Record.qml
+modules/utilities/cards/RecordingList.qml
+modules/utilities/cards/Toggles.qml
+modules/windowinfo/Buttons.qml
+modules/windowinfo/Details.qml
+modules/windowinfo/Preview.qml
+services/GameMode.qml
+services/Hypr.qml
+services/Nmcli.qml
+services/NotifData.qml
+services/Recorder.qml
+shell.qml
