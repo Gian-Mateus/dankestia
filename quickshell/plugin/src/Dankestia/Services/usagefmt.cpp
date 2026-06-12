@@ -12,7 +12,7 @@ bool finitePositive(qreal v) {
 
 } // namespace
 
-namespace caelestia::services::usagefmt {
+namespace dankestia::services::usagefmt {
 
 FormatResult UsageFmt::formatKib(qreal kib, qreal total) const {
     if (!finitePositive(kib) || !finitePositive(total)) {
@@ -30,4 +30,4 @@ FormatResult UsageFmt::formatKib(qreal kib, qreal total) const {
     return { kib, total, "KiB" };
 }
 
-} // namespace caelestia::services::usagefmt
+} // namespace dankestia::services::usagefmt

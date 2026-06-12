@@ -2,7 +2,7 @@
 
 #include "configobject.hpp"
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 class NexusConfig : public ConfigObject {
     Q_OBJECT
@@ -16,4 +16,4 @@ public:
         : ConfigObject(parent) {}
 };
 
-} // namespace caelestia::config
+} // namespace dankestia::config

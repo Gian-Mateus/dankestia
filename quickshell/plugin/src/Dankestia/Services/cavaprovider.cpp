@@ -6,10 +6,10 @@
 #include <cstddef>
 #include <qloggingcategory.h>
 
-Q_LOGGING_CATEGORY(lcCava, "caelestia.services.cava", QtInfoMsg)
-Q_LOGGING_CATEGORY(lcCavaProcessor, "caelestia.services.cava.processor", QtInfoMsg)
+Q_LOGGING_CATEGORY(lcCava, "dankestia.services.cava", QtInfoMsg)
+Q_LOGGING_CATEGORY(lcCavaProcessor, "dankestia.services.cava.processor", QtInfoMsg)
 
-namespace caelestia::services {
+namespace dankestia::services {
 
 CavaProcessor::CavaProcessor(QObject* parent)
     : AudioProcessor(parent)
@@ -140,4 +140,4 @@ void CavaProvider::updateValues(QVector<double> values) {
     }
 }
 
-} // namespace caelestia::services
+} // namespace dankestia::services

@@ -11,9 +11,9 @@
 #include <qsavefile.h>
 #include <qurlquery.h>
 
-Q_LOGGING_CATEGORY(lcLyrics, "caelestia.lyrics", QtInfoMsg)
+Q_LOGGING_CATEGORY(lcLyrics, "dankestia.lyrics", QtInfoMsg)
 
-namespace caelestia::services {
+namespace dankestia::services {
 
 using Qt::StringLiterals::operator""_s;
 using Qt::StringLiterals::operator""_ba;
@@ -33,7 +33,7 @@ constexpr qreal kIndexFudge = 0.1;
 
 [[nodiscard]] const QHash<QByteArray, QByteArray>& lrclibHeaders() {
     static const QHash<QByteArray, QByteArray> h = {
-        { "User-Agent"_ba, "caelestia-shell (https://github.com/caelestia-dots/shell)"_ba },
+        { "User-Agent"_ba, "dankestia-shell (https://github.com/dankestia-dots/shell)"_ba },
     };
     return h;
 }
@@ -899,7 +899,7 @@ const QString& Lyrics::cacheDir() {
         if (cache.isEmpty()) {
             cache = QDir::homePath() + u"/.cache"_s;
         }
-        return cache + u"/caelestia/lyrics"_s;
+        return cache + u"/dankestia/lyrics"_s;
     }();
     return s_dir;
 }
@@ -1045,4 +1045,4 @@ QVector<LyricLine> Lyrics::parseLrc(const QString& text) {
     return result;
 }
 
-} // namespace caelestia::services
+} // namespace dankestia::services

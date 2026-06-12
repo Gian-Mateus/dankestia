@@ -1,7 +1,7 @@
 #include "font.hpp"
 #include "appearanceconfig.hpp"
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 // FontStyleBase
 
@@ -260,4 +260,4 @@ void FontTokens::rebuildClock() {
     emit clockChanged();
 }
 
-} // namespace caelestia::config
+} // namespace dankestia::config

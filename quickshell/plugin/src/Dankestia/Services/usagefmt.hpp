@@ -2,7 +2,7 @@
 
 #include <qqmlintegration.h>
 
-namespace caelestia::services::usagefmt {
+namespace dankestia::services::usagefmt {
 
 struct FormatResult {
     Q_GADGET
@@ -27,4 +27,4 @@ public:
     Q_INVOKABLE [[nodiscard]] FormatResult formatKib(qreal kib, qreal total) const;
 };
 
-} // namespace caelestia::services::usagefmt
+} // namespace dankestia::services::usagefmt

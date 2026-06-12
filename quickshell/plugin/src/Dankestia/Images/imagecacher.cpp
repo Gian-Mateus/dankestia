@@ -11,9 +11,9 @@
 #include <qsavefile.h>
 #include <qthreadpool.h>
 
-Q_LOGGING_CATEGORY(lcCacher, "caelestia.images.cacher", QtInfoMsg)
+Q_LOGGING_CATEGORY(lcCacher, "dankestia.images.cacher", QtInfoMsg)
 
-namespace caelestia::images {
+namespace dankestia::images {
 
 namespace {
 
@@ -49,7 +49,7 @@ const QString& ImageCacher::cacheDir() {
         QString cache = qEnvironmentVariable("XDG_CACHE_HOME");
         if (cache.isEmpty())
             cache = QDir::homePath() + QStringLiteral("/.cache");
-        return cache + QStringLiteral("/caelestia/imagecache");
+        return cache + QStringLiteral("/dankestia/imagecache");
     }();
     return s_dir;
 }
@@ -156,4 +156,4 @@ void ImageCacher::runJob(const QString& sourcePath, const QString& cachePath, co
     qCDebug(lcCacher).noquote() << "Saved to" << cachePath;
 }
 
-} // namespace caelestia::images
+} // namespace dankestia::images

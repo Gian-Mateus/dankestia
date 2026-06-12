@@ -6,7 +6,7 @@
 #include <qsharedpointer.h>
 #include <qvariant.h>
 
-namespace caelestia::internal::hypr {
+namespace dankestia::internal::hypr {
 
 class HyprDevices;
 
@@ -16,7 +16,7 @@ class HyprExtras : public QObject {
     Q_MOC_INCLUDE("hyprdevices.hpp")
 
     Q_PROPERTY(QVariantHash options READ options NOTIFY optionsChanged)
-    Q_PROPERTY(caelestia::internal::hypr::HyprDevices* devices READ devices CONSTANT)
+    Q_PROPERTY(dankestia::internal::hypr::HyprDevices* devices READ devices CONSTANT)
 
 public:
     explicit HyprExtras(QObject* parent = nullptr);
@@ -57,4 +57,4 @@ private:
     SocketPtr makeRequest(const QString& request, const std::function<void(bool, QByteArray)>& callback);
 };
 
-} // namespace caelestia::internal::hypr
+} // namespace dankestia::internal::hypr

@@ -3,7 +3,7 @@
 #include <qobject.h>
 #include <qqmlintegration.h>
 
-namespace caelestia::internal {
+namespace dankestia::internal {
 
 class LogindManager : public QObject {
     Q_OBJECT
@@ -24,4 +24,4 @@ private slots:
     void handleUnlockRequested();
 };
 
-} // namespace caelestia::internal
+} // namespace dankestia::internal

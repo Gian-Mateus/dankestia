@@ -2,7 +2,7 @@
 
 #include "configobject.hpp"
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 // WInfoConfig has no serialized properties (serializer returns {})
 // All properties are in AdvancedConfig.winfo
@@ -15,4 +15,4 @@ public:
         : ConfigObject(parent) {}
 };
 
-} // namespace caelestia::config
+} // namespace dankestia::config

@@ -29,7 +29,7 @@ def rename_in_directory(root_dir):
         for file in files:
             filepath = os.path.join(root, file)
             # only process text files, avoid binaries
-            if file.endswith(('.go', '.qml', '.js', '.py', '.md', '.sh', '.service', '.conf', '.desktop', 'Makefile')):
+            if file.endswith(('.go', '.qml', '.js', '.py', '.md', '.sh', '.service', '.conf', '.desktop', 'Makefile', '.cpp', '.hpp', '.c', '.h')):
                 if process_file(filepath):
                     modified_count += 1
                     print(f"Modificado: {filepath}")

@@ -1,6 +1,6 @@
 #include "lyriccandidate.hpp"
 
-namespace caelestia::services {
+namespace dankestia::services {
 
 QString LyricsBackend::toString(Backend b) {
     switch (b) {
@@ -62,4 +62,4 @@ bool LyricCandidate::operator!=(const LyricCandidate& o) const noexcept {
     return !(*this == o);
 }
 
-} // namespace caelestia::services
+} // namespace dankestia::services

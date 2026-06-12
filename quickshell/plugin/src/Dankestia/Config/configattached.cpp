@@ -4,7 +4,7 @@
 
 #include <qquickitem.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 Config::Config(QObject* parent)
     : QQuickAttachedPropertyPropagator(parent) {
@@ -93,4 +93,4 @@ Config* Config::qmlAttachedProperties(QObject* object) {
     return new Config(object);
 }
 
-} // namespace caelestia::config
+} // namespace dankestia::config

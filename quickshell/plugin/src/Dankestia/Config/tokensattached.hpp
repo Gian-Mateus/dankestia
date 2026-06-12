@@ -4,7 +4,7 @@
 #include <qqmlparserstatus.h>
 #include <qquickattachedpropertypropagator.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 class AnimTokens;
 class AppearancePadding;
@@ -28,13 +28,13 @@ class Tokens : public QQuickAttachedPropertyPropagator, public QQmlParserStatus 
     Q_MOC_INCLUDE("tokens.hpp")
 
     Q_PROPERTY(QString screen READ screen WRITE inheritScreen NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::AppearanceRounding* rounding READ rounding NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::AppearanceSpacing* spacing READ spacing NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::AppearancePadding* padding READ padding NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::AppearanceTransparency* transparency READ transparency NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::SizeTokens* sizes READ sizes NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::FontTokens* font READ font NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::AnimTokens* anim READ anim NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::AppearanceRounding* rounding READ rounding NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::AppearanceSpacing* spacing READ spacing NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::AppearancePadding* padding READ padding NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::AppearanceTransparency* transparency READ transparency NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::SizeTokens* sizes READ sizes NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::FontTokens* font READ font NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::AnimTokens* anim READ anim NOTIFY sourceChanged)
 
 public:
     explicit Tokens(QObject* parent = nullptr);
@@ -78,4 +78,4 @@ private:
     AnimTokens* m_anim = nullptr;
 };
 
-} // namespace caelestia::config
+} // namespace dankestia::config

@@ -3,7 +3,7 @@
 #include <libqalculate/qalculate.h>
 #include <qtconcurrentrun.h>
 
-namespace caelestia {
+namespace dankestia {
 
 QMutex Qalculator::s_calculatorMutex;
 
@@ -145,4 +145,4 @@ bool Qalculator::busy() const {
     return m_busy;
 }
 
-} // namespace caelestia
+} // namespace dankestia

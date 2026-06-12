@@ -10,7 +10,7 @@
 #include <qqmlintegration.h>
 #include <qqmllist.h>
 
-namespace caelestia::models {
+namespace dankestia::models {
 
 class FileSystemEntry : public QObject {
     Q_OBJECT
@@ -72,7 +72,7 @@ class FileSystemModel : public QAbstractListModel {
     Q_PROPERTY(Filter filter READ filter WRITE setFilter NOTIFY filterChanged)
     Q_PROPERTY(QStringList nameFilters READ nameFilters WRITE setNameFilters NOTIFY nameFiltersChanged)
 
-    Q_PROPERTY(QQmlListProperty<caelestia::models::FileSystemEntry> entries READ entries NOTIFY entriesChanged)
+    Q_PROPERTY(QQmlListProperty<dankestia::models::FileSystemEntry> entries READ entries NOTIFY entriesChanged)
 
 public:
     enum Filter {
@@ -145,4 +145,4 @@ private:
     [[nodiscard]] bool compareEntries(const FileSystemEntry* a, const FileSystemEntry* b) const;
 };
 
-} // namespace caelestia::models
+} // namespace dankestia::models

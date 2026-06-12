@@ -6,7 +6,7 @@
 #include <qlist.h>
 #include <qqmlengine.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 class AnimCurves : public ConfigObject {
     Q_OBJECT
@@ -381,4 +381,4 @@ private:
     TokenConfig* m_defaults = nullptr;
 };
 
-} // namespace caelestia::config
+} // namespace dankestia::config

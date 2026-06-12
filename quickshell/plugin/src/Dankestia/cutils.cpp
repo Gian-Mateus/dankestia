@@ -9,9 +9,9 @@
 #include <qloggingcategory.h>
 #include <qqmlengine.h>
 
-Q_LOGGING_CATEGORY(lcCUtils, "caelestia.cutils", QtInfoMsg)
+Q_LOGGING_CATEGORY(lcCUtils, "dankestia.cutils", QtInfoMsg)
 
-namespace caelestia {
+namespace dankestia {
 
 void CUtils::saveItem(QQuickItem* target, const QUrl& path) {
     this->saveItem(target, path, QRect(), QJSValue(), QJSValue());
@@ -142,16 +142,16 @@ qreal CUtils::clamp(qreal value, qreal min, qreal max) {
     return qBound(min, value, max);
 }
 
-#ifndef CAELESTIA_VERSION
-#define CAELESTIA_VERSION ""
+#ifndef DANKESTIA_VERSION
+#define DANKESTIA_VERSION ""
 #endif
 
 QString CUtils::version() const {
-    return QStringLiteral(CAELESTIA_VERSION);
+    return QStringLiteral(DANKESTIA_VERSION);
 }
 
 QString CUtils::qtVersion() const {
     return QStringLiteral(QT_VERSION_STR);
 }
 
-} // namespace caelestia
+} // namespace dankestia

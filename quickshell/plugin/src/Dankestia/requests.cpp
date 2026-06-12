@@ -7,9 +7,9 @@
 #include <qnetworkreply.h>
 #include <qnetworkrequest.h>
 
-Q_LOGGING_CATEGORY(lcRequests, "caelestia.requests", QtInfoMsg)
+Q_LOGGING_CATEGORY(lcRequests, "dankestia.requests", QtInfoMsg)
 
-namespace caelestia {
+namespace dankestia {
 
 Requests::Requests(QObject* parent)
     : QObject(parent)
@@ -55,4 +55,4 @@ void Requests::resetCookies() const {
     m_manager->setCookieJar(new QNetworkCookieJar(m_manager));
 }
 
-} // namespace caelestia
+} // namespace dankestia

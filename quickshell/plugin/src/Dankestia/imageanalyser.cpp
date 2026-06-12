@@ -7,9 +7,9 @@
 #include <qloggingcategory.h>
 #include <qquickwindow.h>
 
-Q_LOGGING_CATEGORY(lcImageAnalyser, "caelestia.imageanalyser", QtInfoMsg)
+Q_LOGGING_CATEGORY(lcImageAnalyser, "dankestia.imageanalyser", QtInfoMsg)
 
-namespace caelestia {
+namespace dankestia {
 
 ImageAnalyser::ImageAnalyser(QObject* parent)
     : QObject(parent)
@@ -228,4 +228,4 @@ void ImageAnalyser::analyse(QPromise<AnalyseResult>& promise, const QImage& imag
     promise.addResult(qMakePair(QColor((0xFFu << 24) | dominantColour), count == 0 ? 0.0 : totalLuminance / count));
 }
 
-} // namespace caelestia
+} // namespace dankestia

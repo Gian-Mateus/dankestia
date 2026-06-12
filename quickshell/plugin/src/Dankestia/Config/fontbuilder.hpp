@@ -3,7 +3,7 @@
 #include <qfont.h>
 #include <qqmlintegration.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 class FontBuilder {
     Q_GADGET
@@ -36,4 +36,4 @@ private:
     QFont m_font;
 };
 
-} // namespace caelestia::config
+} // namespace dankestia::config

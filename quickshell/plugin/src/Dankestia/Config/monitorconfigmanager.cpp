@@ -4,13 +4,13 @@
 
 #include <qstandardpaths.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 namespace {
 
 QString monitorConfigDir(const QString& screen) {
     return QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) +
-           QStringLiteral("/caelestia/monitors/") + screen + QStringLiteral("/");
+           QStringLiteral("/dankestia/monitors/") + screen + QStringLiteral("/");
 }
 
 } // namespace
@@ -61,4 +61,4 @@ TokenConfig* MonitorConfigManager::tokensForScreen(const QString& screen) {
     return overlay.tokens;
 }
 
-} // namespace caelestia::config
+} // namespace dankestia::config

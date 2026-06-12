@@ -4,7 +4,7 @@
 
 #include <qquickimageprovider.h>
 
-namespace caelestia::images {
+namespace dankestia::images {
 
 class CachingImageProvider : public QQuickAsyncImageProvider {
 public:
@@ -18,4 +18,4 @@ private:
     FillMode m_fillMode;
 };
 
-} // namespace caelestia::images
+} // namespace dankestia::images

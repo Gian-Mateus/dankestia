@@ -11,7 +11,7 @@ constexpr int ASYNC_BATCH_DESTROY = 4;
 
 } // namespace
 
-namespace caelestia::components {
+namespace dankestia::components {
 
 // --- LazyListViewAttached ---
 
@@ -1105,4 +1105,4 @@ void LazyListView::onModelReset() {
     resetContent();
 }
 
-} // namespace caelestia::components
+} // namespace dankestia::components

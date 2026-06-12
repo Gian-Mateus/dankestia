@@ -2,7 +2,7 @@
 
 #include "cachingimageprovider.hpp"
 
-namespace caelestia::images {
+namespace dankestia::images {
 
 IUtils* IUtils::create(QQmlEngine* engine, QJSEngine* jsEngine) {
     Q_UNUSED(jsEngine);
@@ -39,4 +39,4 @@ QUrl IUtils::urlForPath(const QString& path, int fillMode) {
     return url;
 }
 
-} // namespace caelestia::images
+} // namespace dankestia::images

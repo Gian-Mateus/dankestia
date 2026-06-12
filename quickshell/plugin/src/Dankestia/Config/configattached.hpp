@@ -4,7 +4,7 @@
 
 #include <qquickattachedpropertypropagator.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 class Config : public QQuickAttachedPropertyPropagator, public QQmlParserStatus {
     Q_OBJECT
@@ -31,23 +31,23 @@ class Config : public QQuickAttachedPropertyPropagator, public QQmlParserStatus 
     Q_MOC_INCLUDE("winfoconfig.hpp")
 
     Q_PROPERTY(QString screen READ screen WRITE inheritScreen NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::AppearanceConfig* appearance READ appearance NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::GeneralConfig* general READ general NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::BackgroundConfig* background READ background NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::BarConfig* bar READ bar NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::BorderConfig* border READ border NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::DashboardConfig* dashboard READ dashboard NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::LauncherConfig* launcher READ launcher NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::LockConfig* lock READ lock NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::NexusConfig* nexus READ nexus NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::NotifsConfig* notifs READ notifs NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::OsdConfig* osd READ osd NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::ServiceConfig* services READ services NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::SessionConfig* session READ session NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::SidebarConfig* sidebar READ sidebar NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::UtilitiesConfig* utilities READ utilities NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::WInfoConfig* winfo READ winfo NOTIFY sourceChanged)
-    Q_PROPERTY(const caelestia::config::UserPaths* paths READ paths NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::AppearanceConfig* appearance READ appearance NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::GeneralConfig* general READ general NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::BackgroundConfig* background READ background NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::BarConfig* bar READ bar NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::BorderConfig* border READ border NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::DashboardConfig* dashboard READ dashboard NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::LauncherConfig* launcher READ launcher NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::LockConfig* lock READ lock NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::NexusConfig* nexus READ nexus NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::NotifsConfig* notifs READ notifs NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::OsdConfig* osd READ osd NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::ServiceConfig* services READ services NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::SessionConfig* session READ session NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::SidebarConfig* sidebar READ sidebar NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::UtilitiesConfig* utilities READ utilities NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::WInfoConfig* winfo READ winfo NOTIFY sourceChanged)
+    Q_PROPERTY(const dankestia::config::UserPaths* paths READ paths NOTIFY sourceChanged)
 
 public:
     explicit Config(QObject* parent = nullptr);
@@ -95,4 +95,4 @@ private:
     GlobalConfig* m_config = nullptr;
 };
 
-} // namespace caelestia::config
+} // namespace dankestia::config

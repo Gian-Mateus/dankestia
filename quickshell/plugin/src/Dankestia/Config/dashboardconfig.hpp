@@ -2,7 +2,7 @@
 
 #include "configobject.hpp"
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 class DashboardPerformance : public ConfigObject {
     Q_OBJECT
@@ -41,4 +41,4 @@ public:
         , m_performance(new DashboardPerformance(this)) {}
 };
 
-} // namespace caelestia::config
+} // namespace dankestia::config

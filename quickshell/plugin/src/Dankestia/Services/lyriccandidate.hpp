@@ -2,7 +2,7 @@
 
 #include <qqmlintegration.h>
 
-namespace caelestia::services {
+namespace dankestia::services {
 
 class LyricsBackend : public QObject {
     Q_OBJECT
@@ -18,14 +18,14 @@ public:
     };
     Q_ENUM(Backend)
 
-    Q_INVOKABLE QString toString(caelestia::services::LyricsBackend::Backend b);
+    Q_INVOKABLE QString toString(dankestia::services::LyricsBackend::Backend b);
 };
 
 class LyricCandidate {
     Q_GADGET
     QML_VALUE_TYPE(lyricCandidate)
 
-    Q_PROPERTY(caelestia::services::LyricsBackend::Backend backend READ backend)
+    Q_PROPERTY(dankestia::services::LyricsBackend::Backend backend READ backend)
     Q_PROPERTY(QString id READ id)
     Q_PROPERTY(QString title READ title)
     Q_PROPERTY(QString artist READ artist)
@@ -57,4 +57,4 @@ private:
     qreal m_duration = 0.0;
 };
 
-} // namespace caelestia::services
+} // namespace dankestia::services

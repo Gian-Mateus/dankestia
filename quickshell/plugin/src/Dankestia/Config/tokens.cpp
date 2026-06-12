@@ -4,12 +4,12 @@
 #include <qqmlengine.h>
 #include <qstandardpaths.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 namespace {
 
 QString configDir() {
-    return QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QStringLiteral("/caelestia/");
+    return QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QStringLiteral("/dankestia/");
 }
 
 } // namespace
@@ -51,4 +51,4 @@ TokenConfig* TokenConfig::create(QQmlEngine*, QJSEngine*) {
     return instance();
 }
 
-} // namespace caelestia::config
+} // namespace dankestia::config

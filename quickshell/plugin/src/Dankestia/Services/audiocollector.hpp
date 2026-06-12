@@ -10,7 +10,7 @@
 #include <thread>
 #include <vector>
 
-namespace caelestia::services {
+namespace dankestia::services {
 
 namespace ac {
 
@@ -73,4 +73,4 @@ private:
     void stop() override;
 };
 
-} // namespace caelestia::services
+} // namespace dankestia::services

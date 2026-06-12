@@ -3,7 +3,7 @@
 
 #include <qmetaobject.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 // Helper: connect all changed signals from a token object to a single valuesChanged signal,
 // plus connect the local scaleChanged signal.
@@ -203,4 +203,4 @@ int AnimDurations::expressiveSlowEffects() const {
     return m_tokens ? static_cast<int>(m_tokens->expressiveSlowEffects() * m_scale) : 0;
 }
 
-} // namespace caelestia::config
+} // namespace dankestia::config

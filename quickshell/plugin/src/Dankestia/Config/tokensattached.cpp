@@ -8,7 +8,7 @@
 
 #include <qquickitem.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 namespace {
 
@@ -127,4 +127,4 @@ Tokens* Tokens::qmlAttachedProperties(QObject* object) {
     return new Tokens(object);
 }
 
-} // namespace caelestia::config
+} // namespace dankestia::config

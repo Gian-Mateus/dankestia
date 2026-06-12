@@ -9,7 +9,7 @@
 #include <qrect.h>
 #include <qvector.h>
 
-namespace caelestia::components {
+namespace dankestia::components {
 
 class LazyListViewAttached : public QObject {
     Q_OBJECT
@@ -240,4 +240,4 @@ private:
     QList<QMetaObject::Connection> m_modelConnections;
 };
 
-} // namespace caelestia::components
+} // namespace dankestia::components

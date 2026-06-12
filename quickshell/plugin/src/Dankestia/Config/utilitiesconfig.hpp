@@ -5,7 +5,7 @@
 #include <qstring.h>
 #include <qvariant.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 using Qt::StringLiterals::operator""_s;
 
@@ -70,4 +70,4 @@ public:
         , m_vpn(new UtilitiesVpn(this)) {}
 };
 
-} // namespace caelestia::config
+} // namespace dankestia::config

@@ -4,7 +4,7 @@
 #include <qobject.h>
 #include <qqmlengine.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 class GlobalConfig;
 class TokenConfig;
@@ -32,4 +32,4 @@ private:
     QHash<QString, ScreenOverlay> m_overlays;
 };
 
-} // namespace caelestia::config
+} // namespace dankestia::config

@@ -4,7 +4,7 @@
 #include <qobject.h>
 #include <qqmlintegration.h>
 
-namespace caelestia {
+namespace dankestia {
 
 class CUtils : public QObject {
     Q_OBJECT
@@ -34,4 +34,4 @@ public:
     [[nodiscard]] QString qtVersion() const;
 };
 
-} // namespace caelestia
+} // namespace dankestia

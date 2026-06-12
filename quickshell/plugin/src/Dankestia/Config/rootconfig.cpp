@@ -7,7 +7,7 @@
 #include <qmetaobject.h>
 #include <qstandardpaths.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 namespace {
 
@@ -255,4 +255,4 @@ void RootConfig::reload() {
     emitLoadSignals(reloadFromFile());
 }
 
-} // namespace caelestia::config
+} // namespace dankestia::config

@@ -5,9 +5,9 @@
 #include <qsqlquery.h>
 #include <quuid.h>
 
-Q_LOGGING_CATEGORY(lcAppDb, "caelestia.appdb", QtInfoMsg)
+Q_LOGGING_CATEGORY(lcAppDb, "dankestia.appdb", QtInfoMsg)
 
-namespace caelestia {
+namespace dankestia {
 
 AppEntry::AppEntry(QObject* entry, unsigned int frequency, QObject* parent)
     : QObject(parent)
@@ -321,4 +321,4 @@ void AppDb::updateApps() {
     }
 }
 
-} // namespace caelestia
+} // namespace dankestia

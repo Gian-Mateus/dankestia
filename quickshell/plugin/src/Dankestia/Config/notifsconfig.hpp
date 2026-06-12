@@ -4,7 +4,7 @@
 
 #include <qstring.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 class NotifsConfig : public ConfigObject {
     Q_OBJECT
@@ -25,4 +25,4 @@ public:
         : ConfigObject(parent) {}
 };
 
-} // namespace caelestia::config
+} // namespace dankestia::config

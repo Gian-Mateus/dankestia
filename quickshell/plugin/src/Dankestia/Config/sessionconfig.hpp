@@ -5,7 +5,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 using Qt::StringLiterals::operator""_s;
 
@@ -54,4 +54,4 @@ public:
         , m_commands(new SessionCommands(this)) {}
 };
 
-} // namespace caelestia::config
+} // namespace dankestia::config

@@ -6,7 +6,7 @@
 #include <qstringlist.h>
 #include <qvariant.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 using Qt::StringLiterals::operator""_s;
 
@@ -163,4 +163,4 @@ public:
         , m_clock(new BarClock(this)) {}
 };
 
-} // namespace caelestia::config
+} // namespace dankestia::config

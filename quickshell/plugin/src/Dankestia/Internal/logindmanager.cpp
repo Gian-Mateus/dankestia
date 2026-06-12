@@ -6,9 +6,9 @@
 #include <QtDBus/qdbusreply.h>
 #include <qloggingcategory.h>
 
-Q_LOGGING_CATEGORY(lcLogindManager, "caelestia.internal.logindmanager", QtInfoMsg)
+Q_LOGGING_CATEGORY(lcLogindManager, "dankestia.internal.logindmanager", QtInfoMsg)
 
-namespace caelestia::internal {
+namespace dankestia::internal {
 
 LogindManager::LogindManager(QObject* parent)
     : QObject(parent) {
@@ -64,4 +64,4 @@ void LogindManager::handleUnlockRequested() {
     emit unlockRequested();
 }
 
-} // namespace caelestia::internal
+} // namespace dankestia::internal

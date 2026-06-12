@@ -8,9 +8,9 @@
 #include <qloggingcategory.h>
 #include <sensors/sensors.h>
 
-Q_LOGGING_CATEGORY(lcSensorsLib, "caelestia.services.sensorslib", QtInfoMsg)
+Q_LOGGING_CATEGORY(lcSensorsLib, "dankestia.services.sensorslib", QtInfoMsg)
 
-namespace caelestia::services::sensorslib {
+namespace dankestia::services::sensorslib {
 
 namespace {
 
@@ -163,4 +163,4 @@ std::optional<double> gpuPciAverageTemp() {
     return std::nullopt;
 }
 
-} // namespace caelestia::services::sensorslib
+} // namespace dankestia::services::sensorslib

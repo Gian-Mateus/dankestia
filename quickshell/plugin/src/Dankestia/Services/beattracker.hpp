@@ -4,7 +4,7 @@
 #include <aubio/aubio.h>
 #include <qqmlintegration.h>
 
-namespace caelestia::services {
+namespace dankestia::services {
 
 class BeatProcessor : public AudioProcessor {
     Q_OBJECT
@@ -46,4 +46,4 @@ private:
     void updateBpm(smpl_t bpm);
 };
 
-} // namespace caelestia::services
+} // namespace dankestia::services

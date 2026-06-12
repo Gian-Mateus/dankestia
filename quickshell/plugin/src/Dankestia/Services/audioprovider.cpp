@@ -5,10 +5,10 @@
 #include <qloggingcategory.h>
 #include <qthread.h>
 
-Q_LOGGING_CATEGORY(lcAp, "caelestia.services.ap", QtInfoMsg)
-Q_LOGGING_CATEGORY(lcApProcessor, "caelestia.services.ap.processor", QtInfoMsg)
+Q_LOGGING_CATEGORY(lcAp, "dankestia.services.ap", QtInfoMsg)
+Q_LOGGING_CATEGORY(lcApProcessor, "dankestia.services.ap.processor", QtInfoMsg)
 
-namespace caelestia::services {
+namespace dankestia::services {
 
 AudioProcessor::AudioProcessor(QObject* parent)
     : QObject(parent) {}
@@ -78,4 +78,4 @@ void AudioProvider::stop() {
     }
 }
 
-} // namespace caelestia::services
+} // namespace dankestia::services

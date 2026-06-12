@@ -7,9 +7,9 @@
 #include <qstringlist.h>
 #include <qvariant.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
-Q_LOGGING_CATEGORY(lcConfig, "caelestia.config", QtInfoMsg)
+Q_LOGGING_CATEGORY(lcConfig, "dankestia.config", QtInfoMsg)
 
 // ConfigObject
 
@@ -313,4 +313,4 @@ void ConfigObject::emitBatchedChanges() {
     emit propertiesChanged(changes);
 }
 
-} // namespace caelestia::config
+} // namespace dankestia::config

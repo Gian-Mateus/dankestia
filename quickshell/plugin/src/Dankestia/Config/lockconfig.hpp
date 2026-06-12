@@ -2,7 +2,7 @@
 
 #include "configobject.hpp"
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 class LockConfig : public ConfigObject {
     Q_OBJECT
@@ -18,4 +18,4 @@ public:
         : ConfigObject(parent) {}
 };
 
-} // namespace caelestia::config
+} // namespace dankestia::config

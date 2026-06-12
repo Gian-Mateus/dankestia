@@ -6,7 +6,7 @@
 #include <qfilesystemwatcher.h>
 #include <qtimer.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 // Intermediate base for singleton config roots (GlobalConfig, TokenConfig).
 // Provides file-backed persistence, save/reload, and lifecycle signals.
@@ -56,4 +56,4 @@ private:
     QStringList m_lastUnknownKeys;
 };
 
-} // namespace caelestia::config
+} // namespace dankestia::config

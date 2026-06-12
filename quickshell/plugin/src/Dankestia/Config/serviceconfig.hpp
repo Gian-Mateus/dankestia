@@ -5,7 +5,7 @@
 #include <qstring.h>
 #include <qvariant.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 using Qt::StringLiterals::operator""_s;
 
@@ -39,4 +39,4 @@ public:
         : ConfigObject(parent) {}
 };
 
-} // namespace caelestia::config
+} // namespace dankestia::config

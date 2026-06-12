@@ -5,7 +5,7 @@
 #include <qqmlintegration.h>
 #include <qquickpainteditem.h>
 
-namespace caelestia::internal {
+namespace dankestia::internal {
 
 class CircularBuffer;
 
@@ -88,4 +88,4 @@ private:
     qreal m_lineWidth = 2.0;
 };
 
-} // namespace caelestia::internal
+} // namespace dankestia::internal

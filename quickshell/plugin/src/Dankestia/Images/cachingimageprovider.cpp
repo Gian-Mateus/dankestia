@@ -9,9 +9,9 @@
 #include <qrunnable.h>
 #include <qthreadpool.h>
 
-Q_LOGGING_CATEGORY(lcCProv, "caelestia.images.cacheprovider", QtInfoMsg)
+Q_LOGGING_CATEGORY(lcCProv, "dankestia.images.cacheprovider", QtInfoMsg)
 
-namespace caelestia::images {
+namespace dankestia::images {
 
 namespace {
 
@@ -117,4 +117,4 @@ QQuickImageResponse* CachingImageProvider::requestImageResponse(const QString& i
     return response;
 }
 
-} // namespace caelestia::images
+} // namespace dankestia::images

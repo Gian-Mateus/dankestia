@@ -4,7 +4,7 @@
 
 #include <qqmlengine.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 class AppearanceConfig;
 class BackgroundConfig;
@@ -83,4 +83,4 @@ private:
     bool m_tokensBound = false;
 };
 
-} // namespace caelestia::config
+} // namespace dankestia::config

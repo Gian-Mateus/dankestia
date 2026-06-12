@@ -6,7 +6,7 @@
 #include <qstring.h>
 #include <qvariant.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 // Forward declare token types from advancedconfig.hpp
 class RoundingTokens;
@@ -325,4 +325,4 @@ public:
         , m_transparency(new AppearanceTransparency(this)) {}
 };
 
-} // namespace caelestia::config
+} // namespace dankestia::config

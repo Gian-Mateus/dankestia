@@ -4,7 +4,7 @@
 #include <qqmlintegration.h>
 #include <qtimer.h>
 
-namespace caelestia::services {
+namespace dankestia::services {
 
 class AudioProcessor : public QObject {
     Q_OBJECT
@@ -45,4 +45,4 @@ private:
     void stop() override;
 };
 
-} // namespace caelestia::services
+} // namespace dankestia::services

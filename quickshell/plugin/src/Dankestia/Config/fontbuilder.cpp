@@ -1,9 +1,9 @@
 #include "fontbuilder.hpp"
 #include <qloggingcategory.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
-Q_LOGGING_CATEGORY(lcFontBuilder, "caelestia.fontbuilder", QtInfoMsg)
+Q_LOGGING_CATEGORY(lcFontBuilder, "dankestia.fontbuilder", QtInfoMsg)
 
 FontBuilder::FontBuilder(QFont font)
     : m_font(std::move(font)) {}
@@ -89,4 +89,4 @@ FontBuilder FontBuilder::scale(qreal factor) {
     return size(static_cast<int>(m_font.pointSize() * factor));
 }
 
-} // namespace caelestia::config
+} // namespace dankestia::config

@@ -4,7 +4,7 @@
 
 #include <algorithm>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 class BorderConfig : public ConfigObject {
     Q_OBJECT
@@ -26,4 +26,4 @@ public:
     [[nodiscard]] int clampedThickness() const { return std::max(minThickness(), m_thickness); }
 };
 
-} // namespace caelestia::config
+} // namespace dankestia::config

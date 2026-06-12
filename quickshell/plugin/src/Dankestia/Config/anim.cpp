@@ -4,7 +4,7 @@
 
 #include <qpoint.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 AnimTokens::AnimTokens(QObject* parent)
     : QObject(parent) {}
@@ -114,4 +114,4 @@ void AnimTokens::bindDurations(AnimDurations* durations) {
     emit durationsChanged();
 }
 
-} // namespace caelestia::config
+} // namespace dankestia::config

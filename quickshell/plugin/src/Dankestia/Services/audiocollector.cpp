@@ -10,10 +10,10 @@
 #include <stop_token>
 #include <vector>
 
-Q_LOGGING_CATEGORY(lcAc, "caelestia.services.ac", QtInfoMsg)
-Q_LOGGING_CATEGORY(lcAcWorker, "caelestia.services.ac.worker", QtInfoMsg)
+Q_LOGGING_CATEGORY(lcAc, "dankestia.services.ac", QtInfoMsg)
+Q_LOGGING_CATEGORY(lcAcWorker, "dankestia.services.ac.worker", QtInfoMsg)
 
-namespace caelestia::services {
+namespace dankestia::services {
 
 PipeWireWorker::PipeWireWorker(std::stop_token token, AudioCollector* collector)
     : m_loop(nullptr)
@@ -74,7 +74,7 @@ PipeWireWorker::PipeWireWorker(std::stop_token token, AudioCollector* collector)
         self->processStream();
     };
 
-    m_stream = pw_stream_new_simple(pw_main_loop_get_loop(m_loop), "caelestia-shell", props, &events, this);
+    m_stream = pw_stream_new_simple(pw_main_loop_get_loop(m_loop), "dankestia-shell", props, &events, this);
     if (!m_stream) {
         qCWarning(lcAcWorker) << "init: failed to create stream";
         pw_main_loop_destroy(m_loop);
@@ -259,4 +259,4 @@ void AudioCollector::stop() {
     }
 }
 
-} // namespace caelestia::services
+} // namespace dankestia::services

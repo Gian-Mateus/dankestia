@@ -6,7 +6,7 @@
 #include <qstringlist.h>
 #include <qvariant.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 using Qt::StringLiterals::operator""_s;
 
@@ -105,4 +105,4 @@ public:
         , m_battery(new GeneralBattery(this)) {}
 };
 
-} // namespace caelestia::config
+} // namespace dankestia::config

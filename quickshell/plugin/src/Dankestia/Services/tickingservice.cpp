@@ -3,7 +3,7 @@
 #include "../Config/config.hpp"
 #include "../Config/dashboardconfig.hpp"
 
-namespace caelestia::services {
+namespace dankestia::services {
 
 TickingService::TickingService(QObject* parent)
     : Service(parent)
@@ -13,9 +13,9 @@ TickingService::TickingService(QObject* parent)
         tick();
     });
 
-    auto* dash = caelestia::config::GlobalConfig::instance()->dashboard();
+    auto* dash = dankestia::config::GlobalConfig::instance()->dashboard();
     applyInterval(dash->resourceUpdateInterval());
-    QObject::connect(dash, &caelestia::config::DashboardConfig::resourceUpdateIntervalChanged, this, [this, dash] {
+    QObject::connect(dash, &dankestia::config::DashboardConfig::resourceUpdateIntervalChanged, this, [this, dash] {
         applyInterval(dash->resourceUpdateInterval());
     });
 }
@@ -48,4 +48,4 @@ void TickingService::applyInterval(int ms) {
     Q_EMIT updateIntervalChanged();
 }
 
-} // namespace caelestia::services
+} // namespace dankestia::services

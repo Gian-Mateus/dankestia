@@ -4,7 +4,7 @@
 #include <qqmlintegration.h>
 #include <qurl.h>
 
-namespace caelestia::images {
+namespace dankestia::images {
 
 class IUtils : public QObject {
     Q_OBJECT
@@ -21,4 +21,4 @@ private:
         : QObject(parent) {};
 };
 
-} // namespace caelestia::images
+} // namespace dankestia::images

@@ -9,7 +9,7 @@
 #include <qtimer.h>
 #include <qvariant.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 inline QVariantMap vmap(std::initializer_list<std::pair<QString, QVariant>> entries) {
     QVariantMap map;
@@ -18,7 +18,7 @@ inline QVariantMap vmap(std::initializer_list<std::pair<QString, QVariant>> entr
     return map;
 }
 
-} // namespace caelestia::config
+} // namespace dankestia::config
 
 // Declares a serialized config property with getter, setter (change-detected), signal, and member.
 #define CONFIG_PROPERTY(Type, name, ...)                                                                               \
@@ -29,7 +29,7 @@ public:                                                                         
         return m_##name;                                                                                               \
     }                                                                                                                  \
     void set_##name(const Type& val) {                                                                                 \
-        if (caelestia::config::ConfigObject::updateMember(m_##name, val)) {                                            \
+        if (dankestia::config::ConfigObject::updateMember(m_##name, val)) {                                            \
             markPropertyLoaded(QStringLiteral(#name));                                                                 \
             Q_EMIT name##Changed();                                                                                    \
             notifyPropertyChanged(QStringLiteral(#name), QVariant::fromValue(m_##name));                               \
@@ -42,7 +42,7 @@ private:                                                                        
 
 // Declares a CONSTANT sub-object property. Initialize the member in the constructor.
 #define CONFIG_SUBOBJECT(Type, name)                                                                                   \
-    Q_PROPERTY(caelestia::config::Type* name READ name CONSTANT)                                                       \
+    Q_PROPERTY(dankestia::config::Type* name READ name CONSTANT)                                                       \
                                                                                                                        \
 public:                                                                                                                \
     [[nodiscard]] Type* name() const {                                                                                 \
@@ -59,15 +59,15 @@ private:                                                                        
 public:                                                                                                                \
     [[nodiscard]] Type name() const {                                                                                  \
         if (isOverlay())                                                                                               \
-            qCWarning(caelestia::config::lcConfig, "Reading global-only option '%s' on per-monitor overlay",           \
+            qCWarning(dankestia::config::lcConfig, "Reading global-only option '%s' on per-monitor overlay",           \
                 qUtf8Printable(propertyPath(QStringLiteral(#name))));                                                  \
         return m_##name;                                                                                               \
     }                                                                                                                  \
     void set_##name(const Type& val) {                                                                                 \
         if (isOverlay())                                                                                               \
-            qCWarning(caelestia::config::lcConfig, "Writing global-only option '%s' on per-monitor overlay",           \
+            qCWarning(dankestia::config::lcConfig, "Writing global-only option '%s' on per-monitor overlay",           \
                 qUtf8Printable(propertyPath(QStringLiteral(#name))));                                                  \
-        if (caelestia::config::ConfigObject::updateMember(m_##name, val)) {                                            \
+        if (dankestia::config::ConfigObject::updateMember(m_##name, val)) {                                            \
             markPropertyLoaded(QStringLiteral(#name));                                                                 \
             Q_EMIT name##Changed();                                                                                    \
             notifyPropertyChanged(QStringLiteral(#name), QVariant::fromValue(m_##name));                               \
@@ -82,7 +82,7 @@ private:                                                                        
         return true;                                                                                                   \
     }();
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 Q_DECLARE_LOGGING_CATEGORY(lcConfig)
 
@@ -140,4 +140,4 @@ private:
     QTimer* m_batchTimer = nullptr;
 };
 
-} // namespace caelestia::config
+} // namespace dankestia::config

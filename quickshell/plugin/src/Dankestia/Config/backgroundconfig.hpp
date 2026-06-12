@@ -4,7 +4,7 @@
 
 #include <qstring.h>
 
-namespace caelestia::config {
+namespace dankestia::config {
 
 class DesktopClockBackground : public ConfigObject {
     Q_OBJECT
@@ -81,4 +81,4 @@ public:
         , m_visualiser(new BackgroundVisualiser(this)) {}
 };
 
-} // namespace caelestia::config
+} // namespace dankestia::config
