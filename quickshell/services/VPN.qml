@@ -56,19 +56,19 @@ Singleton {
                 connectCmd: ["warp-cli", "connect"],
                 disconnectCmd: ["warp-cli", "disconnect"],
                 interface: "CloudflareWARP",
-                displayName: "Warp"
+                displayName: qsTr("Warp")
             },
             "netbird": {
                 connectCmd: ["netbird", "up", "--no-browser"],
                 disconnectCmd: ["netbird", "down"],
                 interface: "wt0",
-                displayName: "NetBird"
+                displayName: qsTr("NetBird")
             },
             "tailscale": {
                 connectCmd: ["tailscale", "up"],
                 disconnectCmd: ["tailscale", "down"],
                 interface: "tailscale0",
-                displayName: "Tailscale"
+                displayName: qsTr("Tailscale")
             }
         };
 

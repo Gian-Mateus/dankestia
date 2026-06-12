@@ -40,7 +40,7 @@ Singleton {
     CustomShortcut {
         // qmllint enable unresolved-type
         name: "brightnessUp"
-        description: "Increase brightness"
+        description: qsTr("Increase brightness")
         onPressed: root.increaseBrightness()
     }
 
@@ -48,7 +48,7 @@ Singleton {
     CustomShortcut {
         // qmllint enable unresolved-type
         name: "brightnessDown"
-        description: "Decrease brightness"
+        description: qsTr("Decrease brightness")
         onPressed: root.decreaseBrightness()
     }
 

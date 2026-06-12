@@ -62,7 +62,7 @@ Singleton {
     CustomShortcut {
         // qmllint enable unresolved-type
         name: "mediaToggle"
-        description: "Toggle media playback"
+        description: qsTr("Toggle media playback")
         onPressed: {
             const active = root.active;
             if (active && active.canTogglePlaying)
@@ -74,7 +74,7 @@ Singleton {
     CustomShortcut {
         // qmllint enable unresolved-type
         name: "mediaPrev"
-        description: "Previous track"
+        description: qsTr("Previous track")
         onPressed: {
             const active = root.active;
             if (active && active.canGoPrevious)
@@ -86,7 +86,7 @@ Singleton {
     CustomShortcut {
         // qmllint enable unresolved-type
         name: "mediaNext"
-        description: "Next track"
+        description: qsTr("Next track")
         onPressed: {
             const active = root.active;
             if (active && active.canGoNext)
@@ -98,7 +98,7 @@ Singleton {
     CustomShortcut {
         // qmllint enable unresolved-type
         name: "mediaStop"
-        description: "Stop media playback"
+        description: qsTr("Stop media playback")
         onPressed: root.active?.stop()
     }
 
