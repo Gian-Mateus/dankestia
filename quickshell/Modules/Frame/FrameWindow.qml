@@ -5,7 +5,7 @@ import QtQuick.Effects
 import Quickshell
 import Quickshell.Wayland
 import qs.Common
-import qs.Services
+import Dankestia.Services
 import qs.Widgets
 import "../../Common/ConnectorGeometry.js" as ConnectorGeometry
 

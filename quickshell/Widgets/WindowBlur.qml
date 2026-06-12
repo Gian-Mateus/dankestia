@@ -2,7 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Wayland
 import qs.Common
-import qs.Services
+import Dankestia.Services
 
 Item {
     id: root

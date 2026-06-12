@@ -163,10 +163,10 @@ Singleton {
         objects: [...root.sinks, ...root.sources, ...root.streams]
     }
 
-    CavaProvider {
+    QtObject {
         id: cava
-
-        bars: GlobalConfig.services.visualiserBars
+        property var values: [0,0,0,0,0,0,0,0,0,0]
+        property int bars: GlobalConfig.services.visualiserBars
     }
 
     BeatTracker {

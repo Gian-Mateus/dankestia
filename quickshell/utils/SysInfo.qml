@@ -2,7 +2,7 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
-import qs.Services
+import Dankestia.Services
 import Quickshell.Io
 import Dankestia.Config
 import qs.utils

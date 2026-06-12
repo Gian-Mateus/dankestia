@@ -16,22 +16,21 @@ cmake ..
 make
 cd ../../../
 
-echo -e "${GREEN}=== Build concluído! Iniciando o Dankestia ===${NC}"
+echo -e "${BLUE}Parando a interface original do sistema para não dar conflito...${NC}"
+# Usa systemctl para evitar que o Linux reinicie o painel original automaticamente
+systemctl --user stop dankestia.service || true
+killall -9 dankestia quickshell dms 2>/dev/null || true
 
-# Mata processos anteriores do dankestia se existirem
-pkill -x dankestia || true
+# Prepara uma armadilha para ligar a interface original de volta quando fecharmos o teste
+cleanup() {
+    echo -e "${GREEN}Restaurando sua interface original do sistema...${NC}"
+    systemctl --user start dankestia.service || true
+}
+trap cleanup EXIT
 
-# Inicia o backend em segundo plano (background)
-./core/bin/dankestia run &
-BACKEND_PID=$!
+# Exporta a variável para que o backend repasse pro quickshell filho
+export QML2_IMPORT_PATH=$PWD/quickshell/plugin/build/qml
 
-echo -e "${GREEN}Backend Go rodando no PID: $BACKEND_PID${NC}"
-echo -e "${GREEN}Abrindo Interface Gráfica...${NC}"
-
-# Inicia o Quickshell bloqueando o terminal principal
-QML2_IMPORT_PATH=$PWD/quickshell/plugin/build/qml quickshell -p quickshell/
-
-# Assim que a janela do Quickshell for fechada pelo usuário, o script continua e mata o backend
-echo -e "${BLUE}Quickshell encerrado. Desligando o servidor backend...${NC}"
-kill $BACKEND_PID 2>/dev/null || true
-echo -e "${GREEN}Ambiente de desenvolvimento encerrado com sucesso!${NC}"
+echo -e "${GREEN}Iniciando servidor Dankestia... Pressione Ctrl+C para desligar tudo.${NC}"
+# Inicia em foreground. O backend já gerencia o quickshell por padrão.
+./core/bin/dankestia run -c $PWD/quickshell

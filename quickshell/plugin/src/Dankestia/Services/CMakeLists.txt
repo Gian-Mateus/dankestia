@@ -6,7 +6,6 @@ qml_module(dankestia-services
         beattracker.cpp
         audiocollector.cpp
         audioprovider.cpp
-        cavaprovider.cpp
         tickingservice.cpp
         sensorslib.cpp
         usagefmt.cpp
@@ -15,7 +14,6 @@ qml_module(dankestia-services
     LIBRARIES
         PkgConfig::Pipewire
         PkgConfig::Aubio
-        PkgConfig::Cava
         Sensors::Sensors
         dankestia-config
         dankestia-internal
