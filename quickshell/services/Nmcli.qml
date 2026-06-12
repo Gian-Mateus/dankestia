@@ -211,8 +211,5 @@ Singleton {
         readonly property bool isSecure: lastIpcObject.secured || false
     }
 
-    // Unused Timers for compatibility
-    Timer { id: connectionCheckTimer }
-    Timer { id: immediateCheckTimer; property int checkCount: 0 }
-    property var pendingConnection: null
+
 }
