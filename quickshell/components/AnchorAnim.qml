@@ -1,5 +1,5 @@
 import QtQuick
-import Caelestia.Config
+import Dankestia.Config
 
 AnchorAnimation {
     enum Type {

@@ -4,9 +4,9 @@ import QtQuick
 import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Io
-import Caelestia
-import Caelestia.Config
-import Caelestia.Internal
+import Dankestia
+import Dankestia.Config
+import Dankestia.Internal
 import qs.components.misc
 
 Singleton {
@@ -87,7 +87,7 @@ Singleton {
     }
 
     function reloadDynamicConfs(): void {
-        extras.batchMessage(["keyword bindlni ,Caps_Lock,global,caelestia:refreshDevices", "keyword bindlni ,Num_Lock,global,caelestia:refreshDevices"]);
+        extras.batchMessage(["keyword bindlni ,Caps_Lock,global,dankestia:refreshDevices", "keyword bindlni ,Num_Lock,global,dankestia:refreshDevices"]);
     }
 
     Component.onCompleted: reloadDynamicConfs()
@@ -161,7 +161,7 @@ Singleton {
     FileView {
         id: kbLayoutFile
 
-        path: Quickshell.env("CAELESTIA_XKB_RULES_PATH") || "/usr/share/X11/xkb/rules/base.lst"
+        path: Quickshell.env("DANKESTIA_XKB_RULES_PATH") || "/usr/share/X11/xkb/rules/base.lst"
         onLoaded: {
             const layoutMatch = text().match(/! layout\n([\s\S]*?)\n\n/);
             if (layoutMatch) {

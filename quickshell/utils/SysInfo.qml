@@ -4,7 +4,7 @@ import QtQuick
 import Quickshell
 import qs.Services
 import Quickshell.Io
-import Caelestia.Config
+import Dankestia.Config
 import qs.utils
 
 Singleton {
@@ -52,7 +52,7 @@ Singleton {
     }
 
     function updateLogo() {
-        if (GlobalConfig.general.logo === "caelestia") {
+        if (GlobalConfig.general.logo === "dankestia") {
             root.osLogo = Qt.resolvedUrl(`${Quickshell.shellDir}/assets/logo.svg`);
             root.isDefaultLogo = true;
         } else if (GlobalConfig.general.logo) {

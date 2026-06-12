@@ -1,7 +1,7 @@
 pragma Singleton
 
 import Quickshell
-import Caelestia.Config
+import Dankestia.Config
 
 Singleton {
     id: root

@@ -1,8 +1,8 @@
 import QtQuick
 import Quickshell
 import Quickshell.Services.UPower
-import Caelestia
-import Caelestia.Config
+import Dankestia
+import Dankestia.Config
 
 Scope {
     id: root

@@ -1,8 +1,8 @@
 import QtQuick
 import QtQuick.Layouts
 import M3Shapes
-import Caelestia
-import Caelestia.Config
+import Dankestia
+import Dankestia.Config
 import qs.components
 import qs.services
 
