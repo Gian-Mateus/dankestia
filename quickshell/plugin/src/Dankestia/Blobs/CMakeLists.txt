@@ -1,5 +1,5 @@
-qml_module(caelestia-blobs
-    URI Caelestia.Blobs
+qml_module(dankestia-blobs
+    URI Dankestia.Blobs
     SOURCES
         blobgroup.cpp
         blobshape.cpp
@@ -10,7 +10,7 @@ qml_module(caelestia-blobs
         Qt::Quick
 )
 
-qt_add_shaders(caelestia-blobs "blob_shaders"
+qt_add_shaders(dankestia-blobs "blob_shaders"
     BATCHABLE OPTIMIZED NOHLSL NOMSL
     GLSL "300es,330"
     PREFIX "/"

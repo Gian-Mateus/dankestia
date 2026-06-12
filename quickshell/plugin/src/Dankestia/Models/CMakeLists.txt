@@ -1,5 +1,5 @@
-qml_module(caelestia-models
-    URI Caelestia.Models
+qml_module(dankestia-models
+    URI Dankestia.Models
     SOURCES
         filesystemmodel.hpp filesystemmodel.cpp
     LIBRARIES

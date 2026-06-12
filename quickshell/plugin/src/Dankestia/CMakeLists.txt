@@ -1,5 +1,5 @@
-qml_module(caelestia
-    URI Caelestia
+qml_module(dankestia
+    URI Dankestia
     SOURCES
         cutils.hpp cutils.cpp
         qalculator.hpp qalculator.cpp
@@ -16,7 +16,7 @@ qml_module(caelestia
 )
 
 # Bake the shell version in so CUtils can expose it without spawning a process
-target_compile_definitions(caelestia PRIVATE CAELESTIA_VERSION="${VERSION}")
+target_compile_definitions(dankestia PRIVATE DANKESTIA_VERSION="${VERSION}")
 
 add_subdirectory(Components)
 add_subdirectory(Config)

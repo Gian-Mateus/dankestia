@@ -1,5 +1,5 @@
-qml_module(caelestia-services
-    URI Caelestia.Services
+qml_module(dankestia-services
+    URI Dankestia.Services
     SOURCES
         service.cpp
         serviceref.cpp
@@ -10,11 +10,6 @@ qml_module(caelestia-services
         tickingservice.cpp
         sensorslib.cpp
         usagefmt.cpp
-        cpu.cpp
-        gpu.cpp
-        memory.cpp
-        diskinfo.cpp
-        storage.cpp
         lyriccandidate.cpp
         lyrics.cpp
     LIBRARIES
@@ -22,6 +17,6 @@ qml_module(caelestia-services
         PkgConfig::Aubio
         PkgConfig::Cava
         Sensors::Sensors
-        caelestia-config
-        caelestia-internal
+        dankestia-config
+        dankestia-internal
 )

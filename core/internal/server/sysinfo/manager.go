@@ -18,6 +18,8 @@ type Manager struct {
 	subscribers syncmap.Map[string, chan State]
 	stopChan    chan struct{}
 
+	gpuType     gpuType
+
 	lastIdle  float64
 	lastTotal float64
 }
@@ -29,6 +31,22 @@ func NewManager() (*Manager, error) {
 	m.state.Cpu.Name = "CPU"
 	m.state.OsName = m.readOsName()
 	m.state.KernelVersion = m.readKernelVersion()
+
+	m.gpuType = detectGpuType()
+	if m.gpuType != gpuTypeNone {
+		m.state.Gpu.Name = detectGpuName()
+	} else {
+		m.state.Gpu.Name = "Unknown GPU"
+	}
+	switch m.gpuType {
+	case gpuTypeNvidia:
+		m.state.Gpu.Type = "NVIDIA"
+	case gpuTypeGeneric:
+		m.state.Gpu.Type = "GENERIC"
+	default:
+		m.state.Gpu.Type = "NONE"
+	}
+
 	go m.loop()
 	return m, nil
 }
@@ -74,6 +92,8 @@ func (m *Manager) updateStats() {
 	memTotal, memAvail := m.readMemory()
 	uptime := m.readUptime()
 	storageTotal, storageFree := m.readStorage()
+
+	m.updateGpuStats()
 
 	m.stateMutex.Lock()
 	m.state.Cpu.Percentage = cpuUsage

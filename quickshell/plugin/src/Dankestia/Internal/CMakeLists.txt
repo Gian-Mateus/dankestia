@@ -1,5 +1,5 @@
-qml_module(caelestia-internal
-    URI Caelestia.Internal
+qml_module(dankestia-internal
+    URI Dankestia.Internal
     SOURCES
         circularbuffer.cpp
         circularindicatormanager.cpp

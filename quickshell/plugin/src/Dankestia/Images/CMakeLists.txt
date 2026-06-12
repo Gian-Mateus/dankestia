@@ -1,5 +1,5 @@
-qml_module(caelestia-images
-    URI Caelestia.Images
+qml_module(dankestia-images
+    URI Dankestia.Images
     SOURCES
         cachingimageprovider.cpp
         imagecacher.cpp
