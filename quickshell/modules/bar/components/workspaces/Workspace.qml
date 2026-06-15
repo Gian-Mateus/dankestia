@@ -37,7 +37,7 @@ ColumnLayout {
 
         animate: true
         text: {
-            const ws = typeof Hypr !== "undefined" ? Hypr.workspaces.values.find(w => w.id === root.ws) : null;
+            const ws = Compositor.getWorkspace(root.ws);
             const wsName = !ws || ws.name == root.ws ? root.ws : ws.name[0];
             let displayName = wsName.toString();
             if (Config.bar.workspaces.capitalisation.toLowerCase() === "upper") {
@@ -94,7 +94,7 @@ ColumnLayout {
                 model: ScriptModel {
                     values: {
                         const ws = root.ws;
-                        const windows = typeof Hypr !== "undefined" ? Hypr.toplevels.values.filter(c => c.workspace?.id === ws) : [];
+                        const windows = Compositor.windows.filter(c => c.workspaceId === ws);
                         const maxIcons = root.Config.bar.workspaces.maxWindowIcons;
                         return maxIcons > 0 ? windows.slice(0, maxIcons) : windows;
                     }
@@ -104,7 +104,7 @@ ColumnLayout {
                     required property var modelData
 
                     grade: 0
-                    text: Icons.getAppCategoryIcon(modelData.lastIpcObject.class, "terminal")
+                    text: Icons.getAppCategoryIcon(modelData.appId, "terminal")
                     color: Colours.palette.m3onSurfaceVariant
                 }
             }

@@ -5,6 +5,8 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 import Dankestia
+import Dankestia.Config
+import Dankestia.Services
 import qs.components
 import qs.components.effects
 import qs.services
@@ -17,8 +19,8 @@ MouseArea {
 
     property bool onClient
 
-    property real realBorderWidth: onClient ? (WorkspaceManager.isNiri ? 2 : (Hypr.options["general:border_size"] ?? 1)) : 2
-    property real realRounding: onClient ? (WorkspaceManager.isNiri ? 8 : (Hypr.options["decoration:rounding"] ?? 0)) : 0
+    property real realBorderWidth: 2
+    property real realRounding: 0
 
     property real ssx
     property real ssy
@@ -35,43 +37,14 @@ MouseArea {
 
     property list<var> clients: []
 
-    function updateClientsFromHyprland() {
-        const mon = Hypr.monitorFor(screen);
+    function updateClients() {
+        const mon = Compositor.monitors.find(m => m.name === screen.name);
         if (!mon) return [];
 
-        const special = mon.lastIpcObject?.specialWorkspace;
-        const wsId = special?.name ? special.id : mon.activeWorkspace?.id;
-
-        return Hypr.toplevels.values.filter(c => c.workspace?.id === wsId).sort((a, b) => {
-            const ac = a.lastIpcObject;
-            const bc = b.lastIpcObject;
-            return (bc.pinned - ac.pinned) || ((bc.fullscreen !== 0) - (ac.fullscreen !== 0)) || (bc.floating - ac.floating);
+        const activeWsId = mon.activeWorkspaceId || Compositor.activeWorkspaceId;
+        return Compositor.windows.filter(c => c.workspaceId === activeWsId).sort((a, b) => {
+            return (b.pinned - a.pinned) || (b.fullscreen - a.fullscreen) || (b.floating - a.floating);
         });
-    }
-
-    Process {
-        id: niriWindowsProc
-        running: WorkspaceManager.isNiri
-        command: ["niri", "msg", "-j", "windows"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                try {
-                    const wins = JSON.parse(text);
-                    let mapped = [];
-                    for (const w of wins) {
-                        // Map Niri window to Hyprland-like structure expected by checkClientRects
-                        mapped.push({
-                            lastIpcObject: {
-                                at: [w.x, w.y],
-                                size: [w.width, w.height]
-                            }
-                        });
-                    }
-                    root.clients = mapped;
-                    root.checkClientRects(mouseX, mouseY);
-                } catch (e) {}
-            }
-        }
     }
 
     function checkClientRects(x: real, y: real): void {
@@ -79,10 +52,11 @@ MouseArea {
             if (!client)
                 continue;
 
-            let {
-                at: [cx, cy],
-                size: [cw, ch]
-            } = client.lastIpcObject;
+            let cx = client.x;
+            let cy = client.y;
+            let cw = client.width;
+            let ch = client.height;
+
             cx -= screen.x;
             cy -= screen.y;
             if (cx <= x && cy <= y && cx + cw >= x && cy + ch >= y) {
@@ -117,10 +91,7 @@ MouseArea {
     cursorShape: Qt.CrossCursor
 
     Component.onCompleted: {
-        if (!WorkspaceManager.isNiri) {
-            Hypr.extras.refreshOptions();
-            clients = updateClientsFromHyprland();
-        }
+        clients = updateClients();
 
         // Break binding if frozen
         if (loader.freeze)
@@ -130,13 +101,13 @@ MouseArea {
 
         const c = clients[0];
         if (c) {
-            const cx = c.lastIpcObject.at[0] - screen.x;
-            const cy = c.lastIpcObject.at[1] - screen.y;
+            const cx = c.x - screen.x;
+            const cy = c.y - screen.y;
             onClient = true;
             sx = cx;
             sy = cy;
-            ex = cx + c.lastIpcObject.size[0];
-            ey = cy + c.lastIpcObject.size[1];
+            ex = cx + c.width;
+            ey = cy + c.height;
         } else {
             sx = screen.width / 2 - 100;
             sy = screen.height / 2 - 100;
@@ -216,20 +187,6 @@ MouseArea {
             target: root.loader
             property: "activeAsync"
             value: false
-        }
-    }
-
-    Process {
-        running: !WorkspaceManager.isNiri
-        command: ["hyprctl", "cursorpos", "-j"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                if (WorkspaceManager.isNiri) return;
-                try {
-                    const pos = JSON.parse(text);
-                    root.checkClientRects(pos.x - root.screen.x, pos.y - root.screen.y);
-                } catch (e) {}
-            }
         }
     }
 

@@ -4,7 +4,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Effects
 import Quickshell
-import Quickshell.Hyprland
 import Quickshell.Wayland
 import Dankestia.Blobs
 import Dankestia.Config
@@ -19,18 +18,14 @@ StyledWindow {
     readonly property alias bar: bar
     readonly property alias interactionWrapper: interactions
 
-    readonly property var monitor: typeof Hypr !== "undefined" ? Hypr.monitorFor(screen) : null
-    readonly property bool hasSpecialWorkspace: (monitor?.lastIpcObject?.specialWorkspace?.name?.length ?? 0) > 0
+    readonly property var monitor: Compositor.monitors.find(m => m.name === screen.name)
+    readonly property bool hasSpecialWorkspace: {
+        const ws = Compositor.getWorkspace(monitor?.activeWorkspaceId);
+        return ws && ws.isSpecial;
+    }
     readonly property bool hasFullscreen: {
-        if (typeof Hypr === "undefined" || !monitor) return false;
-        if (hasSpecialWorkspace) {
-            const specialName = monitor?.lastIpcObject?.specialWorkspace?.name;
-            if (!specialName)
-                return false;
-            const specialWs = Hypr.workspaces.values.find(ws => ws.name === specialName);
-            return specialWs?.toplevels.values.some(t => t.lastIpcObject.fullscreen > 1) ?? false;
-        }
-        return monitor?.activeWorkspace?.toplevels.values.some(t => t.lastIpcObject.fullscreen > 1) ?? false;
+        if (!monitor) return false;
+        return Compositor.windows.some(w => w.monitorId === monitor.id && w.fullscreen);
     }
 
     property real fsTransitionProg: hasFullscreen ? 1 : 0
@@ -43,10 +38,10 @@ StyledWindow {
     property color surfaceColour: Colours.tPalette.m3surface
 
     readonly property int dragMaskPadding: {
-        if (focusGrab.active || panels.popouts.isDetached)
+        if (focusActive || panels.popouts.isDetached)
             return 0;
 
-        if (monitor?.lastIpcObject?.specialWorkspace?.name || monitor?.activeWorkspace?.lastIpcObject?.windows > 0)
+        if (hasSpecialWorkspace || (monitor && Compositor.getWorkspace(monitor.activeWorkspaceId)?.windows > 0))
             return 0;
 
         const thresholds = [];
@@ -107,20 +102,12 @@ StyledWindow {
         win: root
     }
 
-    HyprlandFocusGrab {
-        id: focusGrab
-
-        active: (visibilities.launcher && root.contentItem.Config.launcher.enabled) || (visibilities.session && root.contentItem.Config.session.enabled) || (visibilities.sidebar && root.contentItem.Config.sidebar.enabled) || (!root.contentItem.Config.dashboard.showOnHover && visibilities.dashboard && root.contentItem.Config.dashboard.enabled) || (panels.popouts.currentName.startsWith("traymenu") && (panels.popouts.current as StackView)?.depth > 1)
-        windows: [root]
-        onCleared: {
-            visibilities.launcher = false;
-            visibilities.session = false;
-            visibilities.sidebar = false;
-            visibilities.dashboard = false;
-            panels.popouts.hasCurrent = false;
-            bar.closeTray();
-        }
-    }
+    // Focus grab logic should be handled by wayland standard protocols
+    // or by checking clicks outside the window. For now, WlrKeyboardFocus 
+    // handles input routing.
+    // 
+    // We bind a property to detect when we should be "active" for keyboard focus
+    property bool focusActive: (visibilities.launcher && root.contentItem.Config.launcher.enabled) || (visibilities.session && root.contentItem.Config.session.enabled) || (visibilities.sidebar && root.contentItem.Config.sidebar.enabled) || (!root.contentItem.Config.dashboard.showOnHover && visibilities.dashboard && root.contentItem.Config.dashboard.enabled) || (panels.popouts.currentName.startsWith("traymenu") && (panels.popouts.current as StackView)?.depth > 1)
 
     StyledRect {
         anchors.fill: parent

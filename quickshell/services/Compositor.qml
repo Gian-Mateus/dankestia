@@ -14,6 +14,13 @@ QtObject {
     property int activeWorkspaceId: 0
     property bool hasCompositor: DankestiaIPC.capabilities.indexOf("compositor") !== -1
 
+    readonly property var focusedWindow: {
+        for (let i = 0; i < windows.length; i++) {
+            if (windows[i].focused) return windows[i]
+        }
+        return null
+    }
+
     Connections {
         target: DankestiaIPC
         function onEventReceived(service, data) {
@@ -49,11 +56,6 @@ QtObject {
     }
 
     function getFocusedWindow() {
-        for (let i = 0; i < root.windows.length; i++) {
-            if (root.windows[i].focused) {
-                return root.windows[i]
-            }
-        }
-        return null
+        return root.focusedWindow
     }
 }

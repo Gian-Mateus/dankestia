@@ -2,9 +2,9 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell
-import Quickshell.Hyprland
 import Quickshell.Wayland
 import Dankestia.Config
+import Dankestia.Services
 import qs.components
 import qs.services
 import qs.modules.nexus
@@ -90,12 +90,10 @@ Item {
         onDetachRequested: mode => root.detach(mode)
     }
 
-    HyprlandFocusGrab {
-        active: root.isDetached
-        windows: [QsWindow.window]
-        onCleared: root.close()
-    }
-
+    // Focus grab logic should be handled by wayland standard protocols
+    // or by checking clicks outside the window. For now, WlrKeyboardFocus 
+    // handles input routing.
+    
     Binding {
         when: root.isDetached || (root.hasCurrent && root.currentName === "wirelesspassword")
 
@@ -123,7 +121,7 @@ Item {
 
         sourceComponent: WindowInfo {
             screen: root.screen
-            client: Hypr.activeToplevel
+            client: Compositor.getFocusedWindow()
         }
     }
 

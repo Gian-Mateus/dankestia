@@ -1,14 +1,14 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell.Hyprland
 import Dankestia.Config
+import Dankestia.Services
 import qs.components
 import qs.services
 
 ColumnLayout {
     id: root
 
-    required property HyprlandToplevel client
+    required property var client
 
     anchors.fill: parent
     spacing: Tokens.spacing.small
@@ -23,7 +23,7 @@ ColumnLayout {
     }
 
     Label {
-        text: root.client?.lastIpcObject.class ?? qsTr("No active client")
+        text: root.client?.appId ?? qsTr("No active client")
         color: Colours.palette.m3tertiary
 
         font: Tokens.font.body.large
@@ -48,25 +48,28 @@ ColumnLayout {
 
     Detail {
         icon: "location_searching"
-        text: qsTr("Position: %1, %2").arg(root.client?.lastIpcObject.at[0] ?? -1).arg(root.client?.lastIpcObject.at[1] ?? -1)
+        text: qsTr("Position: %1, %2").arg(root.client?.x ?? -1).arg(root.client?.y ?? -1)
     }
 
     Detail {
         icon: "resize"
-        text: qsTr("Size: %1 x %2").arg(root.client?.lastIpcObject.size[0] ?? -1).arg(root.client?.lastIpcObject.size[1] ?? -1)
+        text: qsTr("Size: %1 x %2").arg(root.client?.width ?? -1).arg(root.client?.height ?? -1)
         color: Colours.palette.m3tertiary
     }
 
     Detail {
         icon: "workspaces"
-        text: qsTr("Workspace: %1 (%2)").arg(root.client?.workspace.name ?? -1).arg(root.client?.workspace.id ?? -1)
+        text: {
+            const ws = Compositor.getWorkspace(root.client?.workspaceId);
+            return qsTr("Workspace: %1 (%2)").arg(ws?.name ?? "unknown").arg(root.client?.workspaceId ?? -1);
+        }
         color: Colours.palette.m3secondary
     }
 
     Detail {
         icon: "desktop_windows"
         text: {
-            const mon = root.client?.monitor;
+            const mon = Compositor.getMonitor(root.client?.monitorId);
             if (mon)
                 return qsTr("Monitor: %1 (%2) at %3, %4").arg(mon.name).arg(mon.id).arg(mon.x).arg(mon.y);
             return qsTr("Monitor: unknown");
@@ -75,46 +78,41 @@ ColumnLayout {
 
     Detail {
         icon: "page_header"
-        text: qsTr("Initial title: %1").arg(root.client?.lastIpcObject.initialTitle ?? "unknown")
+        text: qsTr("Initial title: %1").arg(root.client?.title ?? "unknown")
         color: Colours.palette.m3tertiary
     }
 
     Detail {
         icon: "category"
-        text: qsTr("Initial class: %1").arg(root.client?.lastIpcObject.initialClass ?? "unknown")
+        text: qsTr("Initial class: %1").arg(root.client?.appId ?? "unknown")
     }
 
     Detail {
         icon: "account_tree"
-        text: qsTr("Process id: %1").arg(root.client?.lastIpcObject.pid ?? -1)
+        text: qsTr("Process id: %1").arg("unknown")
         color: Colours.palette.m3primary
     }
 
     Detail {
         icon: "picture_in_picture_center"
-        text: qsTr("Floating: %1").arg(root.client?.lastIpcObject.floating ? "yes" : "no")
+        text: qsTr("Floating: %1").arg(root.client?.floating ? "yes" : "no")
         color: Colours.palette.m3secondary
     }
 
     Detail {
         icon: "gradient"
-        text: qsTr("Xwayland: %1").arg(root.client?.lastIpcObject.xwayland ? "yes" : "no")
+        text: qsTr("Xwayland: %1").arg("unknown")
     }
 
     Detail {
         icon: "keep"
-        text: qsTr("Pinned: %1").arg(root.client?.lastIpcObject.pinned ? "yes" : "no")
+        text: qsTr("Pinned: %1").arg(root.client?.pinned ? "yes" : "no")
         color: Colours.palette.m3secondary
     }
 
     Detail {
         icon: "fullscreen"
-        text: {
-            const fs = root.client?.lastIpcObject.fullscreen;
-            if (fs)
-                return qsTr("Fullscreen state: %1").arg(fs == 0 ? "off" : fs == 1 ? "maximised" : "on");
-            return qsTr("Fullscreen state: unknown");
-        }
+        text: qsTr("Fullscreen state: %1").arg(root.client?.fullscreen ? "on" : "off")
         color: Colours.palette.m3tertiary
     }
 

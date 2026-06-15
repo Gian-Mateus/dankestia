@@ -41,17 +41,26 @@ Item {
     Loader {
         asynchronous: true
         anchors.fill: parent
-        active: !Config.bar.activeWindow.showOnHover
+        active: true
 
         sourceComponent: MouseArea {
             cursorShape: Qt.PointingHandCursor
             hoverEnabled: true
+            onEntered: {
+                if (Config.bar.activeWindow.showOnHover) {
+                    const popouts = root.bar.popouts;
+                    popouts.currentName = "activewindow";
+                    popouts.currentCenter = root.mapToItem(root.bar, 0, root.implicitHeight / 2).y;
+                    popouts.hasCurrent = true;
+                }
+            }
             onPositionChanged: {
                 const popouts = root.bar.popouts;
                 if (popouts.hasCurrent && popouts.currentName !== "activewindow")
                     popouts.hasCurrent = false;
             }
             onClicked: {
+                if (Config.bar.activeWindow.showOnHover) return;
                 const popouts = root.bar.popouts;
                 if (popouts.hasCurrent) {
                     popouts.hasCurrent = false;

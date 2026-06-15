@@ -14,8 +14,11 @@ Item {
     id: root
 
     required property ShellScreen screen
-    readonly property var monitor: typeof Hypr !== "undefined" ? Hypr.monitorFor(screen) : null
-    readonly property string activeSpecial: typeof Hypr !== "undefined" ? (GlobalConfig.bar.workspaces.perMonitorWorkspaces ? monitor : Hypr.focusedMonitor)?.lastIpcObject.specialWorkspace?.name ?? "" : ""
+    readonly property var monitor: Compositor.monitors.find(m => m.name === screen.name)
+    readonly property string activeSpecial: {
+        const ws = Compositor.getWorkspace(Compositor.activeWorkspaceId);
+        return ws && ws.isSpecial ? ws.name : "";
+    }
 
     layer.enabled: true
     layer.effect: Mask {
@@ -99,7 +102,7 @@ Item {
         onCurrentIndexChanged: currentIndex = Qt.binding(() => model.values.findIndex(w => w.name === root.activeSpecial))
 
         model: ScriptModel {
-            values: typeof Hypr !== "undefined" ? Hypr.workspaces.values.filter(w => w.name.startsWith("special:") && (!GlobalConfig.bar.workspaces.perMonitorWorkspaces || w.monitor === root.monitor)) : []
+            values: Compositor.workspaces.filter(w => w.isSpecial && (!GlobalConfig.bar.workspaces.perMonitorWorkspaces || w.monitorId === root.monitor?.id))
         }
 
         preferredHighlightBegin: 0
@@ -227,7 +230,7 @@ Item {
 
             const ws = view.itemAt(event.x, event.y) as SpecialWsDelegate;
             if (ws?.modelData)
-                WorkspaceManager.dispatch(`togglespecialworkspace ${ws.modelData.name.slice(8)}`);
+                WorkspaceManager.dispatch(`togglespecialworkspace ${ws.modelData.name.replace("special:", "")}`);
             else
                 WorkspaceManager.dispatch("togglespecialworkspace special");
         }
@@ -250,33 +253,27 @@ Item {
         Component.onCompleted: {
             wsId = modelData.id;
             icon = Icons.getSpecialWsIcon(modelData.name);
-            hasWindows = Config.bar.workspaces.showWindowsOnSpecialWorkspaces && modelData.lastIpcObject.windows > 0;
+            hasWindows = Config.bar.workspaces.showWindowsOnSpecialWorkspaces && modelData.windows > 0;
         }
 
-        // Hacky thing cause modelData gets destroyed before the remove anim finishes
         Connections {
-            function onIdChanged(): void {
-                if (ws.modelData)
-                    ws.wsId = ws.modelData.id;
+            target: Compositor
+            function onEventReceived() {
+                if (ws.modelData) {
+                    const latest = Compositor.getWorkspace(ws.wsId);
+                    if (latest) {
+                        ws.hasWindows = root.Config.bar.workspaces.showWindowsOnSpecialWorkspaces && latest.windows > 0;
+                    }
+                }
             }
-
-            function onNameChanged(): void {
-                if (ws.modelData)
-                    ws.icon = Icons.getSpecialWsIcon(ws.modelData.name);
-            }
-
-            function onLastIpcObjectChanged(): void {
-                if (ws.modelData)
-                    ws.hasWindows = root.Config.bar.workspaces.showWindowsOnSpecialWorkspaces && ws.modelData.lastIpcObject.windows > 0;
-            }
-
-            target: ws.modelData
         }
 
         Connections {
             function onShowWindowsOnSpecialWorkspacesChanged(): void {
-                if (ws.modelData)
-                    ws.hasWindows = root.Config.bar.workspaces.showWindowsOnSpecialWorkspaces && ws.modelData.lastIpcObject.windows > 0;
+                if (ws.modelData) {
+                    const latest = Compositor.getWorkspace(ws.wsId);
+                    ws.hasWindows = root.Config.bar.workspaces.showWindowsOnSpecialWorkspaces && latest && latest.windows > 0;
+                }
             }
 
             target: root.Config.bar.workspaces
@@ -350,7 +347,7 @@ Item {
                 Repeater {
                     model: ScriptModel {
                         values: {
-                            const windows = typeof Hypr !== "undefined" ? Hypr.toplevels.values.filter(c => c.workspace?.id === ws.wsId) : [];
+                            const windows = Compositor.windows.filter(c => c.workspaceId === ws.wsId);
                             const maxIcons = root.Config.bar.workspaces.maxWindowIcons;
                             return maxIcons > 0 ? windows.slice(0, maxIcons) : windows;
                         }
@@ -360,7 +357,7 @@ Item {
                         required property var modelData
 
                         grade: 0
-                        text: Icons.getAppCategoryIcon(modelData.lastIpcObject.class, "terminal")
+                        text: Icons.getAppCategoryIcon(modelData.appId, "terminal")
                         color: Colours.palette.m3onSurfaceVariant
                     }
                 }

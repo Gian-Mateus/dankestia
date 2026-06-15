@@ -90,11 +90,17 @@ StyledClippingRect {
         MouseArea {
             anchors.fill: layout
             onClicked: event => {
-                const ws = (layout.childAt(event.x, event.y) as Workspace)?.ws;
-                if (WorkspaceManager.activeWsId !== ws)
-                    WorkspaceManager.dispatch(`workspace ${ws}`);
-                else
-                    WorkspaceManager.dispatch("togglespecialworkspace special");
+                let item = layout.childAt(event.x, event.y);
+                while (item && !item.isWorkspace && item !== layout) {
+                    item = item.parent;
+                }
+                const ws = item ? item.ws : undefined;
+                if (ws !== undefined) {
+                    if (WorkspaceManager.activeWsId !== ws)
+                        WorkspaceManager.dispatch(`workspace ${ws}`);
+                    else
+                        WorkspaceManager.dispatch("togglespecialworkspace special");
+                }
             }
         }
 
