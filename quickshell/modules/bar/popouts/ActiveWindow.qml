@@ -12,7 +12,7 @@ Item {
 
     required property PopoutState popouts
 
-    implicitWidth: Hypr.activeToplevel ? child.implicitWidth : -Tokens.padding.extraLargeIncreased
+    implicitWidth: WorkspaceManager.activeWindowTitle ? child.implicitWidth : -Tokens.padding.extraLargeIncreased
     implicitHeight: child.implicitHeight
 
     Column {
@@ -34,7 +34,7 @@ Item {
                 asynchronous: true
                 Layout.alignment: Qt.AlignVCenter
                 implicitSize: details.implicitHeight
-                source: Icons.getAppIcon(Hypr.activeToplevel?.lastIpcObject.class ?? "", "image-missing")
+                source: Icons.getAppIcon(WorkspaceManager.activeWindowAppId, "image-missing")
             }
 
             ColumnLayout {
@@ -45,14 +45,14 @@ Item {
 
                 StyledText {
                     Layout.fillWidth: true
-                    text: Hypr.activeToplevel?.title ?? ""
+                    text: WorkspaceManager.activeWindowTitle
                     font: Tokens.font.body.medium
                     elide: Text.ElideRight
                 }
 
                 StyledText {
                     Layout.fillWidth: true
-                    text: Hypr.activeToplevel?.lastIpcObject.class ?? ""
+                    text: WorkspaceManager.activeWindowAppId
                     color: Colours.palette.m3onSurfaceVariant
                     elide: Text.ElideRight
                 }
@@ -89,7 +89,7 @@ Item {
             ScreencopyView {
                 id: preview
 
-                captureSource: Hypr.activeToplevel?.wayland ?? null // qmllint disable unresolved-type
+                captureSource: typeof Hypr !== 'undefined' ? (Hypr.activeToplevel?.wayland ?? null) : null // qmllint disable unresolved-type
                 live: visible
 
                 constraintSize.width: Tokens.sizes.bar.windowPreviewSize
