@@ -24,8 +24,15 @@ func NewManager() (*Manager, error) {
 
 	if os.Getenv("HYPRLAND_INSTANCE_SIGNATURE") != "" {
 		m.provider = NewHyprlandProvider()
-	} else if os.Getenv("NIRI_SOCKET") != "" || os.Getenv("WAYLAND_DISPLAY") != "" {
+	} else if os.Getenv("NIRI_SOCKET") != "" {
 		m.provider = NewNiriProvider()
+	} else if os.Getenv("SWAYSOCK") != "" {
+		m.provider = NewSwayProvider()
+	} else if os.Getenv("MIRACLESOCK") != "" {
+		m.provider = NewMiracleProvider()
+	} else if os.Getenv("WAYLAND_DISPLAY") != "" {
+		// Fallback detection (simplified for now)
+		m.provider = NewMangoWCProvider() // Or could use os.Stat checks
 	} else {
 		return nil, fmt.Errorf("no supported compositor detected")
 	}
