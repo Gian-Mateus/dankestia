@@ -21,6 +21,7 @@ import (
 	"github.com/AvengeMedia/Dankestia/core/internal/server/network"
 	serverPlugins "github.com/AvengeMedia/Dankestia/core/internal/server/plugins"
 	"github.com/AvengeMedia/Dankestia/core/internal/server/sysupdate"
+	"github.com/AvengeMedia/Dankestia/core/internal/compositor"
 	"github.com/AvengeMedia/Dankestia/core/internal/server/tailscale"
 	"github.com/AvengeMedia/Dankestia/core/internal/server/thememode"
 	serverThemes "github.com/AvengeMedia/Dankestia/core/internal/server/themes"
@@ -203,6 +204,15 @@ func RouteRequest(conn net.Conn, req models.Request) {
 			return
 		}
 		sysupdate.HandleRequest(conn, req, sysUpdateManager)
+		return
+	}
+
+	if strings.HasPrefix(req.Method, "compositor.") {
+		if compositorManager == nil {
+			models.RespondError(conn, req.ID, "compositor manager not initialized")
+			return
+		}
+		compositor.HandleRequest(conn, req, compositorManager)
 		return
 	}
 

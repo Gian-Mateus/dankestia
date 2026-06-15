@@ -20,6 +20,7 @@ import (
 	"github.com/AvengeMedia/Dankestia/core/internal/server/bluez"
 	"github.com/AvengeMedia/Dankestia/core/internal/server/brightness"
 	"github.com/AvengeMedia/Dankestia/core/internal/server/clipboard"
+	"github.com/AvengeMedia/Dankestia/core/internal/compositor"
 	"github.com/AvengeMedia/Dankestia/core/internal/server/cups"
 	serverDbus "github.com/AvengeMedia/Dankestia/core/internal/server/dbus"
 	"github.com/AvengeMedia/Dankestia/core/internal/server/dwl"
@@ -79,6 +80,7 @@ var trayRecoveryManager *trayrecovery.Manager
 var locationManager *location.Manager
 var sysUpdateManager *sysupdate.Manager
 var sysInfoManager *sysinfo.Manager
+var compositorManager *compositor.Manager
 var geoClientInstance geolocation.Client
 
 const dbusClientID = "dankestia-dbus-client"
@@ -425,6 +427,17 @@ func InitializeSysInfoManager() error {
 	return nil
 }
 
+func InitializeCompositorManager() error {
+	manager, err := compositor.NewManager()
+	if err != nil {
+		log.Warnf("Failed to initialize compositor manager (is a compositor running?): %v", err)
+		return nil // Don't fail the whole server, just run headless
+	}
+	compositorManager = manager
+	log.Info("Compositor manager initialized")
+	return nil
+}
+
 func handleConnection(conn net.Conn) {
 	defer conn.Close()
 
@@ -518,6 +531,10 @@ func getCapabilities() Capabilities {
 	if sysInfoManager != nil {
 		caps = append(caps, "sysinfo")
 	}
+    
+	if compositorManager != nil {
+		caps = append(caps, "compositor")
+	}
 
 	return Capabilities{Capabilities: caps}
 }
@@ -595,6 +612,10 @@ func getServerInfo() ServerInfo {
 
 	if sysInfoManager != nil {
 		caps = append(caps, "sysinfo")
+	}
+    
+	if compositorManager != nil {
+		caps = append(caps, "compositor")
 	}
 
 	return ServerInfo{
@@ -1101,6 +1122,38 @@ func handleSubscribe(conn net.Conn, req models.Request) {
 		}()
 	}
 
+	if shouldSubscribe("compositor") && compositorManager != nil {
+		wg.Add(1)
+		compositorChan := compositorManager.Subscribe(clientID + "-compositor")
+		go func() {
+			defer wg.Done()
+			defer compositorManager.Unsubscribe(clientID + "-compositor")
+
+			initialState := compositorManager.GetState()
+			select {
+			case eventChan <- ServiceEvent{Service: "compositor", Data: initialState}:
+			case <-stopChan:
+				return
+			}
+
+			for {
+				select {
+				case state, ok := <-compositorChan:
+					if !ok {
+						return
+					}
+					select {
+					case eventChan <- ServiceEvent{Service: "compositor", Data: state}:
+					case <-stopChan:
+						return
+					}
+				case <-stopChan:
+					return
+				}
+			}
+		}()
+	}
+
 	if shouldSubscribe("dwl") && dwlManager != nil {
 		wg.Add(1)
 		dwlChan := dwlManager.Subscribe(clientID + "-dwl")
@@ -1427,6 +1480,9 @@ func cleanupManagers() {
 	if tailscaleManager != nil {
 		tailscaleManager.Close()
 	}
+	if compositorManager != nil {
+		compositorManager.Stop()
+	}
 }
 
 func Start(printDocs bool) error {
@@ -1686,6 +1742,14 @@ func Start(printDocs bool) error {
 			}
 		}
 	}()
+
+	if err := InitializeSysUpdateManager(); err != nil {
+		log.Warnf("SysUpdate init error: %v", err)
+	}
+
+	if err := InitializeCompositorManager(); err != nil {
+		log.Warnf("Compositor init error: %v", err)
+	}
 
 	if err := InitializeWaylandManager(); err != nil {
 		log.Warnf("Wayland manager unavailable: %v", err)
