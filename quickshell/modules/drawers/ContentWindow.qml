@@ -19,11 +19,12 @@ StyledWindow {
     readonly property alias bar: bar
     readonly property alias interactionWrapper: interactions
 
-    readonly property HyprlandMonitor monitor: Hypr.monitorFor(screen)
-    readonly property bool hasSpecialWorkspace: (monitor?.lastIpcObject.specialWorkspace?.name.length ?? 0) > 0
+    readonly property var monitor: typeof Hypr !== "undefined" ? Hypr.monitorFor(screen) : null
+    readonly property bool hasSpecialWorkspace: (monitor?.lastIpcObject?.specialWorkspace?.name?.length ?? 0) > 0
     readonly property bool hasFullscreen: {
+        if (typeof Hypr === "undefined" || !monitor) return false;
         if (hasSpecialWorkspace) {
-            const specialName = monitor?.lastIpcObject.specialWorkspace?.name;
+            const specialName = monitor?.lastIpcObject?.specialWorkspace?.name;
             if (!specialName)
                 return false;
             const specialWs = Hypr.workspaces.values.find(ws => ws.name === specialName);
@@ -45,7 +46,7 @@ StyledWindow {
         if (focusGrab.active || panels.popouts.isDetached)
             return 0;
 
-        if (monitor?.lastIpcObject.specialWorkspace?.name || monitor?.activeWorkspace.lastIpcObject.windows > 0)
+        if (monitor?.lastIpcObject?.specialWorkspace?.name || monitor?.activeWorkspace?.lastIpcObject?.windows > 0)
             return 0;
 
         const thresholds = [];

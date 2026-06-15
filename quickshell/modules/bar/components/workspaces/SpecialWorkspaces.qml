@@ -14,8 +14,8 @@ Item {
     id: root
 
     required property ShellScreen screen
-    readonly property HyprlandMonitor monitor: Hypr.monitorFor(screen)
-    readonly property string activeSpecial: (GlobalConfig.bar.workspaces.perMonitorWorkspaces ? monitor : Hypr.focusedMonitor)?.lastIpcObject.specialWorkspace?.name ?? ""
+    readonly property var monitor: typeof Hypr !== "undefined" ? Hypr.monitorFor(screen) : null
+    readonly property string activeSpecial: typeof Hypr !== "undefined" ? (GlobalConfig.bar.workspaces.perMonitorWorkspaces ? monitor : Hypr.focusedMonitor)?.lastIpcObject.specialWorkspace?.name ?? "" : ""
 
     layer.enabled: true
     layer.effect: Mask {
@@ -99,7 +99,7 @@ Item {
         onCurrentIndexChanged: currentIndex = Qt.binding(() => model.values.findIndex(w => w.name === root.activeSpecial))
 
         model: ScriptModel {
-            values: Hypr.workspaces.values.filter(w => w.name.startsWith("special:") && (!GlobalConfig.bar.workspaces.perMonitorWorkspaces || w.monitor === root.monitor))
+            values: typeof Hypr !== "undefined" ? Hypr.workspaces.values.filter(w => w.name.startsWith("special:") && (!GlobalConfig.bar.workspaces.perMonitorWorkspaces || w.monitor === root.monitor)) : []
         }
 
         preferredHighlightBegin: 0
@@ -227,16 +227,16 @@ Item {
 
             const ws = view.itemAt(event.x, event.y) as SpecialWsDelegate;
             if (ws?.modelData)
-                Hypr.dispatch(`togglespecialworkspace ${ws.modelData.name.slice(8)}`);
+                WorkspaceManager.dispatch(`togglespecialworkspace ${ws.modelData.name.slice(8)}`);
             else
-                Hypr.dispatch("togglespecialworkspace special");
+                WorkspaceManager.dispatch("togglespecialworkspace special");
         }
     }
 
     component SpecialWsDelegate: ColumnLayout {
         id: ws
 
-        required property HyprlandWorkspace modelData
+        required property var modelData
         readonly property int size: label.Layout.preferredHeight + (hasWindows ? windows.implicitHeight + Tokens.padding.extraSmall : 0)
         property int wsId
         property string icon
@@ -350,7 +350,7 @@ Item {
                 Repeater {
                     model: ScriptModel {
                         values: {
-                            const windows = Hypr.toplevels.values.filter(c => c.workspace?.id === ws.wsId);
+                            const windows = typeof Hypr !== "undefined" ? Hypr.toplevels.values.filter(c => c.workspace?.id === ws.wsId) : [];
                             const maxIcons = root.Config.bar.workspaces.maxWindowIcons;
                             return maxIcons > 0 ? windows.slice(0, maxIcons) : windows;
                         }

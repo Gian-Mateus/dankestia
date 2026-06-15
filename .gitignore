@@ -115,3 +115,5 @@ core.*
 .direnv/
 quickshell/dankestia-plugins
 __pycache__
+
+.dankestia-dev.log

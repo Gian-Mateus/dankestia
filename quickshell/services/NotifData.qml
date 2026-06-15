@@ -40,6 +40,7 @@ QtObject {
     property list<var> actions
 
     readonly property bool hasFullscreen: {
+        if (typeof Hypr === "undefined" || !Hypr.focusedMonitor) return false;
         const monitor = Hypr.focusedMonitor;
         const specialName = monitor?.lastIpcObject.specialWorkspace?.name;
         if (specialName) {

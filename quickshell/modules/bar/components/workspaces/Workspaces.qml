@@ -14,15 +14,10 @@ StyledClippingRect {
     required property ShellScreen screen
     required property bool fullscreen
 
-    readonly property bool onSpecial: (GlobalConfig.bar.workspaces.perMonitorWorkspaces ? Hypr.monitorFor(screen) : Hypr.focusedMonitor)?.lastIpcObject.specialWorkspace?.name !== ""
-    readonly property int activeWsId: GlobalConfig.bar.workspaces.perMonitorWorkspaces ? (Hypr.monitorFor(screen).activeWorkspace?.id ?? 1) : Hypr.activeWsId
+    readonly property bool onSpecial: WorkspaceManager.onSpecial
+    readonly property int activeWsId: WorkspaceManager.activeWsId
 
-    readonly property var occupied: {
-        const occ = {};
-        for (const ws of Hypr.workspaces.values)
-            occ[ws.id] = ws.lastIpcObject.windows > 0;
-        return occ;
-    }
+    readonly property var occupied: WorkspaceManager.occupied
     readonly property int groupOffset: Math.floor((activeWsId - 1) / Config.bar.workspaces.shown) * Config.bar.workspaces.shown
 
     property real blur: onSpecial ? 1 : 0
@@ -96,10 +91,10 @@ StyledClippingRect {
             anchors.fill: layout
             onClicked: event => {
                 const ws = (layout.childAt(event.x, event.y) as Workspace)?.ws;
-                if (Hypr.activeWsId !== ws)
-                    Hypr.dispatch(`workspace ${ws}`);
+                if (WorkspaceManager.activeWsId !== ws)
+                    WorkspaceManager.dispatch(`workspace ${ws}`);
                 else
-                    Hypr.dispatch("togglespecialworkspace special");
+                    WorkspaceManager.dispatch("togglespecialworkspace special");
             }
         }
 

@@ -83,6 +83,7 @@ Singleton {
     }
 
     function reloadHyprRules(): void {
+        if (typeof Hypr === "undefined" || !Hypr.extras) return;
         const str = "keyword layerrule %1 %2, match:namespace dankestia-drawers";
         Hypr.extras.batchMessage([str.arg("blur").arg(transparency.enabled ? 1 : 0), str.arg("ignore_alpha").arg(transparency.base - 0.03)]);
     }
@@ -99,11 +100,12 @@ Singleton {
     Component.onCompleted: root.requestReloadHyprRules()
 
     Connections {
+        enabled: typeof Hypr !== "undefined"
         function onConfigReloaded(): void {
             root.reloadHyprRules();
         }
 
-        target: Hypr
+        target: typeof Hypr !== "undefined" ? Hypr : null
     }
 
     FileView {

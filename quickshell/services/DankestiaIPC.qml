@@ -4,7 +4,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Io
-import qs.Common
+import "../Common"
 import Dankestia.Services
 
 Singleton {
@@ -441,7 +441,13 @@ Singleton {
 
         if (callback) {
             delete pendingRequests[response.id];
-            callback(response);
+            // The Go backend returns {id, result: {...}} or {id, error: "..."}.
+            // Callbacks expect the inner result directly, so extract it.
+            if (response.error) {
+                callback({ error: response.error });
+            } else {
+                callback(response.result ?? response);
+            }
         }
     }
 

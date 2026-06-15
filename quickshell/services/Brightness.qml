@@ -5,6 +5,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import Dankestia.Services
+import qs.components.misc
 
 Singleton {
     id: root
@@ -17,7 +18,12 @@ Singleton {
 
     function getMonitor(query: string): var {
         if (query === "active") {
-            return monitors.find(m => Hypr.monitorFor(m.modelData)?.focused); // qmllint disable missing-property
+            // Try Hyprland first, fallback to first monitor
+            if (typeof Hypr !== "undefined" && Hypr.monitorFor) {
+                var found = monitors.find(m => Hypr.monitorFor(m.modelData)?.focused);
+                if (found) return found;
+            }
+            return monitors.length > 0 ? monitors[0] : null;
         }
         return monitors.find(m => m.modelData.name === query); // qmllint disable missing-property
     }
@@ -52,7 +58,7 @@ Singleton {
         onPressed: root.decreaseBrightness()
     }
 
-    component Monitor: QtObject {
+    component Monitor: Item {
         id: monitor
 
         required property ShellScreen modelData

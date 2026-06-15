@@ -58,3 +58,39 @@ Requirements: SYS-01
 Success criteria:
 1. Shell inicia sem crashes.
 2. Instalação e distribuição confirmadas.
+
+## Phase 10: Traduções pt_BR
+Goal: Criar as traduções para pt_BR e aplicar ao projeto (complementando a internacionalização da Fase 8).
+Requirements: FRONT-04
+Success criteria:
+1. A interface consegue ser exibida totalmente em Português do Brasil de forma funcional.
+
+## Phase 11: Script de Teste e Setup Local
+Goal: Verificar e ajustar o script de setup (`run_dev.sh` ou similar) para testar o ambiente localmente, parando serviços rodando na máquina, compilando se necessário, e restaurando os serviços anteriores ao fechar.
+Requirements: SYS-02
+Success criteria:
+1. O script permite rodar e testar o Dankestia sem quebrar ou interferir permanentemente no desktop atual do usuário.
+
+## Phase 12: Screenshooter do Caelestia
+Goal: Verificar se o screenshooter original do Caelestia foi importado para o projeto, substituindo o atual do DMS.
+Requirements: FRONT-05
+Success criteria:
+1. Funcionalidades superiores de screenshot do Caelestia estão totalmente integradas e operantes no Dankestia.
+
+## Phase 13: Configurações de Displays
+Goal: Adicionar controle de configurações de displays na interface.
+Requirements: FRONT-06, BACK-04
+Success criteria:
+1. Gerenciamento de monitores/telas funcional via GUI.
+
+## Phase 14: Layout de Teclado
+Goal: Adicionar configuração de troca de layout de teclado na interface.
+Requirements: FRONT-07, BACK-05
+Success criteria:
+1. O usuário consegue alterar o idioma/layout do teclado diretamente pela GUI.
+
+## Phase 15: Gerenciamento de Atalhos via GUI
+Goal: Adicionar configurações de atalhos (listagem, edição e criação de novos) totalmente gerenciáveis via interface gráfica.
+Requirements: FRONT-08, BACK-06
+Success criteria:
+1. O usuário visualiza, edita e cria atalhos do compositor/sistema pela GUI de forma persistente.

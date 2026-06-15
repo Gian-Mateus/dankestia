@@ -4,7 +4,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
-import qs.Common
+import "../../Common"
 import Dankestia.Services
 import qs.Widgets
 

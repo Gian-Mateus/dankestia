@@ -13,6 +13,10 @@ import qs.utils
 StyledRect {
     id: root
 
+    // Safe accessors for Hyprland-specific state
+    readonly property bool hyprCapsLock: typeof Hypr !== "undefined" ? Hypr.capsLock : false
+    readonly property bool hyprNumLock: typeof Hypr !== "undefined" ? Hypr.numLock : false
+    readonly property string hyprKbLayout: typeof Hypr !== "undefined" ? Hypr.kbLayout : ""
     property color colour: Colours.palette.m3secondary
     readonly property alias items: iconColumn
 
@@ -21,7 +25,7 @@ StyledRect {
 
     clip: true
     implicitWidth: Tokens.sizes.bar.innerWidth
-    implicitHeight: iconColumn.implicitHeight + Tokens.padding.medium * 2 - (Config.bar.status.showLockStatus && !Hypr.capsLock && !Hypr.numLock ? iconColumn.spacing : 0)
+    implicitHeight: iconColumn.implicitHeight + Tokens.padding.medium * 2 - (Config.bar.status.showLockStatus && !root.hyprCapsLock && !root.hyprNumLock ? iconColumn.spacing : 0)
 
     ColumnLayout {
         id: iconColumn
@@ -43,15 +47,15 @@ StyledRect {
 
                 Item {
                     implicitWidth: capslockIcon.implicitWidth
-                    implicitHeight: Hypr.capsLock ? capslockIcon.implicitHeight : 0
+                    implicitHeight: root.hyprCapsLock ? capslockIcon.implicitHeight : 0
 
                     MaterialIcon {
                         id: capslockIcon
 
                         anchors.centerIn: parent
 
-                        scale: Hypr.capsLock ? 1 : 0.5
-                        opacity: Hypr.capsLock ? 1 : 0
+                        scale: root.hyprCapsLock ? 1 : 0.5
+                        opacity: root.hyprCapsLock ? 1 : 0
 
                         text: "keyboard_capslock_badge"
                         color: root.colour
@@ -73,18 +77,18 @@ StyledRect {
                 }
 
                 Item {
-                    Layout.topMargin: Hypr.capsLock && Hypr.numLock ? iconColumn.spacing : 0
+                    Layout.topMargin: root.hyprCapsLock && root.hyprNumLock ? iconColumn.spacing : 0
 
                     implicitWidth: numlockIcon.implicitWidth
-                    implicitHeight: Hypr.numLock ? numlockIcon.implicitHeight : 0
+                    implicitHeight: root.hyprNumLock ? numlockIcon.implicitHeight : 0
 
                     MaterialIcon {
                         id: numlockIcon
 
                         anchors.centerIn: parent
 
-                        scale: Hypr.numLock ? 1 : 0.5
-                        opacity: Hypr.numLock ? 1 : 0
+                        scale: root.hyprNumLock ? 1 : 0.5
+                        opacity: root.hyprNumLock ? 1 : 0
 
                         text: "looks_one"
                         color: root.colour
@@ -138,7 +142,7 @@ StyledRect {
 
             sourceComponent: StyledText {
                 animate: true
-                text: Hypr.kbLayout
+                text: root.hyprKbLayout
                 color: root.colour
                 font: Tokens.font.mono.medium
             }
