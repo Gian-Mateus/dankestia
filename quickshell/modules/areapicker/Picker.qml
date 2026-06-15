@@ -17,8 +17,8 @@ MouseArea {
 
     property bool onClient
 
-    property real realBorderWidth: onClient ? (Hypr.options["general:border_size"] ?? 1) : 2
-    property real realRounding: onClient ? (Hypr.options["decoration:rounding"] ?? 0) : 0
+    property real realBorderWidth: onClient ? (WorkspaceManager.isNiri ? 2 : (Hypr.options["general:border_size"] ?? 1)) : 2
+    property real realRounding: onClient ? (WorkspaceManager.isNiri ? 8 : (Hypr.options["decoration:rounding"] ?? 0)) : 0
 
     property real ssx
     property real ssy
@@ -33,20 +33,45 @@ MouseArea {
     property real sw: Math.abs(sx - ex)
     property real sh: Math.abs(sy - ey)
 
-    property list<var> clients: {
-        const mon = Hypr.monitorFor(screen);
-        if (!mon)
-            return [];
+    property list<var> clients: []
 
-        const special = mon.lastIpcObject.specialWorkspace;
-        const wsId = special.name ? special.id : mon.activeWorkspace.id;
+    function updateClientsFromHyprland() {
+        const mon = Hypr.monitorFor(screen);
+        if (!mon) return [];
+
+        const special = mon.lastIpcObject?.specialWorkspace;
+        const wsId = special?.name ? special.id : mon.activeWorkspace?.id;
 
         return Hypr.toplevels.values.filter(c => c.workspace?.id === wsId).sort((a, b) => {
-            // Pinned first, then fullscreen, then floating, then any other
             const ac = a.lastIpcObject;
             const bc = b.lastIpcObject;
             return (bc.pinned - ac.pinned) || ((bc.fullscreen !== 0) - (ac.fullscreen !== 0)) || (bc.floating - ac.floating);
         });
+    }
+
+    Process {
+        id: niriWindowsProc
+        running: WorkspaceManager.isNiri
+        command: ["niri", "msg", "-j", "windows"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                try {
+                    const wins = JSON.parse(text);
+                    let mapped = [];
+                    for (const w of wins) {
+                        // Map Niri window to Hyprland-like structure expected by checkClientRects
+                        mapped.push({
+                            lastIpcObject: {
+                                at: [w.x, w.y],
+                                size: [w.width, w.height]
+                            }
+                        });
+                    }
+                    root.clients = mapped;
+                    root.checkClientRects(mouseX, mouseY);
+                } catch (e) {}
+            }
+        }
     }
 
     function checkClientRects(x: real, y: real): void {
@@ -92,7 +117,10 @@ MouseArea {
     cursorShape: Qt.CrossCursor
 
     Component.onCompleted: {
-        Hypr.extras.refreshOptions();
+        if (!WorkspaceManager.isNiri) {
+            Hypr.extras.refreshOptions();
+            clients = updateClientsFromHyprland();
+        }
 
         // Break binding if frozen
         if (loader.freeze)
@@ -192,12 +220,15 @@ MouseArea {
     }
 
     Process {
-        running: true
+        running: !WorkspaceManager.isNiri
         command: ["hyprctl", "cursorpos", "-j"]
         stdout: StdioCollector {
             onStreamFinished: {
-                const pos = JSON.parse(text);
-                root.checkClientRects(pos.x - root.screen.x, pos.y - root.screen.y);
+                if (WorkspaceManager.isNiri) return;
+                try {
+                    const pos = JSON.parse(text);
+                    root.checkClientRects(pos.x - root.screen.x, pos.y - root.screen.y);
+                } catch (e) {}
             }
         }
     }
